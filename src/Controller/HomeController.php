@@ -32,6 +32,13 @@ class HomeController extends AbstractController
         ]);
     } */
     
+    /** 
+     * 
+     * TODO
+     * 
+     * Cette route et cette methode devraient bouger dans trickControler
+     * /
+     */
     #[Route('/tricks/{id}', name: 'app_show')]
     public function show(EntityManagerInterface $entityManager, $id)
     {
