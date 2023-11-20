@@ -1,0 +1,85 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}
+    detail figure
+{% endblock %}
+
+{% block body %}
+
+    <div class="container border border-secondary col col-lg-8 p-0 my-5" style="box-shadow: 0px 2px 5px 0px #000;">
+        
+        {# image de la figure page détail #}
+        <div class="container p-0 position-relative">
+            <img class="card-img" src="/{{ trick.medias.picture }}" alt="img_trick">
+            <p class="buttons border border-dark position-absolute" style="top: 1%;left: 92%;margin-bottom: 0;">
+                <a href=""><i class="text-dark px-2 fas fa-pen"></i></a>
+                <a href=""><i class="text-dark px-2 fas fa-trash-alt"></i></a>
+            </p>
+        </div>
+
+        {# liste des images et videos #}
+        <div class="container">
+        {# {% for trick in tricks %} #}
+            <article class="col-lg-2 col-md-4">
+                <div class="card my-2">
+                    <div class="card-body">
+                        <img class="card-img" src="/{{ trick.medias.picture }}" alt="img_trick">
+                    </div>
+                    <div class="row">
+                        <div class="col">
+                            <p class="text-center">{{ trick.name}}</p>
+                        </div>
+                    </div>
+                </div>
+            </article>
+        {# {% endfor %} #}
+        </div>
+
+        {# description de la figure #}
+        <div class="container col-lg-12  text-center my-5 px-5">
+            {{ trick.description }}
+        </div>
+
+        {# informations sur la figure #}
+        <div class="container container-fluid col-lg-12 my-5 text-center">
+            <button class="btn btn-secondary disabled my-2">Créé le : </button>
+            <button class="btn btn-secondary disabled my-2">Groupe : </button>
+            <button class="btn btn-secondary disabled my-2">Modifié le :</button>
+            <button class="btn btn-secondary disabled my-2">Auteur : </button>
+        </div>
+
+        {# commentaire #}
+        <div class="container container-fluid col-lg-8 border-top">
+            <div class="col-6 m-auto">
+                <form class="form-inline methode=" post"">
+                    <div class="row align-items-end">
+                        <div class="col-8">
+                            <div class="form-group">
+                                <label for="exampleFormControlTextarea1"></label>
+                                <textarea class="form-control" id="comment" rows="1"></textarea>
+                            </div>
+                        </div>
+                        <div class="col-4 text-center">
+                            <button type="submit" class="btn btn-secondary w-100">Envoyer</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        {# Affichage des commentaires #}
+        <div class="container col-lg-8 my-5 border-top">
+            {# {% for comment in comments %} #}
+            {# {{ loop.revindex ~ '/'~ loop.length}} #}
+                <div class="d-flex col-6 mt-5 mx-auto"> <span>
+                    <i class="fas fa-user-circle align-bottom p-3"></i>
+                </span>
+                <p class="bg-light border border-dark-subtle w-100 p-4">{# {{comment['content']}} #}</p>
+            </div>
+            {# {% endfor %} #}
+        </div>
+        
+    </div>
+
+
+{% endblock %}
