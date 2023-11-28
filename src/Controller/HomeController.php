@@ -39,7 +39,7 @@ class HomeController extends AbstractController
      * Cette route et cette methode devraient bouger dans trickControler
      * /
      */
-    #[Route('/tricks/{id}', name: 'app_show')]
+    /* #[Route('/tricks/{id}', name: 'app_show')]
     public function show(EntityManagerInterface $entityManager, $id)
     {
         $trick = $entityManager->getRepository(Tricks::class)->find($id);
@@ -47,5 +47,5 @@ class HomeController extends AbstractController
         return $this->render('home/show.html.twig', [
             'trick' => $trick
         ]);
-    }
+    } */
 }

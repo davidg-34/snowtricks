@@ -1,2 +1,29 @@
-Ceci est le formulaire d'edition
-{{ form(form) }}
+{% block title %}Administration{% endblock %}
+{% block body %}
+    {% include "home/show.html.twig" %}
+    <div class="container">
+        <h5 class="text-center">
+            Ceci est le formulaire d'edition
+        </h5>
+        <div class="container col-6">
+            {{ form_start(form) }}
+            {{ form_errors(form) }}
+
+            {{ form_row(form.name) }}
+            {{ form_row(form.description) }}
+            {{ form_row(form.category) }}
+            {{ form_row(form.medias) }}
+            
+            <button type="submit" class="m-3">valider</button>
+            {# <button type="submit" class="m-3">
+                {% if editMode %}
+                    Modifier
+                {% else %}
+                    Valider
+                {% endif %}
+            </button> #}
+            <button type="submit" class="m-3" style="background-color: red;color: aliceblue;">supprimer</button>
+            {{ form_end(form) }}
+        </div>
+    </div>
+{% endblock %}
