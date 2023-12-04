@@ -1,10 +1,9 @@
+{% extends 'base.html.twig' %}
+
 {% block title %}Administration{% endblock %}
 {% block body %}
-    {% include "home/show.html.twig" %}
-    <div class="container">
-        <h5 class="text-center">
-            Ceci est le formulaire d'edition
-        </h5>
+    {# {% include "home/show.html.twig" %} #}
+    <div class="container my-5">
         <div class="container col-6">
             {{ form_start(form) }}
             {{ form_errors(form) }}
@@ -14,14 +13,14 @@
             {{ form_row(form.category) }}
             {{ form_row(form.medias) }}
             
-            <button type="submit" class="m-3">valider</button>
-            {# <button type="submit" class="m-3">
-                {% if editMode %}
-                    Modifier
-                {% else %}
+            {# <button type="submit" class="m-3">valider</button> #}
+            <button type="submit" class="m-3">
+                {% if trick is same as(trick.id) %}
                     Valider
+                {% else %}
+                    Modifier
                 {% endif %}
-            </button> #}
+            </button>
             <button type="submit" class="m-3" style="background-color: red;color: aliceblue;">supprimer</button>
             {{ form_end(form) }}
         </div>

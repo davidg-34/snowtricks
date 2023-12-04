@@ -22,30 +22,5 @@ class HomeController extends AbstractController
             'tricks' => $tricks
         ]);
     }
-
-    /* #[Route('/tricks', name: 'app_tricks')]
-    public function tricks(EntityManagerInterface $entityManager): Response
-    {
-        $tricks = $entityManager->getRepository(Tricks::class)->findAll();
-        return $this->render('home/tricks.html.twig', [
-            'tricks' => $tricks
-        ]);
-    } */
     
-    /** 
-     * 
-     * TODO
-     * 
-     * Cette route et cette methode devraient bouger dans trickControler
-     * /
-     */
-    /* #[Route('/tricks/{id}', name: 'app_show')]
-    public function show(EntityManagerInterface $entityManager, $id)
-    {
-        $trick = $entityManager->getRepository(Tricks::class)->find($id);
-
-        return $this->render('home/show.html.twig', [
-            'trick' => $trick
-        ]);
-    } */
 }
