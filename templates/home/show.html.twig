@@ -75,36 +75,35 @@
         </div> #}
 
 
-
-        {# {% for comment in trick.comments %}
+        {% for comment in trick.comments %}
             <div class="comment">
                 <div class="row">
                     <div class="col-3">
-                        {{ comment.avatar}}
+                        <img src="https://ui-avatars.com/api/?rounded=true&background=random&name={{ comment.user.username }}">                        
                     </div>
                     <div class="col">
-                        {{comment.content | raw}}
+                        {{ comment.content | raw }}
                     </div>
                 </div>
             </div>
-        {% endfor %} #} 
+        {% endfor %}        
 
         <div class="container row mx-auto">
             {% if app.user %}
                 {{ form_start(commentForm) }}
                 <div class="row justify-content-center">
-            <div class="col-4">
-                {# {{ form_row(commentForm.avatar, {'attr': {'placeholder': "Votre nom"}}) }} #}
-                {{ form_row(commentForm.content, {'attr': {'placeholder': "Votre commentaire"}}) }}
-            </div>
-            <div class="col-4">
-                <button type="submit" class="btn btn-secondary mb-2 p-3">Laissez un commentaire</button>
-            </div>
+                    <div class="col-4" style="width: 60%">
+                        {# {{ form_row(commentForm.avatar, {'attr': {'placeholder': "Votre nom"}}) }} #}
+                        {{ form_row(commentForm.content, {'attr': {'placeholder': "Votre commentaire"}}) }}
+                    </div>
+                    <div class="col-4" style="width: 30%">
+                        <button type="submit" class="btn btn-secondary mb-2 p-3 w-100">Laissez un commentaire</button>
+                    </div>
+                </div>
                 {{ form_end(commentForm) }}
             {% else %}
                 <h5>Vous ne pouvez-pas commenter si vous n'êtes pas connecté !</h5>
-            {% endif %}
-                </div>
+            {% endif %}        
         </div>
 
         {# Affichage des commentaires #}
