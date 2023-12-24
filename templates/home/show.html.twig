@@ -5,19 +5,24 @@
 {% block body %}
 
     <div class="container border border-secondary col col-lg-8 p-0 my-5" style="box-shadow: 0px 2px 5px 0px #000;">
-        
+
         {# image de la figure page détail #}
         <div class="container p-0 position-relative">
             <img class="card-img" src="/{{ trick.medias.picture }}" alt="img_trick">
             <p class="buttons border border-light position-absolute" style="top: 1%; right: 1%;">
-                <a href="/tricks/{{ trick.id }}/edit"><i class="text-light px-2 fas fa-pen"></i></a>
-                <a href=""><i class="text-light px-2 fas fa-trash-alt"></i></a>
+                <a href="/tricks/{{ trick.id }}/edit">
+                    <i class="text-light px-2 fas fa-pen"></i>
+                </a>
+                <a href="">
+                    <i class="text-light px-2 fas fa-trash-alt"></i>
+                </a>
             </p>
         </div>
 
         {# liste des images et videos #}
-        <div class="container">
-        {# {% for trick in tricks %} #}
+        <div
+            class="container">
+            {# {% for trick in tricks %} #}
             <article class="col-lg-2 col-md-4">
                 <div class="card my-2">
                     <div class="card-body">
@@ -30,7 +35,7 @@
                     </div>
                 </div>
             </article>
-        {# {% endfor %} #}
+            {# {% endfor %} #}
         </div>
 
         {# description de la figure #}
@@ -40,14 +45,18 @@
 
         {# informations sur la figure #}
         <div class="container container-fluid col-lg-12 my-5 text-center">
-            <button class="btn btn-secondary disabled my-2">Créé le : </button>
-            <button class="btn btn-secondary disabled my-2">Groupe : </button>
-            <button class="btn btn-secondary disabled my-2">Modifié le :</button>
-            <button class="btn btn-secondary disabled my-2">Auteur : </button>
+            <button class="btn btn-secondary disabled my-2">Créé le : {# {{trick.comments.created_at}} #}
+            </button>
+            <button class="btn btn-secondary disabled my-2">Groupe : {{trick.category.name}}
+            </button>
+            <button class="btn btn-secondary disabled my-2">Modifié le : {# {{trick.comments.}} #}
+            </button>
+            <button class="btn btn-secondary disabled my-2">Auteur : {# {{trick.users.roles}} #}
+            </button>
         </div>
 
         {# commentaire #}
-        <div class="container container-fluid col-lg-8 border-top">
+        {# <div class="container container-fluid col-lg-8 border-top">
             <div class="col-6 m-auto">
                 <form class="form-inline methode=" post"">
                     <div class="row align-items-end">
@@ -63,20 +72,53 @@
                     </div>
                 </form>
             </div>
+        </div> #}
+
+
+
+        {# {% for comment in trick.comments %}
+            <div class="comment">
+                <div class="row">
+                    <div class="col-3">
+                        {{ comment.avatar}}
+                    </div>
+                    <div class="col">
+                        {{comment.content | raw}}
+                    </div>
+                </div>
+            </div>
+        {% endfor %} #} 
+
+        <div class="container row mx-auto">
+            {% if app.user %}
+                {{ form_start(commentForm) }}
+                <div class="row justify-content-center">
+            <div class="col-4">
+                {# {{ form_row(commentForm.avatar, {'attr': {'placeholder': "Votre nom"}}) }} #}
+                {{ form_row(commentForm.content, {'attr': {'placeholder': "Votre commentaire"}}) }}
+            </div>
+            <div class="col-4">
+                <button type="submit" class="btn btn-secondary mb-2 p-3">Laissez un commentaire</button>
+            </div>
+                {{ form_end(commentForm) }}
+            {% else %}
+                <h5>Vous ne pouvez-pas commenter si vous n'êtes pas connecté !</h5>
+            {% endif %}
+                </div>
         </div>
 
         {# Affichage des commentaires #}
-        <div class="container col-lg-8 my-5 border-top">
-            {# {% for comment in comments %} #}
-            {# {{ loop.revindex ~ '/'~ loop.length}} #}
+        {# <div class="container col-lg-8 my-5 border-top">
+            {% for comment in trick.comments %}
+            {{ loop.revindex ~ '/'~ loop.length}}
                 <div class="d-flex col-6 mt-5 mx-auto"> <span>
                     <i class="fas fa-user-circle align-bottom p-3"></i>
                 </span>
-                <p class="bg-light border border-dark-subtle w-100 p-4">{# {{comment['content']}} #}</p>
+                <p class="bg-light border border-dark-subtle w-100 p-4">{{comment['content']}}</p>
             </div>
-            {# {% endfor %} #}
-        </div>
-        
+            {% endfor %}
+        </div> #}
+
     </div>
 
 {% endblock %}

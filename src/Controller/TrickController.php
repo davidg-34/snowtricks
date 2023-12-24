@@ -2,6 +2,8 @@
 
 namespace App\Controller;
 
+use App\Entity\Comments;
+use App\Form\CommentType;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -25,16 +27,31 @@ class TrickController extends AbstractController
     }
     
     #[Route('/tricks/{id}', name: 'app_show')]
-    public function show(EntityManagerInterface $entityManager, $id)
+    public function show(EntityManagerInterface $entityManager,$id, Request $request):Response
     {
         $trick = $entityManager->getRepository(Tricks::class)->find($id);
         /* echo 'toto';
         die; */
+        // Création d'un commentaire
+        $comment = new Comments();
+        $form = $this->createForm(CommentType::class, $comment);
+        $form->handleRequest($request);
+        if ($form->isSubmitted() && $form->isValid()) {
+            $comment->setCreatedAt(new \DateTime());
+            $comment->setTricks($trick);
+            $entityManager->persist($comment);
+            $entityManager->flush();
+
+            return $this->redirectToRoute('app_show', ['id' => $trick->getId()]);
+        }
+
         return $this->render('home/show.html.twig', [
-            'trick' => $trick
+            'trick' => $trick,
+            'commentForm' => $form->createView()
         ]);
     }
     
+    // Ajout d'une figure / Mise à jour d'une figure
     #[Route('/tricks/new', name: 'trick_add')]
     #[Route('/tricks/{id}/edit', name:'trick_edit', requirements: ['id' => '\d+'])]
     public function form(?Trick $trick = null, Request $request, EntityManagerInterface $entityManager, $id): Response
@@ -61,12 +78,8 @@ class TrickController extends AbstractController
             }
             $entityManager->flush();
                 // On redirige
-            return $this->redirectToRoute('trick_edit', [
-                'id' => $trick->getId()
-            ]);
+            return $this->redirectToRoute('trick_edit', ['id' => $trick->getId()]);
         }
-
-
 
         // symfony 6.2+
         /* return $this->render('trick/edit.html.twig', [            
