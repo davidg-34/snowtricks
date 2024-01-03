@@ -29,14 +29,21 @@ class TrickController extends AbstractController
     // Ajout d'une figure / Mise à jour d'une figure
     #[Route('/tricks/new', name: 'trick_add')]
     #[Route('/tricks/{id}/edit', name: 'trick_edit', requirements: ['id' => '\d+'])]
-    public function form(?Trick $trick = null, Request $request, EntityManagerInterface $entityManager, int $id): Response
+    public function form(Request $request, EntityManagerInterface $entityManager, ?int $id = null): Response
     {
+
+        /* print_r($trick);
+
         // on édite une figure si elle n'est pas créée
         if (!$trick) {
             $trick = new Trick();
-        }
+        } */
 
-        $trick = $entityManager->getRepository(Tricks::class)->find($id);
+        if ($id) {
+            $trick = $entityManager->getRepository(Tricks::class)->find($id);
+        } else {
+            $trick = new Tricks();
+        }
 
         // on crée le formulaire
         $form = $this->createForm(Trick::class, $trick);
