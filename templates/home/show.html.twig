@@ -74,17 +74,19 @@
             </div>
         </div> #}
 
-
+    <h5 class="ms-5 mb-5">Commentaires : {{ trick.comments|length }}</h5>
         {% for comment in trick.comments %}
             <div class="comment">
                 <div class="row">
-                    <div class="col-3">
-                        <img src="https://ui-avatars.com/api/?rounded=true&background=random&name={{ comment.user.username }}">                        
-                    </div>
                     <div class="col">
-                        {{ comment.content | raw }}
+                        <img class="mb-4 mx-5" src="https://ui-avatars.com/api/?rounded=true&background=random&name={{ comment.user.username|default('undefined') }}" width="40px">
+                        <strong>{{ comment.user.username|default('') }}</strong>  
+                        <span class="ps-2">Le {{comment.createdAt | date('d/m/y à H:i')}}</span>                       
                     </div>
                 </div>
+                    <div class="col mb-4 ms-5">
+                        {{ comment.content | raw }}
+                    </div>
             </div>
         {% endfor %}        
 
@@ -92,11 +94,10 @@
             {% if app.user %}
                 {{ form_start(commentForm) }}
                 <div class="row justify-content-center">
-                    <div class="col-4" style="width: 60%">
-                        {# {{ form_row(commentForm.avatar, {'attr': {'placeholder': "Votre nom"}}) }} #}
+                    <div class="col-3" {# style="width: 60%" #}>
                         {{ form_row(commentForm.content, {'attr': {'placeholder': "Votre commentaire"}}) }}
                     </div>
-                    <div class="col-4" style="width: 30%">
+                    <div class="col-3" {# style="width: 30%" #}>
                         <button type="submit" class="btn btn-secondary mb-2 p-3 w-100">Laissez un commentaire</button>
                     </div>
                 </div>

@@ -141,7 +141,7 @@ class Users implements UserInterface, PasswordAuthenticatedUserInterface
         return $this;
     }
 
-    public function removeRelation(Tricks $tricks): self
+    public function removeTricks(Tricks $tricks): self
     {
         if ($this->tricks->removeElement($tricks)) {
             // set the owning side to null (unless already changed)
@@ -165,7 +165,7 @@ class Users implements UserInterface, PasswordAuthenticatedUserInterface
     {
         if (!$this->comments->contains($comment)) {
             $this->comments->add($comment);
-            $comment->setUsers($this);
+            $comment->setUser($this);
         }
 
         return $this;
@@ -175,8 +175,8 @@ class Users implements UserInterface, PasswordAuthenticatedUserInterface
     {
         if ($this->comments->removeElement($comment)) {
             // set the owning side to null (unless already changed)
-            if ($comment->getUsers() === $this) {
-                $comment->setUsers(null);
+            if ($comment->getUser() === $this) {
+                $comment->setUser(null);
             }
         }
 

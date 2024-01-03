@@ -25,16 +25,16 @@ class Tricks
     #[Assert\NotBlank]
     private ?string $description = null;
 
-    #[ORM\ManyToOne(inversedBy: 'relation')]
+    #[ORM\ManyToOne(inversedBy: 'tricks')]
     private ?Users $users = null;
 
     #[ORM\OneToMany(mappedBy: 'tricks', targetEntity: Comments::class)]
     private Collection $comments;
 
-    #[ORM\ManyToOne(inversedBy: 'relation')]
+    #[ORM\ManyToOne(inversedBy: 'tricks')]
     private ?Medias $medias = null;
 
-    #[ORM\ManyToOne(inversedBy: 'relation')]
+    #[ORM\ManyToOne(inversedBy: 'tricks')]
     private ?Category $category = null;
 
     public function __construct()
@@ -105,7 +105,7 @@ class Tricks
     {
         if ($this->comments->removeElement($comment)) {
             // set the owning side to null (unless already changed)
-            if ($comment->getComments() === $this) {
+            if ($comment->getTricks() === $this) {
                 $comment->setTricks(null);
             }
         }

@@ -57,7 +57,7 @@ class Comments
         return $this;
     }
 
-    public function getRelation(): ?Tricks
+    public function getTricks(): ?Tricks
     {
         return $this->tricks;
     }
