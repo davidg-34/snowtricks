@@ -30,9 +30,9 @@
                     Ajoutez
                 {% endif %}
             </button> 
-            <a href="/tricks/{{ trick.id }}/delete">
-            <button class="m-3" style="background-color: red;color: aliceblue;">supprimer</button>
-            </a>           
+            {% if editMode %}
+                <a href="/tricks/{{ trick.id }}/delete" class="button m-3" style="background-color: red; color: aliceblue;">Supprimer</a>                    
+            {% endif %}
             {{ form_end(formTrick) }}
         </div>
     </div>

@@ -74,8 +74,10 @@
             </div>
         </div> #}
 
+
+
     <h5 class="ms-5 mb-5">Commentaires : {{ trick.comments|length }}</h5>
-        {% for comment in trick.comments %}
+        {% for comment in trick.comments(currentPage) %}
             <div class="comment">
                 <div class="row">
                     <div class="col">

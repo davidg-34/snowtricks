@@ -17,6 +17,10 @@ class Tricks
     #[ORM\Column]
     private ?int $id = null;
 
+    #[ORM\Column(length: 25)]
+    #[Assert\NotBlank]
+    private ?string $slug = null;
+
     #[ORM\Column(length: 255)]
     #[Assert\NotBlank]
     private ?string $name = null;
@@ -59,6 +63,18 @@ class Tricks
         return $this;
     }
 
+    public function getSlug(): ?string
+    {
+        return $this->slug;
+    }
+
+    public function setSlug(string $slug): self
+    {
+        $this->slug = $slug;
+
+        return $this;
+    }
+
     public function getDescription(): ?string
     {
         return $this->description;
@@ -86,9 +102,11 @@ class Tricks
     /**
      * @return Collection<int, Comments>
      */
-    public function getComments(): Collection
-    {
-        return $this->comments;
+    public function getComments($page = 1): Collection
+    {     
+        // $commentaires = [1,2,3,4,5,6,7,8,9];
+        $commentPerPage = 2;   
+        return new ArrayCollection($this->comments->slice($page - 1 * $commentPerPage, $commentPerPage));
     }
 
     public function addComment(Comments $comment): self

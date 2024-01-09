@@ -75,13 +75,13 @@ class TrickController extends AbstractController
 
         $this->addFlash('success', 'Figure supprimée !');
         return $this->redirectToRoute('app_tricks', ['id' => $trick->getId()]);
-    }    
-    
+    }     
+
     // Commentaire sur les figures
-    #[Route('/tricks/{id}', name: 'app_show')]
-    public function show(EntityManagerInterface $entityManager,$id, Request $request):Response
+    #[Route('/tricks/{slug}', name: 'app_show')]
+    public function show(EntityManagerInterface $entityManager,$slug, Request $request):Response
     {
-        $trick = $entityManager->getRepository(Tricks::class)->find($id);
+        $trick = $entityManager->getRepository(Tricks::class)->findOneBy(['slug' => $slug]);
         
         $comment = new Comments();
         $form = $this->createForm(CommentType::class, $comment);
@@ -98,7 +98,8 @@ class TrickController extends AbstractController
 
         return $this->render('home/show.html.twig', [
             'trick' => $trick,
-            'commentForm' => $form->createView()
+            'commentForm' => $form->createView(),
+            'currentPage' => $request->query->get('currentpage') ?: 1 
         ]);
     }
     

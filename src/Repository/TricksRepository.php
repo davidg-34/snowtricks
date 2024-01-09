@@ -19,7 +19,7 @@ class TricksRepository extends ServiceEntityRepository
     public function __construct(ManagerRegistry $registry)
     {
         parent::__construct($registry, Tricks::class);
-    }
+    }    
 
 //    /**
 //     * @return Tricks[] Returns an array of Tricks objects
