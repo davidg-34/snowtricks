@@ -1,8 +1,18 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Administration{% endblock %}
+{% block title %}Administration
+{% endblock %}
+
 {% block body %}
-    {# {% include "home/show.html.twig" %} #}
+
+    <div class="container col-6">
+        {% if editMode %}
+            <h1>Modification de la figure</h1>
+        {% else %}
+            <h1>Création d'une figure</h1>
+        {% endif %}
+    </div>
+    {% if app.user %}
     <div class="container my-5">
         <div class="container col-6">
             {{ form_start(formTrick) }}
@@ -10,19 +20,21 @@
 
             {{ form_row(formTrick.name) }}
             {{ form_row(formTrick.description) }}
-            {# {{ form_row(formTrick.category) }} #}
+            {{ form_row(formTrick.category) }}
             {{ form_row(formTrick.medias) }}
-            
-            {# <button type="submit" class="m-3">valider</button> #}
+
             <button type="submit" class="m-3">
-                {% if trick is same as(trick.id) %}
-                    Valider
+                {% if editMode %}
+                    Modifiez
                 {% else %}
-                    Modifier
+                    Ajoutez
                 {% endif %}
-            </button>
-            <button type="submit" class="m-3" style="background-color: red;color: aliceblue;">supprimer</button>
+            </button> 
+            <a href="/tricks/{{ trick.id }}/delete">
+            <button class="m-3" style="background-color: red;color: aliceblue;">supprimer</button>
+            </a>           
             {{ form_end(formTrick) }}
         </div>
     </div>
+    {% endif %}
 {% endblock %}

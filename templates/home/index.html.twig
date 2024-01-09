@@ -28,16 +28,18 @@
                                 <div class="col-6">
                                     <a href="/tricks/{{ trick.id }}"><p class="w-100 mx-4">{{ trick.name}}</p></a>
                                 </div>
+                                {% if app.user %}
                                 <div class="col-6 ">
                                     <div class="row">
                                         <div class="col-6">
                                             <a href="/tricks/{{ trick.id }}/edit"><i class="fas fa-pen"></i></a>
                                         </div>
                                         <div class="col-6">
-                                            <a href=""><i class="fas fa-trash-alt"></i></a>
+                                            <a href="/tricks/{{ trick.id }}/delete"><i class="fas fa-trash-alt"></i></a>
                                         </div>
                                     </div>
                                 </div>
+                                {% endif %}
                             </div>
                         </div>
                     </article>
