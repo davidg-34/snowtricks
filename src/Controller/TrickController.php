@@ -30,11 +30,11 @@ class TrickController extends AbstractController
 
     // Ajout d'une figure / Mise à jour d'une figure
     #[Route('/tricks/new', name: 'trick_add')]
-    #[Route('/tricks/{id}/edit', name: 'trick_edit', requirements: ['id' => '\d+'])]
-    public function form(Request $request, EntityManagerInterface $entityManager, ?int $id = null): Response
+    #[Route('/tricks/{slug}/edit', name: 'trick_edit'/* , requirements: ['id' => '\d+'] */)]
+    public function form(Request $request, EntityManagerInterface $entityManager, ?string $slug = null): Response
     {
-        if ($id) {
-            $trick = $entityManager->getRepository(Tricks::class)->find($id);
+        if ($slug) {
+            $trick = $entityManager->getRepository(Tricks::class)->findOneBy(['slug' => $slug]);
         } else {
             $trick = new Tricks();
         }
@@ -42,10 +42,13 @@ class TrickController extends AbstractController
         $form = $this->createForm(TrickForm::class, $trick);
         // On traite/soumet la requête du formulaire
         $form->handleRequest($request);
+        echo 1;
         //On vérifie si le formulaire est soumis ET valide
         if ($form->isSubmitted() && $form->isValid()) {
+            echo 2;
+            $trick->slug = "toto";
             //si la figure n'a pas d'id, on crée une nouvelle figure
-            if (!$trick->getId()) {
+            if (!$trick->getSlug()) {
                 // On stocke - Prépare à l'enregistrement de l'objet en BDD
                 $entityManager->persist($trick);
             }
@@ -54,7 +57,22 @@ class TrickController extends AbstractController
             // flash message
             $this->addFlash('success', 'Les données sont enregistrées!');
             // On redirige
-            return $this->redirectToRoute('app_home', ['id' => $trick->getId()]);
+            return $this->redirectToRoute('app_home', ['slug' => $trick->getSlug()]);
+        } else {
+            foreach ($form->getErrors() as $key => $error) {
+                if ($form->isRoot()) {
+                    $errors['#'][] = $error->getMessage();
+                } else {
+                    $errors[] = $error->getMessage();
+                }
+            }
+            foreach ($form->all() as $child) {
+                echo $child->getName();
+                //var_dump($child->getData());
+            }
+            //print_r($errors);
+            // print_r($form->getErrors());
+
         }
         // symfony 6.2+
         //return $this->render('trick/edit.html.twig', []
@@ -67,7 +85,7 @@ class TrickController extends AbstractController
 
     // Suppression d'une figure
     #[Route('/tricks/{id}/delete', name: 'trick_delete')]
-    public function delete(EntityManagerInterface $entityManager, $id):RedirectResponse
+    public function delete(EntityManagerInterface $entityManager, $id): RedirectResponse
     {
         $trick = $entityManager->getRepository(Tricks::class)->find($id);
         $entityManager->remove($trick);
@@ -75,34 +93,31 @@ class TrickController extends AbstractController
 
         $this->addFlash('success', 'Figure supprimée !');
         return $this->redirectToRoute('app_tricks', ['id' => $trick->getId()]);
-    }     
+    }
 
     // Commentaire sur les figures
     #[Route('/tricks/{slug}', name: 'app_show')]
-    public function show(EntityManagerInterface $entityManager,$slug, Request $request):Response
+    public function show(EntityManagerInterface $entityManager, $slug, Request $request): Response
     {
         $trick = $entityManager->getRepository(Tricks::class)->findOneBy(['slug' => $slug]);
-        
+
         $comment = new Comments();
         $form = $this->createForm(CommentType::class, $comment);
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
             $comment->setCreatedAt(new \DateTime());
             $comment->setTricks($trick)
-                    ->setUser($this->getUser());
+                ->setUser($this->getUser());
             $entityManager->persist($comment);
             $entityManager->flush();
 
-            return $this->redirectToRoute('app_show', ['id' => $trick->getId()]);
+            return $this->redirectToRoute('app_show', ['slug' => $trick->getSlug()]);
         }
 
         return $this->render('home/show.html.twig', [
             'trick' => $trick,
             'commentForm' => $form->createView(),
-            'currentPage' => $request->query->get('currentpage') ?: 1 
+            'currentPage' => $request->query->get('currentpage') ?: 1
         ]);
     }
-    
- 
-
 }

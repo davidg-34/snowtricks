@@ -5,36 +5,36 @@
 
 {% block body %}
 
-    <div class="container col-6">
-        {% if editMode %}
-            <h1>Modification de la figure</h1>
-        {% else %}
-            <h1>Création d'une figure</h1>
-        {% endif %}
-    </div>
-    {% if app.user %}
-    <div class="container my-5">
-        <div class="container col-6">
-            {{ form_start(formTrick) }}
-            {{ form_errors(formTrick) }}
+	<div class="container col-6">
+		{% if editMode %}
+			<h1>Modification de la figure</h1>
+		{% else %}
+			<h1>Création d'une figure</h1>
+		{% endif %}
+	</div>
+	{% if app.user %}
+		<div class="container my-5">
+			<div class="container col-6">
+				{{ form_start(formTrick) }}
+				{{ form_errors(formTrick) }}
 
-            {{ form_row(formTrick.name) }}
-            {{ form_row(formTrick.description) }}
-            {{ form_row(formTrick.category) }}
-            {{ form_row(formTrick.medias) }}
+				{{ form_row(formTrick.name) }}
+				{{ form_row(formTrick.description) }}
+				{{ form_row(formTrick.category) }}
+				{{ form_row(formTrick.medias) }}
 
-            <button type="submit" class="m-3">
-                {% if editMode %}
-                    Modifiez
-                {% else %}
-                    Ajoutez
-                {% endif %}
-            </button> 
-            {% if editMode %}
-                <a href="/tricks/{{ trick.id }}/delete" class="button m-3" style="background-color: red; color: aliceblue;">Supprimer</a>                    
-            {% endif %}
-            {{ form_end(formTrick) }}
-        </div>
-    </div>
-    {% endif %}
+				<button type="submit" class="m-3">
+					{% if editMode %}
+						Modifiez
+					{% else %}
+						Ajoutez
+					{% endif %}
+				</button>
+				{% if editMode %}
+					<a href="/tricks/{{ trick.id }}/delete" class="button m-3" style="background-color: red; color: aliceblue;">Supprimer</a>
+				{% endif %}
+				{{ form_end(formTrick) }}
+			</div>
+		</div>
+	{% endif %}
 {% endblock %}

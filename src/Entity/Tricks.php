@@ -103,9 +103,9 @@ class Tricks
      * @return Collection<int, Comments>
      */
     public function getComments($page = 1): Collection
-    {     
+    {
         // $commentaires = [1,2,3,4,5,6,7,8,9];
-        $commentPerPage = 2;   
+        $commentPerPage = 1;
         return new ArrayCollection($this->comments->slice($page - 1 * $commentPerPage, $commentPerPage));
     }
 
