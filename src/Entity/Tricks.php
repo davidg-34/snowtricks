@@ -17,8 +17,7 @@ class Tricks
     #[ORM\Column]
     private ?int $id = null;
 
-    #[ORM\Column(length: 25)]
-    #[Assert\NotBlank]
+    #[ORM\Column(length: 25)]    
     private ?string $slug = null;
 
     #[ORM\Column(length: 255)]

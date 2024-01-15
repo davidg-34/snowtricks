@@ -6,7 +6,9 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\String\Slugger\AsciiSlugger;
 use Doctrine\ORM\EntityManagerInterface;
+use App\Entity\User;
 use App\Entity\Tricks;
 use App\Form\TrickForm;
 use App\Entity\Comments;
@@ -42,40 +44,24 @@ class TrickController extends AbstractController
         $form = $this->createForm(TrickForm::class, $trick);
         // On traite/soumet la requête du formulaire
         $form->handleRequest($request);
-        echo 1;
         //On vérifie si le formulaire est soumis ET valide
-        if ($form->isSubmitted() && $form->isValid()) {
-            echo 2;
-            $trick->slug = "toto";
-            //si la figure n'a pas d'id, on crée une nouvelle figure
-            if (!$trick->getSlug()) {
-                // On stocke - Prépare à l'enregistrement de l'objet en BDD
-                $entityManager->persist($trick);
-            }
-            // On met à jour la base de données - insertion
-            $entityManager->flush();
-            // flash message
-            $this->addFlash('success', 'Les données sont enregistrées!');
-            // On redirige
-            return $this->redirectToRoute('app_home', ['slug' => $trick->getSlug()]);
-        } else {
-            foreach ($form->getErrors() as $key => $error) {
-                if ($form->isRoot()) {
-                    $errors['#'][] = $error->getMessage();
-                } else {
-                    $errors[] = $error->getMessage();
+        if ($form->isSubmitted()) {
+            if ($form->isValid()) {
+                if (!$trick->getId()) {
+                    // creation
+                    $user = $this->getUser();
+                    $trick->setUsers($user);
                 }
+                $slugger = new AsciiSlugger();
+                $trick->setSlug($slugger->slug($trick->getName()));                
+                $entityManager->persist($trick);                
+                $entityManager->flush();
+                // flash message
+                $this->addFlash('success', 'Les données sont enregistrées!');
+                // redirection
+                return $this->redirectToRoute('app_home', ['slug' => $trick->getSlug()]);
             }
-            foreach ($form->all() as $child) {
-                echo $child->getName();
-                //var_dump($child->getData());
-            }
-            //print_r($errors);
-            // print_r($form->getErrors());
-
-        }
-        // symfony 6.2+
-        //return $this->render('trick/edit.html.twig', []
+        }         
         return $this->renderForm('trick/edit.html.twig', [
             'formTrick' => $form,
             'trick' => $trick,
