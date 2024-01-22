@@ -53,15 +53,15 @@ class TrickController extends AbstractController
                     $trick->setUsers($user);
                 }
                 $slugger = new AsciiSlugger();
-                $trick->setSlug($slugger->slug($trick->getName()));                
-                $entityManager->persist($trick);                
+                $trick->setSlug($slugger->slug($trick->getName()));
+                $entityManager->persist($trick);
                 $entityManager->flush();
                 // flash message
                 $this->addFlash('success', 'Les données sont enregistrées!');
                 // redirection
                 return $this->redirectToRoute('app_home', ['slug' => $trick->getSlug()]);
             }
-        }         
+        }
         return $this->renderForm('trick/edit.html.twig', [
             'formTrick' => $form,
             'trick' => $trick,
