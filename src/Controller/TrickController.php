@@ -85,6 +85,8 @@ class TrickController extends AbstractController
     #[Route('/tricks/{slug}', name: 'app_show')]
     public function show(EntityManagerInterface $entityManager, $slug, Request $request): Response
     {
+        // pagination des commentaires
+        $currentPage = $request->query->get('page') ?: 1;
         $trick = $entityManager->getRepository(Tricks::class)->findOneBy(['slug' => $slug]);
 
         $comment = new Comments();
@@ -103,7 +105,7 @@ class TrickController extends AbstractController
         return $this->render('home/show.html.twig', [
             'trick' => $trick,
             'commentForm' => $form->createView(),
-            'currentPage' => $request->query->get('currentpage') ?: 1
+            'currentPage' => $currentPage
         ]);
     }
 }

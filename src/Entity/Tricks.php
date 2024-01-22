@@ -103,9 +103,14 @@ class Tricks
      */
     public function getComments($page = 1): Collection
     {
-        // $commentaires = [1,2,3,4,5,6,7,8,9];
-        $commentPerPage = 1;
-        return new ArrayCollection($this->comments->slice($page - 1 * $commentPerPage, $commentPerPage));
+        // $commentaires = [1,2,3,4,5,6,7,8,9, 10];
+        $commentPerPage = 3;
+        $commentCount = $this->comments->count();
+        $offset = ($page - 1) * $commentPerPage;
+        echo "total comments " . $commentCount . "<br>";
+        echo "page : " . $page . "<br>";
+        echo "offset : " . $offset;
+        return new ArrayCollection($this->comments->slice($offset, $commentPerPage));
     }
 
     public function addComment(Comments $comment): self

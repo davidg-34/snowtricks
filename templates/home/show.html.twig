@@ -102,19 +102,23 @@
         <nav aria-label="Page navigation example w-100">
             <ul class="pagination justify-content-center">
                 <li class="page-item">
-                    <a class="page-link" href="{# {{ path ({slug: slug, page: currentPage - 1}) }} #}">Précédent</a>
+                    {% if (currentPage > 1) %}                    
+                        <a class="page-link" href="{{ path ('app_show', {slug: trick.slug, page: currentPage - 1}) }}">Précédent</a>
+                    {% else %}
+                        <span class="page-link disabled">Précédent</span>
+                    {% endif %}
                 </li>
                 <li class="page-item">
-                    <a class="page-link" href="{# {{ path(path, {slug: slug, page: page}) }} #}">1</a>
+                    <a class="page-link" href="{{ path('app_show', {slug: trick.slug, page: 1}) }}">1</a>
                 </li>
                 <li class="page-item">
-                    <a class="page-link" href="{# {{ path(path, {slug: slug, page: page}) }} #}">2</a>
+                    <a class="page-link" href="{{ path('app_show', {slug: trick.slug, page: 2}) }}">2</a>
                 </li>
                 <li class="page-item">
-                    <a class="page-link" href="{# {{ path(path, {slug: slug, page: page}) }} #}">3</a>
+                    <a class="page-link" href="{{ path('app_show', {slug: trick.slug, page: 3}) }}">3</a>
                 </li>
                 <li class="page-item">
-                    <a class="page-link" href="{# {{ path ({slug: slug, page: currentPage + 1}) }} #}">Suivant</a>
+                    <a class="page-link" href="{{ path ('app_show', {slug: trick.slug, page: currentPage + 1}) }}">Suivant</a>
                 </li>
             </ul>
         </nav>
