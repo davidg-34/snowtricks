@@ -101,11 +101,16 @@ class TrickController extends AbstractController
 
             return $this->redirectToRoute('app_show', ['slug' => $trick->getSlug()]);
         }
-
+        $commentCount = $trick->getCommentCount();
+        $commentPerPage = 3;
+        $commentPageCount = ceil($commentCount / $commentPerPage);
         return $this->render('home/show.html.twig', [
             'trick' => $trick,
             'commentForm' => $form->createView(),
-            'currentPage' => $currentPage
+            'currentPage' => $currentPage,
+            'commentPerPage' => $commentPerPage,
+            'commentCount' => $commentCount,
+            'commentPageCount' => $commentPageCount
         ]);
     }
 }
