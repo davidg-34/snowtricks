@@ -5,8 +5,7 @@
 
 {% block body %}
 
-    <div
-        class="container border border-secondary col col-lg-8 p-0" style="box-shadow: 0px 2px 5px 0px #000;">
+    <div class="container border border-secondary col col-lg-8 p-0" style="box-shadow: 0px 2px 5px 0px #000;">
 
         {# image de la figure page détail #}
         <div class="container p-0 position-relative">
@@ -61,26 +60,6 @@
             </button>
         </div>
 
-        {# commentaire #}
-        {# <div class="container container-fluid col-lg-8 border-top">        
-                    <div class="col-6 
-                        <form class="form-inline methode=" post"">        
-                            <div class="row align-items-end">        
-                                <div class="col-8">        
-                                    <div class="form-group">        
-                                        <label for="exampleFormControlTextarea1"></label>
-                                             <textarea class="form-control" id="comment" rows="1"></textarea>
-                                    </div>
-                                </div>
-                                <div class="col-4 text-center">
-                                <button type="submit" class="btn btn-secondary w-100">Envoyer</button>
-                                </div>
-                            </div>
-                        </form>
-                    </div>
-                </div> #}
-
-
         <h5 class="ms-5 mb-5">Commentaires :
             {{ trick.comments|length }}</h5>
         {% for comment in trick.comments(currentPage) %}
@@ -108,48 +87,22 @@
                         <span class="page-link disabled">Précédent</span>
                     {% endif %}
                 </li>
-                <li class="page-item">
-                    <a class="page-link" href="{{ path('app_show', {slug: trick.slug, page: 1}) }}">1</a>
+                {% for page in currentPage + 1 %}
+                <li
+                    class="page-item {{ (page == currentPage) ? 'active' : '' }}">
+                    <a href="{{ path('app_show', {slug: trick.slug, page: page}) }}" class="page-link">{{ page }}</a>
                 </li>
+                {% endfor %}
                 <li class="page-item">
-                    <a class="page-link" href="{{ path('app_show', {slug: trick.slug, page: 2}) }}">2</a>
-                </li>
-                <li class="page-item">
-                    <a class="page-link" href="{{ path('app_show', {slug: trick.slug, page: 3}) }}">3</a>
-                </li>
-                <li class="page-item">
-                    <a class="page-link" href="{{ path ('app_show', {slug: trick.slug, page: currentPage + 1}) }}">Suivant</a>
+                    {% if (currentPage < currentPage + 1) %}
+                        <a class="page-link" href="{{ path ('app_show', {slug: trick.slug, page: currentPage + 1}) }}">Suivant</a>
+                    {% else %}
+                        <span class="page-link disabled">Suivant</span>
+                    {% endif %}
                 </li>
             </ul>
         </nav>
-        {# <nav aria-label="pagination">
-                    <ul class="pagination">
-                        <li>
-                            <a href="{{ path ({slug: slug, page: currentPage - 1}) }}">
-                                <span aria-hidden="true">«</span>
-                                <span class="visuallyhidden">précédent</span>
-                            </a>
-                        </li>
-                        <li>
-                            <a href="{{ path(path, {slug: slug, page: page}) }}">
-                                <span class="visuallyhidden">page
-                                </span>1</a>
-                        </li>
-                        <li>
-                            <a href="" aria-current="page">
-                                <span class="visuallyhidden">page
-                                </span>2</a>
-                        </li>
-                        <li>
-                            <a href="{{ path ({slug: slug, page: currentPage + 1}) }}">
-                                <span class="visuallyhidden">suivant</span>
-                                <span aria-hidden="true">»</span>
-                            </a>
-                        </li>
-                    </ul>
-                </nav> #}
-
-
+        
         <div class="container row mx-auto">
             {% if app.user %}
                 {{ form_start(commentForm) }}
@@ -166,19 +119,6 @@
                 <p class="text-center fw-bolder fs-4">Vous ne pouvez-pas commenter si vous n'êtes pas connecté !</p>
             {% endif %}
         </div>
-
-        {# Affichage des commentaires #}
-        {# <div class="container col-lg-8 my-5 border-top">
-                    {% for comment in trick.comments %}
-                    {{ loop.revindex ~ '/'~ loop.length}}
-                        <div class="d-flex col-6 mt-5 mx-auto"> <span>
-                            <i class="fas fa-user-circle align-bottom p-3"></i>
-                        </span>
-                        <p class="bg-light border border-dark-subtle w-100 p-4">{{comment['content']}}</p>
-                    </div>
-                    {% endfor %}
-                </div> #}
-
     </div>
 
 {% endblock %}
