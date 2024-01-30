@@ -52,6 +52,20 @@ class TrickController extends AbstractController
                     $user = $this->getUser();
                     $trick->setUsers($user);
                 }
+                // Récupère toutes les données 'médias' à partir du formulaire
+                $medias = $form->get('medias')->getData();
+                if ($medias) {
+                    // Inclus le nom du fichier dans l'url en modifiant le nom de l'image récupérée
+                    $fileName = md5(uniqid()) . '.' . $medias->guessExtension();
+                    // Déplace l'image récupérée, dans le dossier public/assets/uploads
+                    $medias->move(
+                        $this->getParameter('medias_directory'),
+                        $fileName
+                    );
+                    // Insère l'image avec le nom de l'image
+                    $trick->setPicture($fileName);
+                }
+
                 $slugger = new AsciiSlugger();
                 $trick->setSlug($slugger->slug($trick->getName()));
                 $entityManager->persist($trick);

@@ -9,6 +9,7 @@ use Doctrine\ORM\Mapping\Entity;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\FileType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
@@ -28,9 +29,16 @@ class TrickForm extends AbstractType
                 'choice_label' => 'name',
                 'label' => 'Catégorie des figures'
             ])
-            ->add('medias', EntityType::class, $options = [
-                'class' => Medias::class,
-                'choice_label' => 'id'
+            //->add('medias', EntityType::class, $options = [
+            //    'class' => Medias::class,
+            //    'choice_label' => 'id'
+            //])
+            ->add('medias', FileType::class, [
+                //'class' => Medias::class,
+                //'allow_extra_fields' => false,
+                //'allow_file_upload' => true,
+                'mapped' => false,
+                'required' => false
             ])
             ->getForm();
     }

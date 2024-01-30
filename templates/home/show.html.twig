@@ -27,7 +27,8 @@
             <article class="col-lg-2 col-md-4">
                 <div class="card my-2">
                     <div class="card-body">
-                        <img class="card-img" src="/{{ trick.medias.picture }}" alt="img_trick">
+                        {# <img class="card-img" src="/{{ trick.medias.picture }}" alt="img_trick"> #}
+                        <img class="card-img" src="/{{ asset('/uploads' ~ trick.medias.picture) }}" alt="img_trick">
                     </div>
                     <div class="row">
                         <div class="col">
