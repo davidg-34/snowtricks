@@ -34,8 +34,8 @@ class Tricks
     #[ORM\OneToMany(mappedBy: 'tricks', targetEntity: Comments::class)]
     private Collection $comments;
 
-    #[ORM\ManyToOne(inversedBy: 'tricks')]
-    private ?Medias $medias = null;
+    #[ORM\OneToMany(mappedBy: 'tricks', targetEntity: Medias::class)]
+    private Collection $medias;
 
     #[ORM\ManyToOne(inversedBy: 'tricks')]
     private ?Category $category = null;
@@ -43,6 +43,7 @@ class Tricks
     public function __construct()
     {
         $this->comments = new ArrayCollection();
+        $this->medias = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -135,7 +136,12 @@ class Tricks
         return $this;
     }
 
-    public function getMedias(): ?Medias
+    public function getMainMedia(): Collection
+    {        
+        return new ArrayCollection($this->medias->slice(0, 1));        
+    }
+
+    public function getMedias(): Collection
     {
         return $this->medias;
     }

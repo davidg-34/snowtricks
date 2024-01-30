@@ -10,6 +10,7 @@ use Symfony\Component\String\Slugger\AsciiSlugger;
 use Doctrine\ORM\EntityManagerInterface;
 use App\Entity\User;
 use App\Entity\Tricks;
+use App\Entity\Medias;
 use App\Form\TrickForm;
 use App\Entity\Comments;
 use App\Form\CommentType;
@@ -63,9 +64,12 @@ class TrickController extends AbstractController
                         $fileName
                     );
                     // Insère l'image avec le nom de l'image
-                    $trick->setPicture($fileName);
+                    $media = new Medias();
+                    $media->setPicture($fileName);
+                    // $entityManager->persist($media);
+                    // $entityManager->flush();
+                    $trick->setMedias($media);
                 }
-
                 $slugger = new AsciiSlugger();
                 $trick->setSlug($slugger->slug($trick->getName()));
                 $entityManager->persist($trick);

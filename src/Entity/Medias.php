@@ -16,13 +16,13 @@ class Medias
     private ?int $id = null;
 
     #[ORM\Column(length: 120)]
-    private ?string $picture = null;
+    private ?string $media = null;
 
-    #[ORM\Column(length: 120)]
-    private ?string $video = null;
-
-    #[ORM\OneToMany(mappedBy: 'medias', targetEntity: Tricks::class)]
-    private Collection $relation;
+    #[ORM\Column(length: 10)]
+    private ?string $type = null;
+    
+    #[ORM\ManyToOne(inversedBy: 'medias')]
+    private ?Tricks $tricks = null;
 
     public function __construct()
     {
@@ -34,26 +34,26 @@ class Medias
         return $this->id;
     }
 
-    public function getPicture(): ?string
+    public function getMedia(): ?string
     {
-        return $this->picture;
+        return $this->media;
     }
 
-    public function setPicture(string $picture): self
+    public function setMedia(string $media): self
     {
-        $this->picture = $picture;
+        $this->media = $media;
 
         return $this;
     }
 
-    public function getVideo(): ?string
+    public function getType(): ?string
     {
-        return $this->video;
+        return $this->type;
     }
 
-    public function setVideo(string $video): self
+    public function setType(string $type): self
     {
-        $this->video = $video;
+        $this->type = $type;
 
         return $this;
     }
@@ -61,7 +61,7 @@ class Medias
     /**
      * @return Collection<int, Tricks>
      */
-    public function getRelation(): Collection
+    /* public function getRelation(): Collection
     {
         return $this->relation;
     }
@@ -70,7 +70,7 @@ class Medias
     {
         if (!$this->relation->contains($relation)) {
             $this->relation->add($relation);
-            $relation->setMedias($this);
+            $relation->setTricks($this);
         }
 
         return $this;
@@ -80,11 +80,11 @@ class Medias
     {
         if ($this->relation->removeElement($relation)) {
             // set the owning side to null (unless already changed)
-            if ($relation->getMedias() === $this) {
-                $relation->setMedias(null);
+            if ($relation->getTricks() === $this) {
+                $relation->setTricks(null);
             }
         }
 
         return $this;
-    }
+    } */
 }

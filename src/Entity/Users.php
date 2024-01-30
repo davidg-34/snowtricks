@@ -32,11 +32,11 @@ class Users implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column]
     private ?string $password = null;
 
-    #[ORM\OneToMany(mappedBy: 'users', targetEntity: Tricks::class)]
-    private Collection $tricks;
+    // #[ORM\OneToMany(mappedBy: 'users', targetEntity: Tricks::class)]
+    // private Collection $tricks;
 
-    #[ORM\OneToMany(mappedBy: 'users', targetEntity: Comments::class)]
-    private Collection $comments;
+    // #[ORM\OneToMany(mappedBy: 'users', targetEntity: Comments::class)]
+    // private Collection $comments;
 
     #[ORM\Column(length: 120)]
     private ?string $avatar = null;
@@ -126,7 +126,7 @@ class Users implements UserInterface, PasswordAuthenticatedUserInterface
     /**
      * @return Collection<int, Tricks>
      */
-    public function getTricks(): Collection
+    /* public function getTricks(): Collection
     {
         return $this->tricks;
     }
@@ -152,6 +152,7 @@ class Users implements UserInterface, PasswordAuthenticatedUserInterface
 
         return $this;
     }
+    */
 
     /**
      * @return Collection<int, Comments>
