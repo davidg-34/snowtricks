@@ -67,9 +67,9 @@ class TrickController extends AbstractController
                     // Insère l'image avec le nom de l'image
                     $media = new Medias();
                     $media->setMedia($fileName);
-                    // $entityManager->persist($media);
-                    // $entityManager->flush();
-                    $trick->setMedias($media);
+                    $media->setType('picture');
+                    $entityManager->persist($media);
+                    $trick->addMedia($media);
                 }
                 // GENERATION DE SLUG
                 $slugger = new AsciiSlugger();

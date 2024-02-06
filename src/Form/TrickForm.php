@@ -23,16 +23,12 @@ class TrickForm extends AbstractType
             ])
             ->add('description', TextType::class, [
                 'label' => 'Description'
-            ])
+            ])            
             ->add('category', EntityType::class, [
                 'class' => Category::class,
                 'choice_label' => 'name',
                 'label' => 'Catégorie des figures'
             ])
-            //->add('medias', EntityType::class, $options = [
-            //    'class' => Medias::class,
-            //    'choice_label' => 'id'
-            //])
             ->add('medias', FileType::class, [
                 //'class' => Medias::class,
                 //'allow_extra_fields' => false,
@@ -40,6 +36,10 @@ class TrickForm extends AbstractType
                 'mapped' => false,
                 'required' => false
             ])
+            //->add('medias', EntityType::class, $options = [
+            //    'class' => Medias::class,
+            //    'choice_label' => 'id'
+            //])            
             ->getForm();
     }
 

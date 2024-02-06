@@ -57,6 +57,18 @@ class Medias
 
         return $this;
     }
+  
+    public function getTricks(): ?Tricks
+    {
+        return $this->tricks;
+    }
+
+    public function setTricks(?Tricks $tricks): self
+    {
+        $this->tricks = $tricks;
+
+        return $this;
+    }
 
     /**
      * @return Collection<int, Tricks>

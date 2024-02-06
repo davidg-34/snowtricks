@@ -30,36 +30,32 @@
             </p>
         </div>
         
-        {# liste des images et videos #}
-        <div class="container" style="display: grid; grid-template-columns:repeat(3,1fr);">
-            {# {% for trick in tricks %} #}
-            <article class="col{# -lg-2 col-md-4 #}">
-                <div class="card my-2">
-                    <div class="card-body my-3">
-                        {# <img class="card-img" src="/{{ trick.medias.picture }}" alt="img_trick"> #}
-                        {# <img class="card-img" src="/{{ asset('/uploads' ~ trick.medias.picture) }}" alt="img_trick"> #}
-                            {% for media in trick.medias %}
-                                {% if media.type == "picture" %}
-                                <img class="card-img my-3" src="/{{ media.media }}" alt="img_trick"{# style="display:inline-block #}>
-                                {%  else %}
-                                <!-- todo: afficher les videos -->
-                            {%  endif %}
-                        {%  endfor %}
-                    </div>
-                    <div class="row">
-                        <div class="col">
-                            <p class="text-center">{{ trick.name}}</p>
-                        </div>
-                    </div>
-                </div>
-            </article>
-            {# {% endfor %} #}
-        </div>
+        <div class="row my-5">
+            <div class="col">
+                <h1 class="text-center">{{ trick.name}}</h1>
+            </div>
+        </div>                
 
         {# description de la figure #}
-        <div class="container col-lg-12  text-center my-5 px-5">
+        <div class="container col-lg-12 my-5">
             {{ trick.description }}
         </div>
+
+        {# liste des images et videos #}
+        <section class="container" style="display: flex; width: 100%; margin: 0px auto">
+            {% for media in trick.medias %}
+                <article class="card my-2">
+                    <div class="card-body my-3">                        
+                        {% if media.type == "picture" %}
+                            <img class="card-img my-3" src="/assets/uploads/{{ media.media }}" alt="img_trick"{# style="display:inline-block #}>
+                        {%  else %}
+                            <!-- todo: afficher les videos -->
+                        {%  endif %}
+                    </div>                                                                        
+                </article>
+            {%  endfor %}            
+        </section>
+
 
         {# informations sur la figure #}
         <div class="container container-fluid col-lg-12 my-5 text-center">

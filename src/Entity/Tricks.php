@@ -34,7 +34,7 @@ class Tricks
     #[ORM\OneToMany(mappedBy: 'tricks', targetEntity: Comments::class)]
     private Collection $comments;
 
-    #[ORM\OneToMany(mappedBy: 'tricks', targetEntity: Medias::class)]
+    #[ORM\OneToMany(mappedBy: 'tricks', targetEntity: Medias::class, cascade: ['persist'])]
     private Collection $medias;
 
     #[ORM\ManyToOne(inversedBy: 'tricks')]
@@ -148,7 +148,17 @@ class Tricks
 
     public function setMedias(?Medias $medias): self
     {
-        $this->medias = $medias;
+        $this->medias->add($medias);
+
+        return $this;
+    }
+
+    public function addMedia(Medias $media): self
+    {
+        if (!$this->medias->contains($media)) {
+            $this->medias->add($media);
+            $media->setTricks($this);
+        }
 
         return $this;
     }
