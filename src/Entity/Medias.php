@@ -26,7 +26,7 @@ class Medias
 
     public function __construct()
     {
-        $this->relation = new ArrayCollection();
+        $this->media = new ArrayCollection();
     }
 
     public function getId(): ?int

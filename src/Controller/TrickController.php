@@ -41,7 +41,7 @@ class TrickController extends AbstractController
         } else {
             $trick = new Tricks();
         }
-        // on crée le formulaire
+        // CREATION DU FORMULAIRE
         $form = $this->createForm(TrickForm::class, $trick);
         // On traite/soumet la requête du formulaire
         $form->handleRequest($request);
@@ -53,6 +53,7 @@ class TrickController extends AbstractController
                     $user = $this->getUser();
                     $trick->setUsers($user);
                 }
+                // UPLOAD DE FICHIER
                 // Récupère toutes les données 'médias' à partir du formulaire
                 $medias = $form->get('medias')->getData();
                 if ($medias) {
@@ -65,11 +66,12 @@ class TrickController extends AbstractController
                     );
                     // Insère l'image avec le nom de l'image
                     $media = new Medias();
-                    $media->setPicture($fileName);
+                    $media->setMedia($fileName);
                     // $entityManager->persist($media);
                     // $entityManager->flush();
                     $trick->setMedias($media);
                 }
+                // GENERATION DE SLUG
                 $slugger = new AsciiSlugger();
                 $trick->setSlug($slugger->slug($trick->getName()));
                 $entityManager->persist($trick);

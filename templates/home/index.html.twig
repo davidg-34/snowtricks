@@ -5,64 +5,76 @@
 
 {% block body %}
 
-	<header {# id="hero" #}>
-		<div class="hero">
-			<h4 class="citation text-center">Partager vos figures sur le site communautaire de snowtricks !</h4>
-			<div class="arrow arrow-down">
-				<a href="#tricks">
-					<i class="fas fa-arrow-down"></i>
-				</a>
-			</div>
-		</div>
-	</header>
+    <header {# id="hero" #}>
+        <div class="hero">
+            <h4 class="citation text-center">Partager vos figures sur le site communautaire de snowtricks !</h4>
+            {# Flèche du bas #}
+            <div class="arrow arrow-down">
+                <a href="#tricks">
+                    <i class="fas fa-arrow-down"></i>
+                </a>
+            </div>
+        </div>
+    </header>
 
-	<section id="tricks">
-		<div class="container p-3">
-			<div class="row">
-				{% for trick in tricks %}
-					<article class="col-lg-4 col-md-6 col-sm-6">
-						<div class="card my-2">
-							<div class="card-body">
-								{% for media in trick.mainMedia() %}
-									{% if media.type == "picture" %}										
-										<img class="card-img" src="/{{ media.media }}" alt="img_trick">
-									{%  else %}
-										<!-- todo: afficher les videos -->
-									{%  endif %}
-								{%  endfor %}
-							</div>
-							<div class="row">
-								<div class="col-6">
-									<a href="/tricks/{{ trick.slug }}">
-										<p class="w-100 mx-4">{{ trick.name}}</p>
-									</a>
-								</div>
-								{% if app.user %}
-									<div class="col-6 ">
-										<div class="row">
-											<div class="col-6">
-												<a href="/tricks/{{ trick.slug }}/edit">
-													<i class="fas fa-pen"></i>
-												</a>
-											</div>
-											<div class="col-6">
-												<a href="/tricks/{{ trick.id }}/delete">
-													<i class="fas fa-trash-alt"></i>
-												</a>
-											</div>
-										</div>
-									</div>
-								{% endif %}
-							</div>
-						</div>
-					</article>
-				{% endfor %}
-			</div>
-		</div>
-		<div class="arrow">
-			<a href="#">
-				<i class="fas fa-arrow-up"></i>
-			</a>
-		</div>
-	</section>
+    {# Liste des figures #}
+    <section id="tricks">
+        <div class="container p-3">
+            <div class="row">
+                {% for trick in tricks %}
+                    <article class="col-lg-4 col-md-6 col-sm-6">
+                        <div class="card my-2">
+                            <div class="card-body">
+                                {% for media in trick.mainMedia() %}
+                                    {% if media.type == "picture" %}
+                                        <img class="card-img" src="/{{ media.media }}" alt="img_trick">
+                                        {%  else %}
+                                        <!-- todo: afficher les videos -->
+                                    {%  endif %}
+                                {%  endfor %}
+                            </div>
+                            <div class="row">
+                                <div class="col-6">
+                                    <a href="/tricks/{{ trick.slug }}">
+                                        <p class="w-100 mx-4">{{ trick.name}}</p>
+                                    </a>
+                                </div>
+                                {% if app.user %}
+                                    <div class="col-6 ">
+                                        <div class="row">
+                                            <div class="col-6">
+                                                <a href="/tricks/{{ trick.slug }}/edit">
+                                                    <i class="fas fa-pen"></i>
+                                                </a>
+                                            </div>
+                                            <div class="col-6">
+                                                <a href="/tricks/{{ trick.id }}/delete">
+                                                    <i class="fas fa-trash-alt"></i>
+                                                </a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </article>
+                {% endfor %}
+            </div>
+        </div>
+        {# Bouton 'load more' #}
+        <div class="container">
+            <a href="" class="d-grid gap-2 col-2 mx-auto">
+                <button class="text-center bg-primary" onclick="display_data()">
+                    <i class="fas fa-spinner"></i>
+                </button>
+                <input type="hidden" id="loadMore" name="loadMore" value="0">
+            </a>
+        </div>
+        {# Flèche du haut #}
+        <div class="arrow">
+            <a href="#">
+                <i class="fas fa-arrow-up"></i>
+            </a>
+        </div>
+    </section>
 {% endblock %}
