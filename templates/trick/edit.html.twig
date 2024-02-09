@@ -54,10 +54,12 @@
                     <div style="display: flex; gap: 15px; width: 100%;">                    
                         {% for media in trick.medias %}                        
                             {% if media.type == "picture" %}
-                                <div class="edit-media">
-                                    <img src="/assets/uploads/{{ media.media }}" style="width: 50px; height: 50px; border-radius: 15px;">
+                                <div class="edit-media">                                    
+                                        <img src="/assets/uploads/{{ media.media }}" style="width: 50px; height: 50px; border-radius: 15px;">                                    
                                     <div class="delete-overlay">
-                                        <span>X</span>
+                                        <a href="/tricks/{{ trick.id }}/delete">
+                                            <span class="text-white">X</span>
+                                        </a>
                                     </div>
                                 </div>
                             {%  else %}

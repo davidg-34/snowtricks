@@ -12,8 +12,10 @@ use App\Entity\User;
 use App\Entity\Tricks;
 use App\Entity\Medias;
 use App\Form\TrickForm;
+use Symfony\Component\Filesystem\Filesystem;
 use App\Entity\Comments;
 use App\Form\CommentType;
+use Doctrine\Common\Collections\ArrayCollection;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 
 //use Doctrine\ORM\EntityManager;
@@ -93,6 +95,20 @@ class TrickController extends AbstractController
     #[Route('/tricks/{id}/delete', name: 'trick_delete')]
     public function delete(EntityManagerInterface $entityManager, $id): RedirectResponse
     {
+        // Je récupère l'image dans l'array collection à partir de de l'entité tricks
+        $pictures = $tricks->getMedias();
+        // Je crée une instance de la classe Medias
+        $pictures = new Medias();
+        // Je parcours le systeme de fichier des images téléchargées
+        foreach($pictures as $picture) {
+            // Je reconstitue l'image téléchargée stockée dans la base de données
+            $filePicture = $this->getParameter('media_directory').'/'.$picture->getMedia();
+            // Je supprime physiquement l'image
+            if (file_exists($filePicture)) {
+                unlink($filePicture);
+            }
+        }
+
         $trick = $entityManager->getRepository(Tricks::class)->find($id);
         $entityManager->remove($trick);
         $entityManager->flush();

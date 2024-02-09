@@ -27,7 +27,7 @@
                             <div class="card-body">
                                 {% for media in trick.mainMedia() %}
                                     {% if media.type == "picture" %}
-                                        <img class="card-img" src="/{{ media.media }}" alt="img_trick">
+                                        <img class="card-img" src="/assets/uploads/{{ media.media }}" alt="img_trick">
                                         {%  else %}
                                         <!-- todo: afficher les videos -->
                                     {%  endif %}
