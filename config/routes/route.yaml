@@ -1,0 +1,4 @@
+# routes.yaml
+load_more:
+    path: /load-more
+    controller: App\Controller\TrickController::loadMore

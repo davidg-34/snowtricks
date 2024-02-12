@@ -7,6 +7,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\String\Slugger\AsciiSlugger;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Doctrine\ORM\EntityManagerInterface;
 use App\Entity\User;
 use App\Entity\Tricks;
@@ -15,6 +16,7 @@ use App\Form\TrickForm;
 use Symfony\Component\Filesystem\Filesystem;
 use App\Entity\Comments;
 use App\Form\CommentType;
+use App\Repository\TricksRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 
@@ -43,7 +45,7 @@ class TrickController extends AbstractController
         } else {
             $trick = new Tricks();
         }
-        // CREATION DU FORMULAIRE
+        // CREATION DU FORMULAIRE****************
         $form = $this->createForm(TrickForm::class, $trick);
         // On traite/soumet la requête du formulaire
         $form->handleRequest($request);
@@ -55,7 +57,7 @@ class TrickController extends AbstractController
                     $user = $this->getUser();
                     $trick->setUsers($user);
                 }
-                // UPLOAD DE FICHIER
+                // UPLOAD DE FICHIER*************
                 // Récupère toutes les données 'médias' à partir du formulaire
                 $medias = $form->get('medias')->getData();
                 if ($medias) {
@@ -73,7 +75,7 @@ class TrickController extends AbstractController
                     $entityManager->persist($media);
                     $trick->addMedia($media);
                 }
-                // GENERATION DE SLUG
+                // GENERATION DE SLUG***************
                 $slugger = new AsciiSlugger();
                 $trick->setSlug($slugger->slug($trick->getName()));
                 $entityManager->persist($trick);
@@ -131,7 +133,7 @@ class TrickController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $comment->setCreatedAt(new \DateTime());
             $comment->setTricks($trick)
-                ->setUser($this->getUser());
+                    ->setUser($this->getUser());
             $entityManager->persist($comment);
             $entityManager->flush();
 
@@ -149,4 +151,16 @@ class TrickController extends AbstractController
             'commentPageCount' => $commentPageCount
         ]);
     }
+
+    #[Route('/load-more', name: 'home/index.html.twig')]
+    public function loadMore(EntityManagerInterface $entityManager):response
+    {
+        // Récupérer les figures à afficher
+        $tricks = $this->$entityManager->getRepository(Tricks::class)->getData();
+        
+        // Retourner les données au format JSON
+        return new JsonResponse($tricks);
+    }
+
+   
 }
