@@ -1,0 +1,38 @@
+                {% for trick in tricks %}
+                    <article class="col-lg-4 col-md-6 col-sm-6">
+                        <div class="card my-2">
+                            <div class="card-body">
+                                {% for media in trick.mainMedia() %}
+                                    {% if media.type == "picture" %}
+                                        <img class="card-img" src="/assets/uploads/{{ media.media }}" alt="img_trick">
+                                        {%  else %}
+                                        <!-- todo: afficher les videos -->
+                                    {%  endif %}
+                                {%  endfor %}
+                            </div>
+                            <div class="row">
+                                <div class="col-6">
+                                    <a href="/tricks/{{ trick.slug }}">
+                                        <p class="w-100 mx-4">{{ trick.name}}</p>
+                                    </a>
+                                </div>
+                                {% if app.user %}
+                                    <div class="col-6 ">
+                                        <div class="row">
+                                            <div class="col-6">
+                                                <a href="/tricks/{{ trick.slug }}/edit">
+                                                    <i class="fas fa-pen"></i>
+                                                </a>
+                                            </div>
+                                            <div class="col-6">
+                                                <a href="/tricks/{{ trick.id }}/delete">
+                                                    <i class="fas fa-trash-alt"></i>
+                                                </a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </article>
+                {% endfor %}

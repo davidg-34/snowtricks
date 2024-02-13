@@ -3,6 +3,7 @@
 namespace App\Repository;
 
 use App\Entity\Tricks;
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
@@ -20,6 +21,12 @@ class TricksRepository extends ServiceEntityRepository
     {
         parent::__construct($registry, Tricks::class);
     }    
+
+    public function findAll($currentPage = 1, $tricksPerPage = 3) {        
+        $offset = ($currentPage-1)*$tricksPerPage;
+        $allTricks = new ArrayCollection($this->findBy(array()));
+        return $allTricks->slice($offset, $tricksPerPage);
+    }
 
 //    /**
 //     * @return Tricks[] Returns an array of Tricks objects

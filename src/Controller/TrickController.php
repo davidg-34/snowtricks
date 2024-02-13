@@ -170,14 +170,15 @@ class TrickController extends AbstractController
         return $this->redirectToRoute('trick_edit', ['slug' => $trick->getSlug()]);        
     }
 
-    #[Route('/load-more', name: 'home/index.html.twig')]
-    public function loadMore(EntityManagerInterface $entityManager):response
-    {
-        // Récupérer les figures à afficher
-        $tricks = $this->$entityManager->getRepository(Tricks::class)->getData();
+    #[Route('/ajax/tricks/{page}', name: 'tricks_load_more')]
+    public function loadMore(EntityManagerInterface $entityManager, $page):response
+    {   
+        $currentPage = intval($page);
+        $tricks = $entityManager->getRepository(Tricks::class)->findAll($currentPage);
+        return $this->render('trick/tricks.html.twig', [
+            'tricks' => $tricks
+        ]);
         
-        // Retourner les données au format JSON
-        return new JsonResponse($tricks);
     }
 
    
