@@ -98,10 +98,8 @@ class TrickController extends AbstractController
     public function delete(EntityManagerInterface $entityManager, $id): RedirectResponse
     {
         // Je récupère l'image dans l'array collection à partir de de l'entité tricks
-        $pictures = $tricks->getMedias();
-        // Je crée une instance de la classe Medias
+        /* $pictures = $tricks->getMedias();
         $pictures = new Medias();
-        // Je parcours le systeme de fichier des images téléchargées
         foreach($pictures as $picture) {
             // Je reconstitue l'image téléchargée stockée dans la base de données
             $filePicture = $this->getParameter('media_directory').'/'.$picture->getMedia();
@@ -110,6 +108,7 @@ class TrickController extends AbstractController
                 unlink($filePicture);
             }
         }
+        */
 
         $trick = $entityManager->getRepository(Tricks::class)->find($id);
         $entityManager->remove($trick);
@@ -150,6 +149,25 @@ class TrickController extends AbstractController
             'commentCount' => $commentCount,
             'commentPageCount' => $commentPageCount
         ]);
+    }
+
+
+    // Suppression d'un media de figure
+    #[Route('/tricks/{id}/medias/{mediaId}/delete', name: 'trick_media_delete')]
+    public function deleteMedia(EntityManagerInterface $entityManager, $id, $mediaId): RedirectResponse
+    {
+        $trick = $entityManager->getRepository(Tricks::class)->find($id);        
+        $form = $this->createForm(TrickForm::class, $trick);
+        
+        $media = $entityManager->getRepository(Medias::class)->find($mediaId);
+        
+        // Suppression de l'image sur le HD
+        unlink($this->getParameter('medias_directory') . '/' . $media->getMedia());
+        // Suppression de l'image en BDD
+        $entityManager->remove($media);
+        $entityManager->flush();
+
+        return $this->redirectToRoute('trick_edit', ['slug' => $trick->getSlug()]);        
     }
 
     #[Route('/load-more', name: 'home/index.html.twig')]
