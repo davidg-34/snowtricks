@@ -16,7 +16,7 @@
                     <!-- todo: afficher les videos -->
                     {# <video controls autoplay="none" loop muted preload="none">
                         <div class="ratio ratio-4x3 muted=none">
-                            <iframe class="embed-responsive-item muted" src="/assets/uploads/{{ media.media }}" allowullscreen></iframe>
+                            <iframe class="embed-responsive-item muted" src="/assets/uploads/{{ media.media }}" allowullscreen autoplay="false" autostart="0"></iframe>
                         </div>
                         </video> #}
                 {%  endif %}
@@ -51,8 +51,12 @@
                         {% if media.type == "picture" %}
                             <img class="card-img my-3" src="/assets/uploads/{{ media.media }}" alt="img_trick">
                         {%  elseif media.type == "video" %}
+                        asdasddasasddsa
                         <div class="ratio ratio-4x3">
-                            <iframe class="embed-responsive-items" src="/assets/uploads/{{ media.media }}" allowullscreen></iframe>
+                            <video width="100%" height="auto" controls preload="none">
+                                <source src="/assets/uploads/{{ media.media }}" type="video/mp4">
+                                Your browser does not support the video tag.
+                            </video>
                         </div>
                         {%  endif %}
                     </div>
@@ -63,7 +67,10 @@
                             {% if media.type == "picture" %}
                                 <img class="card-img" src="/assets/uploads/{{ media.media }}" alt="img_trick">
                                 {%  elseif media.type == "video" %}
-                                <iframe cass="embed-responsive-item" src="/assets/uploads/{{ media.media }}" allowfullscreen></iframe>
+                                <video width="100%" height="auto" controls preload="none">
+                                    <source src="/assets/uploads/{{ media.media }}" type="video/mp4">
+                                    Your browser does not support the video tag.
+                                </video>
                             {%  endif %}
                         {%  endfor %}
                     </div> #}

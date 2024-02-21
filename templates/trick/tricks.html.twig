@@ -10,7 +10,7 @@
                         {%  else  %}
                         {# <video controls autoplay="none" muted preload="none"> #}
                         <div class="ratio ratio-16x9 controls muted autoplay="none"">
-                            <iframe class="embed-responsive-item muted" src="/assets/uploads/{{ media.media }}" allowullscreen></iframe>
+                            <iframe class="embed-responsive-item muted" src="/assets/uploads/{{ media.media }}" allowullscreen  autoplay="false" autostart="0"></iframe>
                         </div>
                         {# </video> #}
                     {%  endif %}

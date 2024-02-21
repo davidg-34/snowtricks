@@ -40,28 +40,22 @@
                 {% if editMode %}
                     <div style="display: flex; gap: 15px; width: 100%;">
                         {% for media in trick.medias %}
-                            {% if media.type == "picture" %}
-                                <div class="edit-media">
+                            <div class="edit-media">
+                                {% if media.type == "picture" %}
                                     <img src="/assets/uploads/{{ media.media }}" style="width: 50px; height: 50px; border-radius: 15px;">
-                                    <div class="delete-overlay">
-                                        <a href="/tricks/{{ trick.id }}/medias/{{ media.id }}/delete">
-                                            <span class="text-white">X</span>
-                                        </a>
-                                    </div>
+                                {% else %}
+                                    <img src="/assets/videoicon.png" style="width: 50px; height: 50px; border-radius: 15px;">
+                                {% endif %}
+                                <div class="delete-overlay">
+                                    <a href="/tricks/{{ trick.id }}/medias/{{ media.id }}/delete">
+                                        <span class="text-white">X</span>
+                                    </a>
                                 </div>
-                            {%  else %}
-                                <!-- todo: afficher les videos -->
-                                <div class="ratio ratio-16x9 muted">
-                                    <iframe class="embed-responsive-item muted" src="/assets/uploads/{{ media.media }}" allowullscreen></iframe>
-                                </div>
-                            {%  endif %}
+                            </div>
                         {%  endfor %}
                     </div>
                 {% endif %}
-
-
                 {{ form_end(formTrick) }}
-
             </div>
         </div>
     {% endif %}
