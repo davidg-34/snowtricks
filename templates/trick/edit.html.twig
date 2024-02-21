@@ -5,39 +5,14 @@
 
 {% block body %}
 
-    <!-- todo :deplacer ca dnas le stryle -->
-    <style>
-    .edit-media {        
-        position: relative;
-    }
-    .edit-media div.delete-overlay{
-        opacity: 0.7;
-        background-color: #333;
-        color: white;
-        font-weight: bolder;
-        position: absolute;
-        top: 0;
-        left: 0;
-        width: 50px;
-        height: 50px;
-        border-radius: 15px;
-        position: absolute;
-        display: none;
-        justify-content: center;
-        align-items: center;        
-    }
-    .edit-media:hover div.delete-overlay{
-        display: flex;
-    }    
-    </style>
-
     <div class="container col-6">
         {% if editMode %}
-            <h1>Modification de la figure</h1>
+            <h1 class="text-center">Modification de la figure</h1>
         {% else %}
-            <h1>Création d'une figure</h1>
+            <h1 class="text-center">Création d'une figure</h1>
         {% endif %}
     </div>
+    {# Formulaire pour créer/modifier une figure #}
     {% if app.user %}
         <div class="container my-5">
             <div class="container col-6">
@@ -48,28 +23,9 @@
                 {{ form_row(formTrick.description) }}
                 {{ form_row(formTrick.category) }}
                 {{ form_row(formTrick.medias) }}
-                
 
-                {% if editMode %}
-                    <div style="display: flex; gap: 15px; width: 100%;">                    
-                        {% for media in trick.medias %}                        
-                            {% if media.type == "picture" %}
-                                <div class="edit-media">                                    
-                                        <img src="/assets/uploads/{{ media.media }}" style="width: 50px; height: 50px; border-radius: 15px;">                                    
-                                    <div class="delete-overlay">
-                                        <a href="/tricks/{{ trick.id }}/medias/{{ media.id }}/delete">
-                                            <span class="text-white">X</span>
-                                        </a>
-                                    </div>
-                                </div>
-                            {%  else %}
-                                <!-- todo: afficher les videos -->
-                            {%  endif %}
-                        {%  endfor %}  
-                    </div>
-                {% endif %}
-
-                <button type="submit" class="my-3">
+                {# Boutons modifier/ajouter/supprimer une figure du formulaire #}
+                <button type="submit" class="m-3">
                     {% if editMode %}
                         Modifiez
                     {% else %}
@@ -79,6 +35,30 @@
                 {% if editMode %}
                     <a href="/tricks/{{ trick.id }}/delete" class="button m-3" style="background-color: red; color: aliceblue;">Supprimer</a>
                 {% endif %}
+
+                {# Modification/suppression de l'image ou vidéo téléchargée #}
+                {% if editMode %}
+                    <div style="display: flex; gap: 15px; width: 100%;">
+                        {% for media in trick.medias %}
+                            {% if media.type == "picture" %}
+                                <div class="edit-media">
+                                    <img src="/assets/uploads/{{ media.media }}" style="width: 50px; height: 50px; border-radius: 15px;">
+                                    <div class="delete-overlay">
+                                        <a href="/tricks/{{ trick.id }}/medias/{{ media.id }}/delete">
+                                            <span class="text-white">X</span>
+                                        </a>
+                                    </div>
+                                </div>
+                            {%  else %}
+                                <!-- todo: afficher les videos -->
+                                <div class="ratio ratio-16x9 muted">
+                                    <iframe class="embed-responsive-item muted" src="/assets/uploads/{{ media.media }}" allowullscreen></iframe>
+                                </div>
+                            {%  endif %}
+                        {%  endfor %}
+                    </div>
+                {% endif %}
+
 
                 {{ form_end(formTrick) }}
 

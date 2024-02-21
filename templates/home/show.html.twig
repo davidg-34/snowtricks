@@ -5,21 +5,24 @@
 
 {% block body %}
 
-    <div class="container border border-secondary col col-lg-8 p-0" style="box-shadow: 0px 2px 5px 0px #000;">
+    <section class="container border border-secondary col col-lg-8 p-0" style="box-shadow: 0px 2px 5px 0px #000;">
 
         {# image de la figure page détail #}
-        <div
-            class="container p-0 position-relative">
-            {# <img class="card-img" src="/{{ trick.medias.picture }}" alt="img_trick"> #}
-
+        <div class="container p-0 position-relative">
             {% for media in trick.mainMedia %}
                 {% if media.type == "picture" %}
-                    <img class="card-img" src="/{{ media.media }}" alt="img_trick">
+                    <img class="card-img" src="/assets/uploads/{{ media.media }}" alt="img_trick">
                     {%  else %}
                     <!-- todo: afficher les videos -->
+                    {# <video controls autoplay="none" loop muted preload="none">
+                        <div class="ratio ratio-4x3 muted=none">
+                            <iframe class="embed-responsive-item muted" src="/assets/uploads/{{ media.media }}" allowullscreen></iframe>
+                        </div>
+                        </video> #}
                 {%  endif %}
             {%  endfor %}
 
+            {# Les 2 icones modifier/supprimer la figure #}
             <p class="buttons border border-light position-absolute" style="top: 1%; right: 1%;">
                 <a href="/tricks/{{ trick.slug }}/edit">
                     <i class="text-light px-2 fas fa-pen"></i>
@@ -29,12 +32,11 @@
                 </a>
             </p>
         </div>
-        
         <div class="row my-5">
             <div class="col">
                 <h1 class="text-center">{{ trick.name}}</h1>
             </div>
-        </div>                
+        </div>
 
         {# description de la figure #}
         <div class="container col-lg-12 my-5">
@@ -42,99 +44,109 @@
         </div>
 
         {# liste des images et videos #}
-        <section class="container" style="display: flex; width: 100%; margin: 0px auto">
-            {% for media in trick.medias %}
-                <article class="card my-2">
-                    <div class="card-body my-3">                        
+        <section class="container {# style=" display: flex; width: 100%; margin: 0px auto #}">
+            <article class="row d-lg-flex justify-content-center">
+                {% for media in trick.medias %}
+                    <div class="card m-2 col-lg-4 col-md-6 col-sm-6">
                         {% if media.type == "picture" %}
-                            <img class="card-img my-3" src="/assets/uploads/{{ media.media }}" alt="img_trick"{# style="display:inline-block #}>
-                        {%  else %}
-                            <!-- todo: afficher les videos -->
+                            <img class="card-img my-3" src="/assets/uploads/{{ media.media }}" alt="img_trick">
+                        {%  elseif media.type == "video" %}
+                        <div class="ratio ratio-4x3">
+                            <iframe class="embed-responsive-items" src="/assets/uploads/{{ media.media }}" allowullscreen></iframe>
+                        </div>
                         {%  endif %}
-                    </div>                                                                        
-                </article>
-            {%  endfor %}            
-        </section>
-
-
-        {# informations sur la figure #}
-        <div class="container container-fluid col-lg-12 my-5 text-center">
-            <button class="btn btn-secondary disabled my-2">Créé le :
-                {# {{trick.comments.created_at}} #}
-            </button>
-            <button class="btn btn-secondary disabled my-2">Groupe :
-                {{trick.category.name}}
-            </button>
-            <button class="btn btn-secondary disabled my-2">Modifié le :
-                {# {{trick.comments.}} #}
-            </button>
-            <button class="btn btn-secondary disabled my-2">Auteur :
-                {# {{trick.users.roles}} #}
-            </button>
-        </div>
-
-        {# Commentaires #}
-        <h5 class="ms-5 mb-5">Commentaires :
-            {{ trick.comments|length }}</h5>
-        {% for comment in trick.comments(currentPage, commentPerPage) %}
-            <div class="comment">
-                <div class="row">
-                    <div class="col">
-                        <img class="mb-4 mx-5" src="https://ui-avatars.com/api/?rounded=true&background=random&name={{ comment.user.username|default('undefined') }}" width="40px">
-                        <strong>{{ comment.user.username|default('') }}</strong>
-                        <span class="ps-2">Le
-                            {{comment.createdAt | date('d/m/y à H:i')}}</span>
                     </div>
-                </div>
-                <div class="col mb-4 ms-5">
-                    {{ comment.content | raw }}
-                </div>
-            </div>
-        {% endfor %}
+                {%  endfor %}
+            </article>
+        {# <div class="col-lg-4 col-md-6 col-sm-6">
+                        {% for media in trick.mainMedia() %}
+                            {% if media.type == "picture" %}
+                                <img class="card-img" src="/assets/uploads/{{ media.media }}" alt="img_trick">
+                                {%  elseif media.type == "video" %}
+                                <iframe cass="embed-responsive-item" src="/assets/uploads/{{ media.media }}" allowfullscreen></iframe>
+                            {%  endif %}
+                        {%  endfor %}
+                    </div> #}
 
-        <nav aria-label="Page navigation example w-100">
-            <ul class="pagination justify-content-center">
-                <li class="page-item">
-                    {% if (currentPage > 1) %}
-                        <a class="page-link" href="{{ path ('app_show', {slug: trick.slug, page: currentPage - 1}) }}">Précédent</a>
-                    {% else %}
-                        <span class="page-link disabled">Précédent</span>
-                    {% endif %}
-                </li>
-                {% for page in range(currentPage - 2, currentPage + 2) %}
-                    {% if (page > 0 and page < commentPageCount) %}
-                        <li class="page-item {{ (page == currentPage) ? 'active' : '' }}">
-                            <a href="{{ path('app_show', {slug: trick.slug, page: page}) }}" class="page-link">{{ page }}</a>
-                        </li>
-                    {%  endif %}
-                {% endfor %}
-                <li>
-                    {% if (currentPage < commentPageCount) %}
-                        <a class="page-link" href="{{ path ('app_show', {slug: trick.slug, page: currentPage + 1}) }}">Suivant</a>
-                    {% else %}
-                        <span class="page-link disabled">Suivant</span>
-                    {% endif %}
-                </li>
-            </ul>
-        </nav>
+    </section>
 
-        {# Formulaire du commentaire #}
-        <div class="container row mx-auto">
-            {% if app.user %}
-                {{ form_start(commentForm) }}
-                <div class="row justify-content-center">
-                    <div class="col-3" {# style="width: 60%" #}>
-                        {{ form_row(commentForm.content, {'attr': {'placeholder': "Votre commentaire"}}) }}
-                    </div>
-                    <div class="col-3" {# style="width: 30%" #}>
-                        <button type="submit" class="btn btn-secondary mb-2 p-3 w-100">Laissez un commentaire</button>
-                    </div>
-                </div>
-                {{ form_end(commentForm) }}
-            {% else %}
-                <p class="text-center fw-bolder fs-4">Vous ne pouvez-pas commenter si vous n'êtes pas connecté !</p>
-            {% endif %}
-        </div>
+    {# informations sur la figure #}
+    <div class="container container-fluid col-lg-12 my-5 text-center">
+        <button class="btn btn-secondary disabled my-2">Créé le :
+            {# {{trick.comments.createdAt | date('d/m/y à H:i')}} #}
+        </button>
+        <button class="btn btn-secondary disabled my-2">Groupe :
+            {{trick.category.name}}
+        </button>
+        <button class="btn btn-secondary disabled my-2">Modifié le :
+            {# {{trick.comments.update}} #}
+        </button>
+        <button class="btn btn-secondary disabled my-2">Auteur :
+            {{trick.users.role.username|default('')}}
+        </button>
     </div>
 
+    {# Commentaires #}
+    <h5 class="ms-5 mb-5">Commentaires :
+        {{ trick.comments|length }}</h5>
+    {% for comment in trick.comments(currentPage, commentPerPage) %}
+        <div class="comment">
+            <div class="row">
+                <div class="col">
+                    <img class="mb-4 mx-5" src="https://ui-avatars.com/api/?rounded=true&background=random&name={{ comment.user.username|default('undefined') }}" width="40px">
+                    <strong>{{ comment.user.username|default('') }}</strong>
+                    <span class="ps-2">Le
+                        {{comment.createdAt | date('d/m/y à H:i')}}</span>
+                </div>
+            </div>
+            <div class="col mb-4 ms-5">
+                {{ comment.content | raw }}
+            </div>
+        </div>
+    {% endfor %}
+
+    {# Paginatio des commentaires #}
+    <nav aria-label="Page navigation example w-100">
+        <ul class="pagination justify-content-center">
+            <li class="page-item">
+                {% if (currentPage > 1) %}
+                    <a class="page-link" href="{{ path ('app_show', {slug: trick.slug, page: currentPage - 1}) }}">Précédent</a>
+                {% else %}
+                    <span class="page-link disabled">Précédent</span>
+                {% endif %}
+            </li>
+            {% for page in range(currentPage - 2, currentPage + 2) %}
+                {% if (page > 0 and page < commentPageCount) %}
+                    <li class="page-item {{ (page == currentPage) ? 'active' : '' }}">
+                        <a href="{{ path('app_show', {slug: trick.slug, page: page}) }}" class="page-link">{{ page }}</a>
+                    </li>
+                {%  endif %}
+            {% endfor %}
+            <li>
+                {% if (currentPage < commentPageCount) %}
+                    <a class="page-link" href="{{ path ('app_show', {slug: trick.slug, page: currentPage + 1}) }}">Suivant</a>
+                {% else %}
+                    <span class="page-link disabled">Suivant</span>
+                {% endif %}
+            </li>
+        </ul>
+    </nav>
+
+    {# Formulaire du commentaire #}
+    <div class="container mx-auto">
+        {% if app.user %}
+            {{ form_start(commentForm) }}
+            <div class="row justify-content-center mt-4 d-flex flex-column-sm{# d-true #} {# d-sm-block#}">
+                <div class="col-4" {# style="width: 60%" #}>
+                    {{ form_row(commentForm.content, {'attr': {'placeholder': "Votre commentaire"}}) }}
+                </div>
+                <div class="col-4 " {# style="width: 30%" #}>
+                    <button type="submit" class="btn btn-secondary mb-2 p-3 p-0-sm {# w-100 #}">Laissez un commentaire</button>
+                </div>
+            </div>
+            {{ form_end(commentForm) }}
+        {% else %}
+            <p class="text-center fw-bolder fs-4">Vous ne pouvez-pas commenter si vous n'êtes pas connecté !</p>
+        {% endif %}
+    </div>
 {% endblock %}

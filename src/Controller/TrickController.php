@@ -25,13 +25,21 @@ use Symfony\Component\HttpFoundation\RedirectResponse;
 
 class TrickController extends AbstractController
 {
+    #[Route('/', name: 'app_home')]
+    public function index(EntityManagerInterface $entityManager): Response
+    {
+        $tricks = $entityManager->getRepository(Tricks::class)->findAll();
+        return $this->render('home/index.html.twig', [
+            'tricks' => $tricks
+        ]);
+    }
 
     #[Route('/tricks', name: 'app_tricks')]
     public function tricks(EntityManagerInterface $entityManager): Response
     {
         $tricks = $entityManager->getRepository(Tricks::class)->findAll();
-        return $this->render('home/index.html.twig', [
-            'tricks' => $tricks
+        return $this->render('home/tricks.html.twig', [
+            //'tricks' => $tricks
         ]);
     }
 
@@ -72,6 +80,7 @@ class TrickController extends AbstractController
                     $media = new Medias();
                     $media->setMedia($fileName);
                     $media->setType('picture');
+                    $media->setType('video');
                     $entityManager->persist($media);
                     $trick->addMedia($media);
                 }
@@ -117,6 +126,23 @@ class TrickController extends AbstractController
         $this->addFlash('success', 'Figure supprimée !');
         return $this->redirectToRoute('app_tricks', ['id' => $trick->getId()]);
     }
+    // Suppression d'un media de figure
+    #[Route('/tricks/{id}/medias/{mediaId}/delete', name: 'trick_media_delete')]
+    public function deleteMedia(EntityManagerInterface $entityManager, $id, $mediaId): RedirectResponse
+    {
+        $trick = $entityManager->getRepository(Tricks::class)->find($id);        
+        $form = $this->createForm(TrickForm::class, $trick);
+        
+        $media = $entityManager->getRepository(Medias::class)->find($mediaId);
+        
+        // Suppression de l'image sur le HD
+        unlink($this->getParameter('medias_directory') . '/' . $media->getMedia());
+        // Suppression de l'image en BDD
+        $entityManager->remove($media);
+        $entityManager->flush();
+
+        return $this->redirectToRoute('trick_edit', ['slug' => $trick->getSlug()]);        
+    }
 
     // Commentaire sur les figures
     #[Route('/tricks/{slug}', name: 'app_show')]
@@ -151,25 +177,7 @@ class TrickController extends AbstractController
         ]);
     }
 
-
-    // Suppression d'un media de figure
-    #[Route('/tricks/{id}/medias/{mediaId}/delete', name: 'trick_media_delete')]
-    public function deleteMedia(EntityManagerInterface $entityManager, $id, $mediaId): RedirectResponse
-    {
-        $trick = $entityManager->getRepository(Tricks::class)->find($id);        
-        $form = $this->createForm(TrickForm::class, $trick);
-        
-        $media = $entityManager->getRepository(Medias::class)->find($mediaId);
-        
-        // Suppression de l'image sur le HD
-        unlink($this->getParameter('medias_directory') . '/' . $media->getMedia());
-        // Suppression de l'image en BDD
-        $entityManager->remove($media);
-        $entityManager->flush();
-
-        return $this->redirectToRoute('trick_edit', ['slug' => $trick->getSlug()]);        
-    }
-
+    // loadMore
     #[Route('/ajax/tricks/{page}', name: 'tricks_load_more')]
     public function loadMore(EntityManagerInterface $entityManager, $page):response
     {   
