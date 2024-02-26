@@ -80,14 +80,18 @@
         {# informations sur la figure #}
         <div class="container container-fluid col-lg-12 my-5 text-center">
             <button class="btn btn-primary disabled my-2">Créé le :
-                {# {{ trick.comment.createdAt | date('d/m/y à H:i')}} #}
+                {{ trick.createdAt | date('d/m/y à H:i') }}
             </button>
+            {%  if (trick.updatedAt) %}
+                <button class="btn btn-primary disabled my-2">Modifié le :
+                    {{ trick.updatedAt | date('d/m/y à H:i') }}
+                </button>
+            {%  endif %}
+
             <button class="btn btn-primary disabled my-2">Groupe :
                 {{trick.category.name}}
             </button>
-            <button class="btn btn-primary disabled my-2">Modifié le :
-                {# {{trick.comments.update}} #}
-            </button>
+            
             <button class="btn btn-primary disabled my-2">Auteur :
                 {{trick.users.username|default('')}}
             </button>
@@ -113,31 +117,33 @@
         {% endfor %}
 
         {# Paginatio des commentaires #}
-        <nav aria-label="Page navigation example w-100">
-            <ul class="pagination justify-content-center">
-                <li class="page-item">
-                    {% if (currentPage > 1) %}
-                        <a class="page-link" href="{{ path ('app_show', {slug: trick.slug, page: currentPage - 1}) }}">Précédent</a>
-                    {% else %}
-                        <span class="page-link disabled">Précédent</span>
-                    {% endif %}
-                </li>
-                {% for page in range(currentPage - 2, currentPage + 2) %}
-                    {% if (page > 0 and page < commentPageCount) %}
-                        <li class="page-item {{ (page == currentPage) ? 'active' : '' }}">
-                            <a href="{{ path('app_show', {slug: trick.slug, page: page}) }}" class="page-link">{{ page }}</a>
-                        </li>
-                    {%  endif %}
-                {% endfor %}
-                <li>
-                    {% if (currentPage < commentPageCount) %}
-                        <a class="page-link" href="{{ path ('app_show', {slug: trick.slug, page: currentPage + 1}) }}">Suivant</a>
-                    {% else %}
-                        <span class="page-link disabled">Suivant</span>
-                    {% endif %}
-                </li>
-            </ul>
-        </nav>
+        {% if (trick.comments|length > 0) %}
+            <nav aria-label="Page navigation example w-100">
+                <ul class="pagination justify-content-center">
+                    <li class="page-item">
+                        {% if (currentPage > 1) %}
+                            <a class="page-link" href="{{ path ('app_show', {slug: trick.slug, page: currentPage - 1}) }}">Précédent</a>
+                        {% else %}
+                            <span class="page-link disabled">Précédent</span>
+                        {% endif %}
+                    </li>
+                    {% for page in range(currentPage - 2, currentPage + 2) %}
+                        {% if (page > 0 and page < commentPageCount) %}
+                            <li class="page-item {{ (page == currentPage) ? 'active' : '' }}">
+                                <a href="{{ path('app_show', {slug: trick.slug, page: page}) }}" class="page-link">{{ page }}</a>
+                            </li>
+                        {%  endif %}
+                    {% endfor %}
+                    <li>
+                        {% if (currentPage < commentPageCount) %}
+                            <a class="page-link" href="{{ path ('app_show', {slug: trick.slug, page: currentPage + 1}) }}">Suivant</a>
+                        {% else %}
+                            <span class="page-link disabled">Suivant</span>
+                        {% endif %}
+                    </li>
+                </ul>
+            </nav>
+        {%  endif %}
 
         {# Formulaire du commentaire #}
         <div class="container mx-auto">
