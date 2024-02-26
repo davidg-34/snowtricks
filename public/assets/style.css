@@ -41,6 +41,11 @@ nav{
     margin-right: 2rem; 
     margin-bottom: 2rem;   
 }
+
+#tricks {
+    min-height: 100vh;
+}
+
 .card-body .card-img{
     height: 13rem;
     /* object-fit: cover; */

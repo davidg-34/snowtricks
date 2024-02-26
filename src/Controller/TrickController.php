@@ -66,7 +66,7 @@ class TrickController extends AbstractController
                     $trick->setUsers($user);
                 } else {
                     // edition
-                    $trick->setEditedAt(date('Y-m-d H:i:s'));
+                    $trick->setUpdatedAt(new \DateTime());
                 }
                 // UPLOAD DE FICHIER*************
                 // Récupère toutes les données 'médias' à partir du formulaire
