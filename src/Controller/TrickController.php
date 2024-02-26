@@ -78,9 +78,12 @@ class TrickController extends AbstractController
                     );
                     // Insère l'image avec le nom de l'image
                     $media = new Medias();
-                    $media->setMedia($fileName);
-                    $media->setType('picture');
-                    $media->setType('video');
+                    $media->setMedia($fileName);                    
+                    if (strpos($fileName, 'mp4')) {
+                        $media->setType('video');
+                    } else {
+                        $media->setType('picture');
+                    }
                     $entityManager->persist($media);
                     $trick->addMedia($media);
                 }
