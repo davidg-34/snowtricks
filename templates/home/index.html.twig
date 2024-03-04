@@ -7,15 +7,7 @@
 
     <header>
         <div class="hero">
-            <h4 class="citation text-center">Partager vos figures sur le site communautaire de snowtricks !</h4>
-            {% if app.user %}
-            <button type="button" class="btn btn-primary d-block m-auto">
-            <a class="text-center" href="/tricks/new">
-                <i class="text-black fw-normal px-2 fab fa-creative-commons-share">
-                    creation  d'une  figure</i>
-            </a>
-            </button>
-            {% endif %}
+            <h4 class="citation text-center">Partager vos figures sur le site communautaire de snowtricks !</h4>            
             {# Flèche du bas #}
             <div class="arrow arrow-down">
                 <a href="#tricks">
@@ -28,6 +20,18 @@
     {# Liste des figures #}
     <section id="tricks">
         <div class="container p-3">
+
+            {% if app.user %}
+                <div class="new-trick-container">
+            <button type="button" class="btn btn-primary new-trick">
+            <a class="text-center" href="/tricks/new">
+                <i class="text-black fw-normal px-2 fab fa-creative-commons-share">
+                    creation  d'une  figure</i>
+            </a>
+            </button>
+            </div>
+            {% endif %}
+
             <div class="row" id="tricks_container">
                 {% include "trick/tricks.html.twig" %}
             </div>

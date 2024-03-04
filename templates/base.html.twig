@@ -29,13 +29,25 @@
             {{ encore_entry_script_tags('app') }}
         {% endblock %}
         <style type="text/css">
-            .main-container {
-                background-image: url('/assets/imghero.jpg');
-                background-repeat: no-repeat;
-                background-size: contain;
-                background-position: top center;
+            
+            html {
+                width: 100%;
+                height: 100%;
+                margin: 0;
+                padding: 0;
             }
 
+            body {
+                width: 100%;
+                height: 100%;
+                min-height: 100vh;
+                margin: 0;
+                padding: 0;
+                display: flex;                
+                flex-direction: column;
+                justify-items: space-between;
+                align-items: center;
+            }
             .container {
                 background-color: white;
             }
@@ -54,7 +66,9 @@
                 {% endfor %}
             </div>
 
+
             {% block body %}{% endblock %}
+                
         </div>
             {% include "_partials/_footer.html.twig" %}
         <script type="text/javascript" src="script.js"></script>

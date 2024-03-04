@@ -5,25 +5,23 @@
             {# Affiche les cartes photos et vidéos page accueil #}
             <div class="card-body">
                 {% for media in trick.mainMedia() %}
-                    {% if media.type == "picture" %}
-                        <img class="card-img" src="/assets/uploads/{{ media.media }}" alt="img_trick">
-                        {%  else  %}
-                        {# <video controls autoplay="none" muted preload="none"> #}
-                        <div class="ratio ratio-16x9 controls muted autoplay="none"">
-                            <iframe class="embed-responsive-item muted" src="/assets/uploads/{{ media.media }}" allowullscreen  autoplay="false" autostart="0"></iframe>
-                        </div>
-                        {# </video> #}
-                    {%  endif %}
+                    <img class="card-img" src="/assets/uploads/{{ media.media }}" alt="img_trick">                    
                 {%  endfor %}
-            </div>
-            <div class="row">
-                <div class="col-6">
-                    <a href="/tricks/{{ trick.slug }}">
-                        <p class="w-100 mx-4">{{ trick.name}}</p>
-                    </a>
+                <div>
+                    {% if app.user %}
+                        <a href="/tricks/{{ trick.slug }}/edit">
+                            <i class="fas fa-pen"></i> &nbsp;{{ trick.name}}
+                        </a>
+                    {%  else  %}
+                        <a href="/tricks/{{ trick.slug }}">
+                            <p class="w-100 mx-4">{{ trick.name}}</p>
+                        </a>
+                    {% endif %}
                 </div>
+            </div>
+            <div class="row">                
                 {# Icônes modification/suppression si l'utilisateur est connecté #}
-                {% if app.user %}
+                {# {% if app.user %}
                     <div class="col-6 ">
                         <div class="row">
                             <div class="col-6">
@@ -38,7 +36,7 @@
                             </div>
                         </div>
                     </div>
-                {% endif %}
+                {% endif %} #}                
             </div>
         </div>
     </article>

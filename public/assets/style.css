@@ -7,16 +7,23 @@
     font-family: "raleway", "sans-serif";
 }
 /* NAVIGATION */
-nav{
+nav {
+    width: 100%;
     border-bottom: solid 1.5px rgb(14, 4, 44);
 }
+
+.main-container {
+    flex-grow: 1;
+    width: 100%;
+}
+
 /* PAGE ACCUEIL */
 .hero{
     position: relative;
     background-image: url(/assets/imghero.jpg);
     background-size: cover;
     background-position: center;
-    min-height: 92vh;    
+    min-height: 100vh;    
 }
 .citation{
     position: absolute;
@@ -42,6 +49,11 @@ nav{
     text-align: end;
     margin-right: 2rem; 
     margin-bottom: 2rem;   
+}
+.new-trick-container {
+    text-align: right;
+    width: 100%;
+    padding: 15px 0;
 }
 
 /* CARTES IMAGES */
