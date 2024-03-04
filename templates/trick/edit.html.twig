@@ -33,18 +33,18 @@
                     {% endif %}
                 </button>
                 {% if editMode %}
-                    <a href="/tricks/{{ trick.id }}/delete" class="button m-3" style="background-color: red; color: aliceblue;">Supprimer</a>
+                    <a href="/tricks/{{ trick.id }}/delete" class="delete-btn m-3">Supprimer</a>
                 {% endif %}
 
-                {# Modification/suppression de l'image ou vidéo téléchargée #}
+                {# Modification/suppression de l'image ou la vidéo téléchargée du formulaire #}
                 {% if editMode %}
                     <div style="display: flex; gap: 15px; width: 100%;">
                         {% for media in trick.medias %}
                             <div class="edit-media">
                                 {% if media.type == "picture" %}
-                                    <img src="/assets/uploads/{{ media.media }}" style="width: 50px; height: 50px; border-radius: 15px;">
+                                    <img src="/assets/uploads/{{ media.media }}">
                                 {% else %}
-                                    <img src="/assets/videoicon.png" style="width: 50px; height: 50px; border-radius: 15px;">
+                                    <img src="/assets/videoicon.png">
                                 {% endif %}
                                 <div class="delete-overlay">
                                     <a href="/tricks/{{ trick.id }}/medias/{{ media.id }}/delete">

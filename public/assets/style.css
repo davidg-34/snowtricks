@@ -6,10 +6,11 @@
     box-sizing: border-box;
     font-family: "raleway", "sans-serif";
 }
-
+/* NAVIGATION */
 nav{
     border-bottom: solid 1.5px rgb(14, 4, 44);
 }
+/* PAGE ACCUEIL */
 .hero{
     position: relative;
     background-image: url(/assets/imghero.jpg);
@@ -27,6 +28,7 @@ nav{
     color: rgb(14, 4, 44);
     transition: 2s;
 }
+/* FLECHES BAS HAUT PAGE ACCUEIL */
 .arrow .fas{
     color: rgb(14, 4, 44);
     font-size: 2.25rem;
@@ -42,30 +44,38 @@ nav{
     margin-bottom: 2rem;   
 }
 
-#tricks {
-    min-height: 100vh;
-}
-
+/* CARTES IMAGES */
 .card-body .card-img{
     height: 13rem;
     /* object-fit: cover; */
     object-fit: fill;
 }
-.test{
-    background-color: red;
-    color: white;
-    margin-right: 10px;
-}
 
-button, .button {
+/* BOUTONS BOUTONS-ICONES */
+button, .delete-btn, .icon-btn {
     padding: 6px 12px;    
     text-decoration: none;
     display: inline-block;
     border: solid 1px darkgray;
 }
+.delete-btn{
+    background-color: red;
+    color: aliceblue;
+}
+.icon-btn{
+    top: 1%;
+    right: 1%;
+    /* bottom: -20%; */
+}
 
+/* IMAGE DU FORMULAIRE EDIT/DELETE */
 .edit-media {        
     position: relative;
+}
+.edit-media > img{
+    width: 50px;
+    height: 50px;
+    border-radius: 15px;
 }
 .edit-media div.delete-overlay{
     opacity: 0.7;
@@ -78,11 +88,25 @@ button, .button {
     width: 50px;
     height: 50px;
     border-radius: 15px;
-    position: absolute;
     display: none;
     justify-content: center;
     align-items: center;        
 }
 .edit-media:hover div.delete-overlay{
     display: flex;
+}
+
+/* HOVER: BOUTON LOAD MORE */
+.container > a:hover{
+    opacity: 1.5;
+    outline-offset: -1px;
+    outline: rgb(14, 4, 44) solid 1px;
+}
+.container span:hover{
+    color: aliceblue;
+}
+
+/* FOOTER */
+footer{
+    border-top: solid 1.5px rgb(14, 4, 44);
 }

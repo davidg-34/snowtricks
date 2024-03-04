@@ -5,9 +5,17 @@
 
 {% block body %}
 
-    <header {# id="hero" #}>
+    <header>
         <div class="hero">
             <h4 class="citation text-center">Partager vos figures sur le site communautaire de snowtricks !</h4>
+            {% if app.user %}
+            <button type="button" class="btn btn-primary d-block m-auto">
+            <a class="text-center" href="/tricks/new">
+                <i class="text-black fw-normal px-2 fab fa-creative-commons-share">
+                    creation  d'une  figure</i>
+            </a>
+            </button>
+            {% endif %}
             {# Flèche du bas #}
             <div class="arrow arrow-down">
                 <a href="#tricks">
@@ -26,9 +34,9 @@
         </div>
         {# Bouton 'load more' #}
         <div class="container">
-            <a href="" class="d-grid gap-2 col-2 mx-auto" id="load-more">
+            <a href="" class="d-grid gap-2 col-2 mx-auto text-decoration-none" id="load-more">
                 <button class="text-center bg-primary" onclick="loadMore(); return false">
-                    Load More
+                    <span>Load More</span>
                 </button>
                 <input type="hidden" id="loadMore" name="loadMore" value="0">
             </a>

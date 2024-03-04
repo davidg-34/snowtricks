@@ -10,14 +10,16 @@
         {# Run `composer require symfony/webpack-encore-bundle` to start using Symfony UX #}
 
         {# <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootswatch/5.3.2/flatly/bootstrap.min.css" integrity="sha512-rx+BMEjKes84XHg1erhvtq7Mqxm/lm6w4WMoCtDAaTMtUzT5iK5hNTu8mc2+yPNSldAX5hheN/ZhtNQjjYy5nA==" crossorigin="anonymous" referrerpolicy="no-referrer"/>
-                <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootswatch/5.3.2/flatly/bootstrap.rtl.min.css" integrity="sha512-OHjihgg30GxixxblIXS4qhcH+fVIoPaRi5iNE014ptjC5KQyBlteeZ2PKsJh5RMFWYeV8Y++UBxGhO7HQGgG0Q==" crossorigin="anonymous" referrerpolicy="no-referrer"/> #}
+                        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootswatch/5.3.2/flatly/bootstrap.rtl.min.css" integrity="sha512-OHjihgg30GxixxblIXS4qhcH+fVIoPaRi5iNE014ptjC5KQyBlteeZ2PKsJh5RMFWYeV8Y++UBxGhO7HQGgG0Q==" crossorigin="anonymous" referrerpolicy="no-referrer"/> #}
 
-        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous"> <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous"> 
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" integrity="sha512-z3gLpd7yknf1YoNbCzqRKc4qyor8gaKU1qmn+CShxbuBusANI9QpRohGBreCFkKxLhei6S9CQXFEbbKuqLg0DA==" crossorigin="anonymous" referrerpolicy="no-referrer"/>
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw==" crossorigin="anonymous" referrerpolicy="no-referrer"/>
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
         <link rel="stylesheet" href="/assets/style.css">
+
 
         {% block stylesheets %}
             {{ encore_entry_link_tags('app') }}
@@ -37,23 +39,24 @@
             .container {
                 background-color: white;
             }
-        </style>        
+        </style>
     </head>
     <body>
         {% block header %}
             {% include "_partials/_nav.html.twig" %}
         {% endblock %}
         <div class="main-container">
-        <div class="col-6 mx-auto">
-            {% for message in app.flashes('success') %}
-                <div class="alert alert-success text-center">
-                    {{ message }}
-                </div>
-            {% endfor %}
+            <div class="col-6 mx-auto">
+                {% for message in app.flashes('success') %}
+                    <div class="alert alert-success text-center">
+                        {{ message }}
+                    </div>
+                {% endfor %}
+            </div>
+
+            {% block body %}{% endblock %}
         </div>
-            
-        {% block body %}{% endblock %}
-        </div>
+            {% include "_partials/_footer.html.twig" %}
         <script type="text/javascript" src="script.js"></script>
     </body>
 </html>

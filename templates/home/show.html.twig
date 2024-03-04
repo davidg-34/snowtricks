@@ -14,7 +14,6 @@
                 {% if media.type == "picture" %}
                     <img class="card-img" src="/assets/uploads/{{ media.media }}" alt="img_trick">
                 {%  else %}
-                    <!-- todo: afficher les videos -->
                     <video controls autoplay="none" loop muted preload="none">
                         <div class="ratio ratio-4x3 muted=none">
                             <iframe class="embed-responsive-item muted" src="/assets/uploads/{{ media.media }}" allowullscreen autoplay="false" autostart="0"></iframe>
@@ -22,76 +21,78 @@
                     </video>
                 {%  endif %}
             {%  endfor %}
-
             {# Les 2 icones modifier/supprimer la figure #}
-            <p class="buttons border border-light position-absolute" style="top: 1%; right: 1%;">
-                <a href="/tricks/{{ trick.slug }}/edit">
-                    <i class="text-light px-2 fas fa-pen"></i>
-                </a>
-                <a href="">
-                    <i class="text-light px-2 fas fa-trash-alt"></i>
-                </a>
-            </p>
+            {% if app.user %}
+                <p class="icon-btn border border-light position-absolute">
+                    <a href="/tricks/{{ trick.slug }}/edit">
+                        <i class="text-light px-2 fas fa-pen"></i>
+                    </a>
+                    {# <a href="/tricks/{{ trick.id }}/delete" data-bs-toggle="modal" data-bs-target="#deleteTrickModal" data-href="/tricks/{{ trick.id }}/delete">
+                        <i class="text-light px-2 fas fa-trash-alt"></i>
+                    </a> #}
+                    <a class="confirmModalLink" href="/tricks/{{ trick.id }}/delete"> {# data-bs-toggle="modal" data-bs-target="#deleteTrickModal" data-href="/tricks/{{ trick.id }}/delete"> #}
+                        <i class="text-light px-2 fas fa-trash-alt"></i>
+                    </a>
+                </p>
+                {% else %}
+            {% endif %}
         </div>
         <div class="row my-5">
             <div class="col">
                 <h1 class="text-center">{{ trick.name}}</h1>
             </div>
         </div>
-
         {# description de la figure #}
         <div class="container col-lg-12 my-5">
             {{ trick.description }}
         </div>
 
-        {# liste des images et videos #}
-        <section class="container {# style=" display: flex; width: 100%; margin: 0px auto #}">
+        {# liste des images et videos ################################### #}
+        <section class="container">
             <article class="row d-lg-flex justify-content-center">
                 {% for media in trick.medias %}
                     <div class="card m-2 col-lg-4 col-md-6 col-sm-6">
                         {% if media.type == "picture" %}
-                            <img class="card-img my-3" src="/assets/uploads/{{ media.media }}" alt="img_trick">
+                            <img class="card-img my-3" src="/assets/uploads/{{ media.media }}" class="card-img-top" alt="img_trick">
                         {%  elseif media.type == "video" %}
-                            <div class="ratio ratio-4x3">
+                            <div class="ratio ratio-4x3 my-3">
                                 <video width="100%" height="auto" controls preload="none">
                                     <source src="/assets/uploads/{{ media.media }}" type="video/mp4">
                                     Your browser does not support the video tag.
                                 </video>
                             </div>
                         {%  endif %}
+                        {% if app.user %}
+                            <div class="card-body ms-auto">
+                                <a href="/tricks/{{ trick.slug }}/edit">
+                                    <i class="text-black px-2 fas fa-pen"></i>
+                                </a>
+                                <a href="/tricks/{{ trick.id }}/delete">
+                                    <i class="text-black px-2 fas fa-trash-alt"></i>
+                                </a>
+                            </div>
+                            {% else %}
+                        {% endif %}
                     </div>
                 {%  endfor %}
             </article>
-            {# <div class="col-lg-4 col-md-6 col-sm-6">
-                {% for media in trick.mainMedia() %}
-                    {% if media.type == "picture" %}
-                        <img class="card-img" src="/assets/uploads/{{ media.media }}" alt="img_trick">
-                    {%  elseif media.type == "video" %}
-                        <video width="100%" height="auto" controls preload="none">
-                            <source src="/assets/uploads/{{ media.media }}" type="video/mp4">
-                            Your browser does not support the video tag.
-                        </video>
-                    {%  endif %}
-                {%  endfor %}
-            </div> #}
-
         </section>
 
-        {# informations sur la figure #}
+        {# informations sur la figure ######################################" #}
         <div class="container container-fluid col-lg-12 my-5 text-center">
             <button class="btn btn-primary disabled my-2">Créé le :
-                {{ trick.createdAt | date('d/m/y à H:i') }}
+                {{ trick.createdAt | date('d/m/y') }}
             </button>
             {%  if (trick.updatedAt) %}
                 <button class="btn btn-primary disabled my-2">Modifié le :
-                    {{ trick.updatedAt | date('d/m/y à H:i') }}
+                    {{ trick.updatedAt | date('d/m/y') }}
                 </button>
             {%  endif %}
 
             <button class="btn btn-primary disabled my-2">Groupe :
                 {{trick.category.name}}
             </button>
-            
+
             <button class="btn btn-primary disabled my-2">Auteur :
                 {{trick.users.username|default('')}}
             </button>
@@ -116,7 +117,7 @@
             </div>
         {% endfor %}
 
-        {# Paginatio des commentaires #}
+        {# Pagination des commentaires #}
         {% if (trick.comments|length > 0) %}
             <nav aria-label="Page navigation example w-100">
                 <ul class="pagination justify-content-center">
@@ -149,15 +150,15 @@
         <div class="container mx-auto">
             {% if app.user %}
                 {{ form_start(commentForm) }}
-                <div class="row justify-content-center align-items-center mt-4{# d-sm-block#}">
-                    <div class="col-xl-4" {# style="width: 80%; margin: auto" #}>
+                <div class="row justify-content-center align-items-center mt-4">
+                    <div class="col-xl-4">
                         {{ form_row(commentForm.content, {'attr': {'placeholder': "Votre commentaire"}}) }}
                     </div>
-                    <div class="col-xl-4"{# style="width: 30%" #}>
+                    <div class="col-xl-4">
                         <button type="submit" class="btn btn-primary mb-3 p-3 w-100">Laissez un commentaire</button>
                     </div>
                 </div>
-                {{ form_end(commentForm) }}               
+                {{ form_end(commentForm) }}
             {% else %}
                 <p class="text-center fw-bolder fs-4">Vous ne pouvez-pas commenter si vous n'êtes pas connecté !</p>
             {% endif %}
