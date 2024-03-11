@@ -21,19 +21,7 @@
                 {{ form_row(formTrick.name) }}
                 {{ form_row(formTrick.description) }}
                 {{ form_row(formTrick.category) }}
-                {{ form_row(formTrick.medias) }}
-
-                {# Boutons modifier/ajouter/supprimer une figure du formulaire #}
-                <button type="submit" class="m-3">
-                    {% if editMode %}
-                        Modifiez
-                    {% else %}
-                        Ajoutez
-                    {% endif %}
-                </button>
-                {% if editMode %}
-                    <a href="/tricks/{{ trick.id }}/delete" class="delete-btn m-3">Supprimer</a>
-                {% endif %}
+                {{ form_row(formTrick.medias) }}                
 
                 {# Modification/suppression de l'image ou la vidéo téléchargée du formulaire #}
                 {% if editMode %}
@@ -54,6 +42,23 @@
                         {%  endfor %}
                     </div>
                 {% endif %}
+
+                {# Boutons modifier/ajouter/supprimer une figure du formulaire #}
+                <button type="submit">
+                    {% if editMode %}
+                        Modifiez
+                    {% else %}
+                        Ajoutez
+                    {% endif %}
+                </button>
+                {% if editMode %}
+                    <a class="delete-btn m-3" data-bs-toggle="modal" data-bs-target="#deleteConfirmationModal" href="/tricks/{{ trick.id }}/delete">
+                        <i class="fas fa-trash"></i> Supprimer
+                    </a>
+                    {% include "modals/delete-trick.html.twig" %}
+                    <!--<a href="/tricks/{{ trick.id }}/delete" class="delete-btn m-3">Supprimer</a>-->
+                {% endif %}
+
                 {{ form_end(formTrick) }}
             </div>
         </div>

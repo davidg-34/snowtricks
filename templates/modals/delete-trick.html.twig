@@ -1,9 +1,9 @@
 <!-- Button trigger modal -->
-<a data-bs-toggle="modal" data-bs-target="#exampleModal" href="/tricks/{{ trick.slug }}/edit">
+<!--<a data-bs-toggle="modal" data-bs-target="#exampleModal" href="/tricks/{{ trick.slug }}/edit">
     <i class="fas fa-pen"></i> &nbsp;{{ trick.name}}
-</a>
+</a>-->
 <!-- Modal -->
-<div class="modal fade" id="exampleModal" data-bs-backdrop="static" tabindex="-1" aria-labelledby="confirmation de la suppression" aria-hidden="true">
+<div class="modal fade" id="deleteConfirmationModal" data-bs-backdrop="static" tabindex="-1" aria-labelledby="confirmation de la suppression" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
@@ -15,11 +15,12 @@
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fermer</button>
-                <button type="button" class="btn btn-primary">Continuer
-                    <a id="deleteTrick" href="/tricks/{{ trick.slug }}/edit"></a>
+                <a id="deleteTrick" href="/tricks/{{ trick.id }}/delete">
+                    <button type="button" class="btn btn-primary">Continuer</button>
+                </a>
               {# <a id="exampleModal" href="/tricks"></a> #}
               {# <a id="deleteTrick" href="{{ path('app_home') }}"</a> #}
-                </button>
+                
             </div>
         </div>
     </div>

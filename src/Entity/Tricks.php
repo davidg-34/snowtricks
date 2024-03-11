@@ -91,7 +91,7 @@ class Tricks
         $this->description = $description;
 
         return $this;
-    }
+    }    
 
     public function getUsers(): ?Users
     {

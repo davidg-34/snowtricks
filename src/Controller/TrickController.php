@@ -112,18 +112,18 @@ class TrickController extends AbstractController
     #[Route('/tricks/{id}/delete', name: 'trick_delete')]
     public function delete(EntityManagerInterface $entityManager, $id): RedirectResponse
     {
-        // Je récupère l'image dans l'array collection à partir de de l'entité tricks
-        /* $pictures = $tricks->getMedias();
-        $pictures = new Medias();
-        foreach($pictures as $picture) {
-            // Je reconstitue l'image téléchargée stockée dans la base de données
-            $filePicture = $this->getParameter('media_directory').'/'.$picture->getMedia();
-            // Je supprime physiquement l'image
-            if (file_exists($filePicture)) {
-                unlink($filePicture);
-            }
-        }
-        */
+                            // Je récupère l'image dans l'array collection à partir de de l'entité tricks
+                            /* $pictures = $tricks->getMedias();
+                            $pictures = new Medias();
+                            foreach($pictures as $picture) {
+                                // Je reconstitue l'image téléchargée stockée dans la base de données
+                                $filePicture = $this->getParameter('media_directory').'/'.$picture->getMedia();
+                                // Je supprime physiquement l'image
+                                if (file_exists($filePicture)) {
+                                    unlink($filePicture);
+                                }
+                            }
+                            */
 
         $trick = $entityManager->getRepository(Tricks::class)->find($id);
         $entityManager->remove($trick);

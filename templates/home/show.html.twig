@@ -22,6 +22,8 @@
                 {%  endif %}
             {%  endfor %}
             {# Les 2 icones modifier/supprimer la figure #}
+
+
             {% if app.user %}
                 <p class="icon-btn border border-light position-absolute">
                     <a href="/tricks/{{ trick.slug }}/edit">
@@ -63,7 +65,7 @@
                             </div>
                         {%  endif %}
                         {% if app.user %}
-                            <div class="card-body ms-auto">
+                            <div class="card-body">
                                 <a href="/tricks/{{ trick.slug }}/edit">
                                     <i class="text-black px-2 fas fa-pen"></i>
                                 </a>
