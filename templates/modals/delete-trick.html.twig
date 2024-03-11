@@ -1,57 +1,27 @@
-<div class="modal fade" id="deleteTrickmodal" tabindex="-1" role="dialog" aria-labelledby="deleteTrickmodal" aria-hidden="true">
-    <div class="modal-dialog" role="document">
+<!-- Button trigger modal -->
+<a data-bs-toggle="modal" data-bs-target="#exampleModal" href="/tricks/{{ trick.slug }}/edit">
+    <i class="fas fa-pen"></i> &nbsp;{{ trick.name}}
+</a>
+<!-- Modal -->
+<div class="modal fade" id="exampleModal" data-bs-backdrop="static" tabindex="-1" aria-labelledby="confirmation de la suppression" aria-hidden="true">
+    <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="deleteTrickmodal">Suppression trick</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
+                <h1 class="modal-title fs-5" id="exampleModalLabel">Confirmation de la suppression</h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-                Voulez-vous vraiment supprimer ce trick?
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Retour</button>
-                <a id="deleteTrick" href="" class="btn btn-white">Supprimer</a>
-            </div>
-        </div>
-    </div>
-</div>
-
-<div class="modal fade" data-bs-backdrop="static" id="deleteTrickmodal"{# tabindex="-1" role="dialog" aria-labelledby="deleteTrickModal" aria-hidden="true"> #}
-    <div class="modal-dialog modal-dialog-centered" {# role="document" #}>
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" aria-labelledby="modal-title" id="deleteTrickModal">Suppression de la figure
-                </h5>
-                <button class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                {# <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button> #}
-            </div>
-            <div class="modal-body" aria-describedby="content"> 
                 Voulez-vous supprimer cette figure ?
             </div>
             <div class="modal-footer">
-                <button class="btn btn-secondary" data-dismiss="modal">Fermer</button>
-                <button class="btn btn-primary"><a id="deleteTrick" href="" class="btn btn-white">Supprimer</a>
-                </button> 
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fermer</button>
+                <button type="button" class="btn btn-primary">Continuer
+                    <a id="deleteTrick" href="/tricks/{{ trick.slug }}/edit"></a>
+              {# <a id="exampleModal" href="/tricks"></a> #}
+              {# <a id="deleteTrick" href="{{ path('app_home') }}"</a> #}
+                </button>
             </div>
         </div>
-    </div>
-</div>
-
-<div class="modal hide fade" id="confirmModal">
-    <div class="modal-header">
-        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-        <h3>Confirmation de la suppression</h3>
-    </div>
-    <div class="modal-body">
-        <p>Etes-vous sûr de vouloir supprimer cet élément ?</p>
-    </div>
-    <div class="modal-footer">
-    	<a href="#" class="btn" id="confirmModalNo">Non</a>
-    <a href="#" class="btn btn-primary" id="confirmModalYes">Oui</a>
     </div>
 </div>
 

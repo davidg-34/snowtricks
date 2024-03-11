@@ -50,11 +50,11 @@ nav {
     margin-right: 2rem; 
     margin-bottom: 2rem;   
 }
-.new-trick-container {
+/* .new-trick-container {
     text-align: right;
     width: 100%;
     padding: 15px 0;
-}
+} */
 
 /* CARTES IMAGES */
 .card-body .card-img{
@@ -80,7 +80,7 @@ button, .delete-btn, .icon-btn {
     /* bottom: -20%; */
 }
 
-/* IMAGE DU FORMULAIRE EDIT/DELETE */
+/* MINIATURES TELECHARGEES DU FORMULAIRE EDIT/DELETE */
 .edit-media {        
     position: relative;
 }

@@ -9,9 +9,10 @@
                 {%  endfor %}
                 <div>
                     {% if app.user %}
-                        <a href="/tricks/{{ trick.slug }}/edit">
-                            <i class="fas fa-pen"></i> &nbsp;{{ trick.name}}
-                        </a>
+                        {# <a href="/tricks/{{ trick.slug }}/edit">
+                            <i class="fas fa-pen" data-toggle="modal" data-target="#deleteTrickModal"></i> &nbsp;{{ trick.name}}
+                        </a> #}
+                        {% include "modals/delete-trick.html.twig" %}
                     {%  else  %}
                         <a href="/tricks/{{ trick.slug }}">
                             <p class="w-100 mx-4">{{ trick.name}}</p>
@@ -29,10 +30,10 @@
                                     <i class="fas fa-pen"></i>
                                 </a>
                             </div>
-                            <div class="col-6">
-                                <a href="/tricks/{{ trick.id }}/delete">
-                                    <i class="fas fa-trash-alt"></i>
-                                </a>
+                            <div class="col-6">                                
+                                    <a href="/tricks/{{ trick.id }}/delete">
+                                        <i class="fas fa-trash-alt" data-toggle="modal" data-target="#deleteTrickModal"></i>
+                                    </a>
                             </div>
                         </div>
                     </div>
