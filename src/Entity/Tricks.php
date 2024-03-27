@@ -7,9 +7,11 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: TricksRepository::class)]
+#[UniqueEntity(fields: ['name'], message: 'Cette figure est déjà créée')]
 class Tricks
 {
     #[ORM\Id]
@@ -17,7 +19,8 @@ class Tricks
     #[ORM\Column]
     private ?int $id = null;
 
-    #[ORM\Column(length: 25)]    
+    #[ORM\Column(length: 25)]
+    #[Assert\NotBlank()]
     private ?string $slug = null;
 
     #[ORM\Column(length: 255)]
@@ -40,8 +43,8 @@ class Tricks
     #[ORM\ManyToOne(inversedBy: 'tricks')]
     private ?Category $category = null;
 
-    #[ORM\Column(type: Types::DATETIME_MUTABLE)]
-    private ?\DateTimeInterface $createdAt = null;
+    #[ORM\Column(type: Types::DATETIME_MUTABLE, options: ["default" => "CURRENT_TIMESTAMP"])]
+    private ?\DateTimeInterface $createdAt;
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE)]
     private ?\DateTimeInterface $updatedAt = null;
@@ -91,7 +94,7 @@ class Tricks
         $this->description = $description;
 
         return $this;
-    }    
+    }
 
     public function getUsers(): ?Users
     {

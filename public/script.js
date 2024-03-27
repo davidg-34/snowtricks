@@ -8,7 +8,3 @@ async function loadMore() {
 }
 
 
-$("#exampleModal").on("show.bs.modal", function (e) {
-    $(this).find("#deleteTrick").attr("href", $(e.relatedTarget).data("href"));
-});
-

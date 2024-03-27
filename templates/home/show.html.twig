@@ -5,9 +5,7 @@
 
 {% block body %}
 
-    <section
-        class="container border border-secondary col col-lg-8 p-0" style="box-shadow: 0px 2px 5px 0px #000;">
-
+    <section class="container border border-secondary col col-lg-8 p-0" style="box-shadow: 0px 2px 5px 0px #000;">
         {# image de la figure page détail #}
         <div class="container p-0 position-relative">
             {% for media in trick.mainMedia %}
@@ -21,24 +19,21 @@
                     </video>
                 {%  endif %}
             {%  endfor %}
-            {# Les 2 icones modifier/supprimer la figure #}
-
-
-            {% if app.user %}
+            {# Les 2 icônes modifier/supprimer la figure #}
+            {% if app.user and app.user.id == trick.getUsers().getId( )%}
                 <p class="icon-btn border border-light position-absolute">
                     <a href="/tricks/{{ trick.slug }}/edit">
                         <i class="text-light px-2 fas fa-pen"></i>
                     </a>
-                    {# <a href="/tricks/{{ trick.id }}/delete" data-bs-toggle="modal" data-bs-target="#deleteTrickModal" data-href="/tricks/{{ trick.id }}/delete">
-                        <i class="text-light px-2 fas fa-trash-alt"></i>
-                    </a> #}
-                    <a class="confirmModalLink" href="/tricks/{{ trick.id }}/delete"> {# data-bs-toggle="modal" data-bs-target="#deleteTrickModal" data-href="/tricks/{{ trick.id }}/delete"> #}
-                        <i class="text-light px-2 fas fa-trash-alt"></i>
+                    <a data-bs-toggle="modal" data-bs-target="#deleteConfirmationModal" href="/tricks/{{ trick.id }}/delete">
+                        <i class="text-light fas fa-trash"></i> 
                     </a>
+                    {% include "modals/delete-trick.html.twig" %}
                 </p>
                 {% else %}
             {% endif %}
         </div>
+        {# Titre/Nom de la figure #}
         <div class="row my-5">
             <div class="col">
                 <h1 class="text-center">{{ trick.name}}</h1>
@@ -49,7 +44,7 @@
             {{ trick.description }}
         </div>
 
-        {# liste des images et videos ################################### #}
+        {# liste des images et videos #}
         <section class="container">
             <article class="row d-lg-flex justify-content-center">
                 {% for media in trick.medias %}
@@ -64,14 +59,16 @@
                                 </video>
                             </div>
                         {%  endif %}
-                        {% if app.user %}
+                        {# 2 icônes modifier/supprimer #}
+                        {% if app.user and app.user.id == trick.getUsers().getId( )%}
                             <div class="card-body">
                                 <a href="/tricks/{{ trick.slug }}/edit">
                                     <i class="text-black px-2 fas fa-pen"></i>
                                 </a>
-                                <a href="/tricks/{{ trick.id }}/delete">
-                                    <i class="text-black px-2 fas fa-trash-alt"></i>
+                                <a data-bs-toggle="modal" data-bs-target="#deleteConfirmationModal" href="/tricks/{{ trick.id }}/delete">
+                                    <i class="text-black px-2 fas fa-trash-alt"></i> 
                                 </a>
+                                {% include "modals/delete-trick.html.twig" %}
                             </div>
                             {% else %}
                         {% endif %}

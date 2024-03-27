@@ -25,14 +25,14 @@ use Symfony\Component\HttpFoundation\RedirectResponse;
 
 class TrickController extends AbstractController
 {
-    #[Route('/', name: 'app_home')]
+    /* #[Route('/', name: 'app_home')]
     public function index(EntityManagerInterface $entityManager): Response
     {
         $tricks = $entityManager->getRepository(Tricks::class)->findAll();
         return $this->render('home/index.html.twig', [
             'tricks' => $tricks
         ]);
-    }
+    } */
 
     #[Route('/tricks', name: 'app_tricks')]
     public function tricks(EntityManagerInterface $entityManager): Response
@@ -62,6 +62,7 @@ class TrickController extends AbstractController
             if ($form->isValid()) {
                 if (!$trick->getId()) {
                     // creation
+                    $trick->setCreatedAt(new \DateTime());
                     $user = $this->getUser();
                     $trick->setUsers($user);
                 } else {
@@ -99,6 +100,9 @@ class TrickController extends AbstractController
                 $this->addFlash('success', 'Les données sont enregistrées!');
                 // redirection
                 return $this->redirectToRoute('app_home', ['slug' => $trick->getSlug()]);
+            } else {
+                $this->addFlash('warning', 'Erreur');
+                return $this->redirectToRoute('app_homme');
             }
         }
         return $this->renderForm('trick/edit.html.twig', [
@@ -112,19 +116,6 @@ class TrickController extends AbstractController
     #[Route('/tricks/{id}/delete', name: 'trick_delete')]
     public function delete(EntityManagerInterface $entityManager, $id): RedirectResponse
     {
-                            // Je récupère l'image dans l'array collection à partir de de l'entité tricks
-                            /* $pictures = $tricks->getMedias();
-                            $pictures = new Medias();
-                            foreach($pictures as $picture) {
-                                // Je reconstitue l'image téléchargée stockée dans la base de données
-                                $filePicture = $this->getParameter('media_directory').'/'.$picture->getMedia();
-                                // Je supprime physiquement l'image
-                                if (file_exists($filePicture)) {
-                                    unlink($filePicture);
-                                }
-                            }
-                            */
-
         $trick = $entityManager->getRepository(Tricks::class)->find($id);
         $entityManager->remove($trick);
         $entityManager->flush();

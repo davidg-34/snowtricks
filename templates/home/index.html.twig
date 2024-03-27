@@ -21,11 +21,12 @@
     <section id="tricks">
         <div class="container p-3">
             {% if app.user %}
+                {# Bouton création d'une figure #}
                 <div class="new-trick-container text-end p-3 w-100">
                     <button type="button" class="btn btn-primary new-trick">
                         <a class="text-center" href="/tricks/new">
                             <i class="text-black fw-normal px-2 fab fa-creative-commons-share">
-                                creation  d'une  figure
+                                <span class="d-none-md">creation  d'une  figure</span>
                             </i>
                         </a>
                     </button>
@@ -38,7 +39,7 @@
         {# Bouton 'load more' #}
         <div class="container">
             <a href="" class="d-grid gap-2 col-2 mx-auto text-decoration-none" id="load-more">
-                <button class="text-center bg-primary" onclick="loadMore(); return false">
+                <button class="text-center bg-primary rounded" onclick="loadMore(); return false">
                     <span>Load More</span>
                 </button>
                 <input type="hidden" id="loadMore" name="loadMore" value="0">

@@ -1,7 +1,3 @@
-<!-- Button trigger modal -->
-<!--<a data-bs-toggle="modal" data-bs-target="#exampleModal" href="/tricks/{{ trick.slug }}/edit">
-    <i class="fas fa-pen"></i> &nbsp;{{ trick.name}}
-</a>-->
 <!-- Modal -->
 <div class="modal fade" id="deleteConfirmationModal" data-bs-backdrop="static" tabindex="-1" aria-labelledby="confirmation de la suppression" aria-hidden="true">
     <div class="modal-dialog">
@@ -18,9 +14,6 @@
                 <a id="deleteTrick" href="/tricks/{{ trick.id }}/delete">
                     <button type="button" class="btn btn-primary">Continuer</button>
                 </a>
-              {# <a id="exampleModal" href="/tricks"></a> #}
-              {# <a id="deleteTrick" href="{{ path('app_home') }}"</a> #}
-                
             </div>
         </div>
     </div>

@@ -14,7 +14,7 @@
     {# Formulaire pour créer/modifier une figure #}
     {% if app.user %}
         <div class="container my-5">
-            <div class="container col-6">
+            <div class="container col-lg-6 col-md-8 modife rounded-3 p-3">
                 {{ form_start(formTrick) }}
                 {{ form_errors(formTrick) }}
 
@@ -25,16 +25,17 @@
 
                 {# Modification/suppression de l'image ou la vidéo téléchargée du formulaire #}
                 {% if editMode %}
-                    <div style="display: flex; gap: 15px; width: 100%;">
+                    <div class=" d-flex gap-3 w-100">
                         {% for media in trick.medias %}
                             <div class="edit-media">
                                 {% if media.type == "picture" %}
                                     <img src="/assets/uploads/{{ media.media }}">
                                 {% else %}
                                     <img src="/assets/videoicon.png">
-                                {% endif %}
+                                {% endif %}                                
+                                {% include "modals/delete-trick.html.twig" %}
                                 <div class="delete-overlay">
-                                    <a href="/tricks/{{ trick.id }}/medias/{{ media.id }}/delete">
+                                    <a data-bs-toggle="modal" data-bs-target="#deleteConfirmationModal" href="/tricks/{{ trick.id }}/medias/{{ media.id }}/delete">
                                         <span class="text-white">X</span>
                                     </a>
                                 </div>
@@ -44,20 +45,21 @@
                 {% endif %}
 
                 {# Boutons modifier/ajouter/supprimer une figure du formulaire #}
-                <button type="submit">
+                <div class="container mt-3 text-center">
+                    <button type="submit" class="bg-primary mt-2 rounded">
+                        {% if editMode %}
+                            Modifiez 
+                        {% else %}
+                            Ajoutez
+                        {% endif %}
+                    </button>
                     {% if editMode %}
-                        Modifiez
-                    {% else %}
-                        Ajoutez
+                        <a class="delete-btn m-3 rounded" data-bs-toggle="modal" data-bs-target="#deleteConfirmationModal" href="/tricks/{{ trick.id }}/delete">
+                            Supprimer
+                        </a>
+                        {% include "modals/delete-trick.html.twig" %}
                     {% endif %}
-                </button>
-                {% if editMode %}
-                    <a class="delete-btn m-3" data-bs-toggle="modal" data-bs-target="#deleteConfirmationModal" href="/tricks/{{ trick.id }}/delete">
-                        <i class="fas fa-trash"></i> Supprimer
-                    </a>
-                    {% include "modals/delete-trick.html.twig" %}
-                    <!--<a href="/tricks/{{ trick.id }}/delete" class="delete-btn m-3">Supprimer</a>-->
-                {% endif %}
+                </div>
 
                 {{ form_end(formTrick) }}
             </div>
