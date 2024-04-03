@@ -25,6 +25,7 @@ class AppFixtures extends Fixture
     {
         $this->hasher = $hasher;
         $this->slugger = $slugger;
+
         $this->faker = Factory::create('fr_FR');
     }
 
@@ -48,22 +49,21 @@ class AppFixtures extends Fixture
         // Create tricks
         for ($i=1; $i <= 10; $i++) {
             $trick = new Tricks();
-            $trick->setName($this-> faker->Words(1, true));
-            //$trick->setSlug($faker->Slug());
-            //$trick->setSlug($faker->words(4, true));
-            // Générer un slug à partir d'un tableau de 2 mots
-            //$nbwords = $faker->words(2);
-            //$slug = implode('-', $nbwords);                        
-            //$trick->setSlug($slug);
+            $name = $this->faker->Words(1, true);
+            $description = $this->faker->Text();
+            $media = $this->faker->image();
+            $trick->setName($name);
             $trick->setDescription($description);
-            //$trick->setDescription($faker->Text());
-            $trick->setSlug($this->slugger->slug($description));
+            $trick->setSlug($this->slugger->slug($name));
+            $trick->setMedias($media);
             $trick->setCreatedAt(\DateTimeImmutable::createFromMutable($this->faker->dateTime));
             $trick->setUpdatedAt(\DateTimeImmutable::createFromMutable($this->faker->dateTime));
             $manager->persist($trick);
             $tricks[] = $trick;
         }
-        dd($tricks);
+        //dd($tricks);
+
+        // Create category
 
         $manager->flush();
 
