@@ -5,17 +5,16 @@ namespace App\DataFixtures;
 use App\Entity\Category;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Persistence\ObjectManager;
+use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
+use Symfony\Component\String\Slugger\SluggerInterface;
 use Faker\Factory;
 use Faker\Generator;
 use App\Entity\Tricks;
 use App\Entity\Users;
 use App\Entity\Medias;
-use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
-use Symfony\Component\String\Slugger\SluggerInterface;
 use App\Entity\TrickGroup;
 use App\Entity\TrickImage;
-use App\Entity\comments;
-//use Proxies\__CG__\App\Entity\Medias;
+use App\Entity\Comments;
 
 class AppFixtures extends Fixture
 {
@@ -27,10 +26,9 @@ class AppFixtures extends Fixture
     {
         $this->hasher = $hasher;
         $this->slugger = $slugger;
-
         $this->faker = Factory::create('fr_FR');
-        $this->faker->addProvider('imageUrl');
-        $this->faker->addProvider(new \Bluemmb\Faker\PicsumPhotosProvider($this->faker));
+        // $this->faker->addProvider('imageUrl');
+        // $this->faker->addProvider(new \Bluemmb\Faker\PicsumPhotosProvider($this->faker));
     }
 
     public function load(ObjectManager $manager): void
@@ -44,9 +42,11 @@ class AppFixtures extends Fixture
                  ->setIsVerified(true);
             $password = $this->hasher->hashPassword($user, 'pass_1234');
             $user->setPassword($password);
+            $user->setAvatar("none");
             $manager->persist($user);
             $users[] = $user;
         }
+
 
         // Create categories
         $categories = [];
@@ -55,7 +55,7 @@ class AppFixtures extends Fixture
             $category = new Category();
             $category->setName($catName);
             $manager->persist($category);
-            $this->addReference($categories, $category); 
+            // $this->addReference($categories, $category); 
             $categories[] = $category;
         }
 
@@ -78,18 +78,15 @@ class AppFixtures extends Fixture
             $trick->setName($name);
             $trick->setDescription($description);
             $trick->setSlug($this->slugger->slug($name));
-            //$trick->setCategory($categories[array_rand($categories)]);
-            $trick->setCategory($this->getReference($categories[array_rand($categories)])) ;
+            $trick->setCategory($categories[array_rand($categories)]);
+            // $trick->setCategory($this->getReference($categories[array_rand($categories)])) ;
+            $trick->addMedia($medias[array_rand($medias)]);
             $trick->setCreatedAt(\DateTimeImmutable::createFromMutable($this->faker->dateTime));
             $trick->setUpdatedAt(\DateTimeImmutable::createFromMutable($this->faker->dateTime));
-            $manager->persist($trick);
-            $trick->addMedia($medias[array_rand($medias)]);
+            $manager->persist($trick);            
             $tricks[] = $trick;
-        }
-        //dd($tricks);
-
-        // Create category
-
+        }        
+        
         $manager->flush();
 
     }
