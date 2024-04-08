@@ -15,7 +15,7 @@ use Symfony\Component\String\Slugger\SluggerInterface;
 use App\Entity\TrickGroup;
 use App\Entity\TrickImage;
 use App\Entity\comments;
-use Proxies\__CG__\App\Entity\Medias;
+//use Proxies\__CG__\App\Entity\Medias;
 
 class AppFixtures extends Fixture
 {
@@ -29,6 +29,8 @@ class AppFixtures extends Fixture
         $this->slugger = $slugger;
 
         $this->faker = Factory::create('fr_FR');
+        $this->faker->addProvider('imageUrl');
+        $this->faker->addProvider(new \Bluemmb\Faker\PicsumPhotosProvider($this->faker));
     }
 
     public function load(ObjectManager $manager): void
@@ -53,6 +55,7 @@ class AppFixtures extends Fixture
             $category = new Category();
             $category->setName($catName);
             $manager->persist($category);
+            $this->addReference($categories, $category); 
             $categories[] = $category;
         }
 
@@ -60,7 +63,7 @@ class AppFixtures extends Fixture
         $medias = [];
         for ($i = 0; $i < 3 ; $i++) {
             $media = new Medias();
-            $media->setMedia($this->faker->image());
+            $media->setMedia($this->faker->imageUrl());
             $media->setType('picture');
             $manager->persist($media);
             $medias[] = $media;
@@ -71,11 +74,12 @@ class AppFixtures extends Fixture
             $trick = new Tricks();
             $name = $this->faker->Words(1, true);
             $description = $this->faker->Text();
-            $media = $this->faker->image();
+            $media = $this->faker->imageUrl();
             $trick->setName($name);
             $trick->setDescription($description);
             $trick->setSlug($this->slugger->slug($name));
-            $trick->setCategory($categories[array_rand($categories)]);
+            //$trick->setCategory($categories[array_rand($categories)]);
+            $trick->setCategory($this->getReference($categories[array_rand($categories)])) ;
             $trick->setCreatedAt(\DateTimeImmutable::createFromMutable($this->faker->dateTime));
             $trick->setUpdatedAt(\DateTimeImmutable::createFromMutable($this->faker->dateTime));
             $manager->persist($trick);

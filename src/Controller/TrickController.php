@@ -105,7 +105,7 @@ class TrickController extends AbstractController
                 return $this->redirectToRoute('app_homme');
             }
         }
-        return $this->renderForm('trick/edit.html.twig', [
+        return $this->render('trick/edit.html.twig', [
             'formTrick' => $form,
             'trick' => $trick,
             'editMode' => $trick->getId() !== null
