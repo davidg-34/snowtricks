@@ -140,8 +140,8 @@ class Tricks
     }
 
     public function getMainMedia(): Collection
-    {        
-        return new ArrayCollection($this->medias->slice(0, 1));        
+    {
+        return new ArrayCollection($this->medias->slice(0, 1));
     }
 
     public function getMedias(): Collection
@@ -178,7 +178,7 @@ class Tricks
         return $this;
     }
 
-    public function getCommentCount() 
+    public function getCommentCount()
     {
         return $this->comments->count();
     }

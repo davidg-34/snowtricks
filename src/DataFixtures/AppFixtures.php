@@ -35,6 +35,7 @@ class AppFixtures extends Fixture
     {
 
         // Create Users
+        $users = [];
         for ($i = 0; $i < 10; $i++) {
             $user = new Users();
             $user->setEmail($this->faker->email())
@@ -57,16 +58,6 @@ class AppFixtures extends Fixture
             $categories[] = $category;
         }
 
-        // Create random medias
-        $medias = [];
-        for ($i = 0; $i < 3 ; $i++) {
-            $media = new Medias();
-            $media->setMedia($this->faker->imageUrl());
-            $media->setType('picture');
-            $manager->persist($media);
-            $medias[] = $media;
-        }
-
         // Create tricks
         for ($i=1; $i <= 10; $i++) {
             $trick = new Tricks();
@@ -77,12 +68,22 @@ class AppFixtures extends Fixture
             $trick->setDescription($description);
             $trick->setSlug($this->slugger->slug($name));
             $trick->setCategory($categories[array_rand($categories)]);
-            $trick->addMedia($medias[array_rand($medias)]);
+            $trick->setUsers($users[array_rand($users)]);
+            // Create random medias fopr this trick
+            $trick_medias = [];
+            for ($m = 0; $m < 3 ; $m++) {
+                $media = new Medias();
+                $media->setMedia('snow' . rand(1,6) . '.png');
+                $media->setType('picture');
+                $manager->persist($media);
+                $trick_medias[] = $media;
+                $trick->addMedia($trick_medias[$m]);
+            }
             $trick->setCreatedAt(\DateTimeImmutable::createFromMutable($this->faker->dateTime));
             $trick->setUpdatedAt(\DateTimeImmutable::createFromMutable($this->faker->dateTime));
-            $manager->persist($trick);            
+            $manager->persist($trick);
             $tricks[] = $trick;
-        }        
+        }
         /* dd(['users'=> $users, 'categories' => $categories, 'medias' => $medias, 'tricks' => $tricks]); */
         $manager->flush();
 
