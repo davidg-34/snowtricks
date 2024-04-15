@@ -47,7 +47,6 @@ class AppFixtures extends Fixture
             $users[] = $user;
         }
 
-
         // Create categories
         $categories = [];
         for ($i = 0; $i < 3 ; $i++) {
@@ -55,7 +54,6 @@ class AppFixtures extends Fixture
             $category = new Category();
             $category->setName($catName);
             $manager->persist($category);
-            // $this->addReference($categories, $category); 
             $categories[] = $category;
         }
 
@@ -79,14 +77,13 @@ class AppFixtures extends Fixture
             $trick->setDescription($description);
             $trick->setSlug($this->slugger->slug($name));
             $trick->setCategory($categories[array_rand($categories)]);
-            // $trick->setCategory($this->getReference($categories[array_rand($categories)])) ;
             $trick->addMedia($medias[array_rand($medias)]);
             $trick->setCreatedAt(\DateTimeImmutable::createFromMutable($this->faker->dateTime));
             $trick->setUpdatedAt(\DateTimeImmutable::createFromMutable($this->faker->dateTime));
             $manager->persist($trick);            
             $tricks[] = $trick;
         }        
-        
+        /* dd(['users'=> $users, 'categories' => $categories, 'medias' => $medias, 'tricks' => $tricks]); */
         $manager->flush();
 
     }

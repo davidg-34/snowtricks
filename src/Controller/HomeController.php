@@ -12,7 +12,7 @@ use Doctrine\ORM\Mapping\Entity;
 
 class HomeController extends AbstractController
 {
-    #[Route('/', name: 'app_home')]
+    #[Route('/', name: 'home')]
     public function index(EntityManagerInterface $entityManager): Response
     {
         $tricks = $entityManager->getRepository(Tricks::class)->findAll();

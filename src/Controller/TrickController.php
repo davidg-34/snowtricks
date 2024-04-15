@@ -99,10 +99,10 @@ class TrickController extends AbstractController
                 // flash message
                 $this->addFlash('success', 'Les données sont enregistrées!');
                 // redirection
-                return $this->redirectToRoute('app_home', ['slug' => $trick->getSlug()]);
+                return $this->redirectToRoute('home', ['slug' => $trick->getSlug()]);
             } else {
                 $this->addFlash('warning', 'Erreur');
-                return $this->redirectToRoute('app_homme');
+                return $this->redirectToRoute('homme');
             }
         }
         return $this->render('trick/edit.html.twig', [
