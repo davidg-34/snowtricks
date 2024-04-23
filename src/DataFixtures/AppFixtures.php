@@ -36,7 +36,7 @@ class AppFixtures extends Fixture
 
         // Create Users
         $users = [];
-        for ($i = 0; $i < 10; $i++) {
+        for ($i = 0; $i < 5; $i++) {
             $user = new Users();
             $user->setEmail($this->faker->email())
                  ->setUsername($this->faker->userName())
@@ -48,12 +48,21 @@ class AppFixtures extends Fixture
             $users[] = $user;
         }
 
-        // Create categories
-        $categories = [];
+        // Create categories        
+        /* $categories = ['grab', 'butter', 'spin'];
         for ($i = 0; $i < 3 ; $i++) {
             $catName = $this->faker->Words(1, true);
             $category = new Category();
             $category->setName($catName);
+            $manager->persist($category);
+            $categories[] = $category;
+        } */        
+        $categories = [];
+        foreach (['grab', 'butter', 'spins'] as $values) {
+            $category = new Category();
+            $category->setName($values);
+            //$catName = $this->faker->Words(1, true);
+            //$category->setName($catName);
             $manager->persist($category);
             $categories[] = $category;
         }
@@ -69,23 +78,36 @@ class AppFixtures extends Fixture
             $trick->setSlug($this->slugger->slug($name));
             $trick->setCategory($categories[array_rand($categories)]);
             $trick->setUsers($users[array_rand($users)]);
-            // Create random medias fopr this trick
+            // Create random medias for this trick
             $trick_medias = [];
-            for ($m = 0; $m < 3 ; $m++) {
+            for ($m = 0; $m < 3 ; $m++) {            
                 $media = new Medias();
-                $media->setMedia('snow' . rand(1,6) . '.png');
-                $media->setType('picture');
-                $manager->persist($media);
-                $trick_medias[] = $media;
-                $trick->addMedia($trick_medias[$m]);
+                if ($media->setType('picture')) {
+                    $media->setMedia('snow' . rand(1,6) . '.png');
+                    $media->setType('picture');
+                    //$media->setType($media[array_rand($trick_medias)]);
+                    //$media->setMedia('snow' . rand(1,6) . '.png');
+                    //$media->setMedia('snow' . rand(1,4) . '.mp4');
+                    //$media->setType('snow' . rand(1, 6) . (rand(0, 1) ? '.mp4' : '.png'));
+                    //$media->setType('picture' . (rand (0, 1) ? '.png' : 'video' . 'mp4') );
+                    $manager->persist($media);
+                    $trick_medias[] = $media;
+                    $trick->addMedia($trick_medias[$m]);
+                } else {
+                    $media->setMedia('snow' . rand(1,4) . '.mp4');
+                    $media->setType('video');
+                    $manager->persist($media);
+                    $trick_medias[] = $media;
+                    $trick->addMedia($trick_medias[$m]);
+                }
             }
             $trick->setCreatedAt(\DateTimeImmutable::createFromMutable($this->faker->dateTime));
             $trick->setUpdatedAt(\DateTimeImmutable::createFromMutable($this->faker->dateTime));
             $manager->persist($trick);
             $tricks[] = $trick;
         }
-        /* dd(['users'=> $users, 'categories' => $categories, 'medias' => $medias, 'tricks' => $tricks]); */
-        $manager->flush();
+        /* dd(['users'=> $users, 'categories' => $categories, 'medias' => $trick_medias, 'tricks' => $tricks]);*/
+        $manager->flush(); 
 
     }
 

@@ -35,7 +35,7 @@
                                 {% endif %}                                
                                 {% include "modals/delete-trick.html.twig" %}
                                 <div class="delete-overlay">
-                                    <a data-bs-toggle="modal" data-bs-target="#deleteConfirmationModal" href="/tricks/{{ trick.id }}/medias/{{ media.id }}/delete">
+                                    <a data-bs-toggle="modal" data-bs-target="#deleteConfirmationModal" href="{# /tricks/{{ trick.id }} #}/medias/{{ media.id }}/delete">
                                         <span class="text-white">X</span>
                                     </a>
                                 </div>

@@ -102,7 +102,7 @@ class TrickController extends AbstractController
                 return $this->redirectToRoute('home', ['slug' => $trick->getSlug()]);
             } else {
                 $this->addFlash('warning', 'Erreur');
-                return $this->redirectToRoute('homme');
+                return $this->redirectToRoute('home');
             }
         }
         return $this->render('trick/edit.html.twig', [

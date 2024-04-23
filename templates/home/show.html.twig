@@ -22,10 +22,10 @@
             {# Les 2 icônes modifier/supprimer la figure #}
             {% if app.user and app.user.id == trick.getUsers().getId( )%}
                 <p class="icon-btn border border-light position-absolute">
-                    <a href="/tricks/{{ trick.slug }}/edit">
+                    <a href="/tricks/{{ trick.slug }}{# /medias/{{ media.id }} #}/edit">
                         <i class="text-light px-2 fas fa-pen"></i>
                     </a>
-                    <a data-bs-toggle="modal" data-bs-target="#deleteConfirmationModal" href="/tricks/{{ trick.id }}/delete">
+                    <a data-bs-toggle="modal" data-bs-target="#deleteConfirmationModal" href="/tricks/{{ trick.id }}{# /medias/{{ media.id }} #}/delete">
                         <i class="text-light fas fa-trash"></i> 
                     </a>
                     {% include "modals/delete-trick.html.twig" %}
@@ -65,7 +65,7 @@
                                 <a href="/tricks/{{ trick.slug }}/edit">
                                     <i class="text-black px-2 fas fa-pen"></i>
                                 </a>
-                                <a data-bs-toggle="modal" data-bs-target="#deleteConfirmationModal" href="/tricks/{{ trick.id }}/delete">
+                                <a data-bs-toggle="modal" data-bs-target="#deleteConfirmationModal" href="{# /tricks/{{ trick.id }}/medias #}/{{ media.id }}/delete">
                                     <i class="text-black px-2 fas fa-trash-alt"></i> 
                                 </a>
                                 {% include "modals/delete-trick.html.twig" %}
