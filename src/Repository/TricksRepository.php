@@ -22,7 +22,8 @@ class TricksRepository extends ServiceEntityRepository
         parent::__construct($registry, Tricks::class);
     }    
 
-    public function findAll($currentPage = 1, $tricksPerPage = 3) {        
+    public function findAll($currentPage = 1, $tricksPerPage = 3) : array
+    {        
         $offset = ($currentPage-1)*$tricksPerPage;
         $allTricks = new ArrayCollection($this->findBy(array()));
         return $allTricks->slice($offset, $tricksPerPage);
