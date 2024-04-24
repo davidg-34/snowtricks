@@ -19,27 +19,22 @@ class TrickForm extends AbstractType
     {
         $builder
             ->add('name', TextType::class, [
-                'label' => 'Nom'
+                'label' => 'Nom',
+                'required' => true
             ])
             ->add('description', TextType::class, [
                 'label' => 'Description'
-            ])            
+            ])
             ->add('category', EntityType::class, [
                 'class' => Category::class,
                 'choice_label' => 'name',
-                'label' => 'Catégorie des figures'
+                'label' => 'Catégorie des figures',
+                'required' => false
             ])
             ->add('medias', FileType::class, [
-                //'class' => Medias::class,
-                //'allow_extra_fields' => false,
-                //'allow_file_upload' => true,
                 'mapped' => false,
                 'required' => false
             ])
-            //->add('medias', EntityType::class, $options = [
-            //    'class' => Medias::class,
-            //    'choice_label' => 'id'
-            //])            
             ->getForm();
     }
 

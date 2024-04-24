@@ -20,7 +20,6 @@ class Tricks
     private ?int $id = null;
 
     #[ORM\Column(length: 25)]
-    #[Assert\NotBlank()]
     private ?string $slug = null;
 
     #[ORM\Column(length: 255)]

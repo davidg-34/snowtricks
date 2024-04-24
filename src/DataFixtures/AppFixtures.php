@@ -69,7 +69,15 @@ class AppFixtures extends Fixture
             $trick->setUsers($users[array_rand($users)]);
             // Create random medias for this trick
             $trick_medias = [];
-            for ($m = 0; $m < 3 ; $m++) {
+            // First, we add an image to the trick
+            $media = new Medias();
+            $media->setMedia('snow' . rand(1,6) . '.png');
+            $media->setType('picture');
+            $manager->persist($media);
+            $trick_medias[] = $media;
+            $trick->addMedia($trick_medias[0]);
+            // then we add two more medias : image or video
+            for ($m = 1; $m < 3 ; $m++) {
                 $media = new Medias();
                 // Générer un nombre aléatoire pour déterminer le type de média
                 if (rand(0, 1) == 0) {

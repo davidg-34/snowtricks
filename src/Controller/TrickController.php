@@ -69,8 +69,17 @@ class TrickController extends AbstractController
                     // edition
                     $trick->setUpdatedAt(new \DateTime());
                 }
+                // print_r($trick);
                 // UPLOAD DE FICHIER*************
                 // Récupère toutes les données 'médias' à partir du formulaire
+
+                // GENERATION DE SLUG***************
+                $slugger = new AsciiSlugger();
+                $trick->setSlug($slugger->slug($trick->getName()));
+                $entityManager->persist($trick);
+                $entityManager->flush();
+
+
                 $medias = $form->get('medias')->getData();
                 if ($medias) {
                     // Inclus le nom du fichier dans l'url en modifiant le nom de l'image récupérée
@@ -82,7 +91,7 @@ class TrickController extends AbstractController
                     );
                     // Insère l'image avec le nom de l'image
                     $media = new Medias();
-                    $media->setMedia($fileName);                    
+                    $media->setMedia($fileName);
                     if (strpos($fileName, 'mp4')) {
                         $media->setType('video');
                     } else {
@@ -91,18 +100,13 @@ class TrickController extends AbstractController
                     $entityManager->persist($media);
                     $trick->addMedia($media);
                 }
-                // GENERATION DE SLUG***************
-                $slugger = new AsciiSlugger();
-                $trick->setSlug($slugger->slug($trick->getName()));
-                $entityManager->persist($trick);
-                $entityManager->flush();
+
                 // flash message
                 $this->addFlash('success', 'Les données sont enregistrées!');
                 // redirection
                 return $this->redirectToRoute('home', ['slug' => $trick->getSlug()]);
             } else {
                 $this->addFlash('warning', 'Erreur');
-                return $this->redirectToRoute('home');
             }
         }
         return $this->render('trick/edit.html.twig', [
@@ -127,18 +131,17 @@ class TrickController extends AbstractController
     #[Route('/tricks/{id}/medias/{mediaId}/delete', name: 'trick_media_delete')]
     public function deleteMedia(EntityManagerInterface $entityManager, $id, $mediaId): RedirectResponse
     {
-        $trick = $entityManager->getRepository(Tricks::class)->find($id);        
-        $form = $this->createForm(TrickForm::class, $trick);
-        
+        $trick = $entityManager->getRepository(Tricks::class)->find($id);
+        // $form = $this->createForm(TrickForm::class, $trick);
         $media = $entityManager->getRepository(Medias::class)->find($mediaId);
-        
+
         // Suppression de l'image sur le HD
         unlink($this->getParameter('medias_directory') . '/' . $media->getMedia());
         // Suppression de l'image en BDD
         $entityManager->remove($media);
         $entityManager->flush();
 
-        return $this->redirectToRoute('trick_edit', ['slug' => $trick->getSlug()]);        
+        return $this->redirectToRoute('trick_edit', ['slug' => $trick->getSlug()]);
     }
 
     // Commentaire sur les figures
@@ -177,14 +180,14 @@ class TrickController extends AbstractController
     // loadMore
     #[Route('/ajax/tricks/{page}', name: 'tricks_load_more')]
     public function loadMore(EntityManagerInterface $entityManager, $page):response
-    {   
+    {
         $currentPage = intval($page);
         $tricks = $entityManager->getRepository(Tricks::class)->findAll($currentPage);
         return $this->render('trick/tricks.html.twig', [
             'tricks' => $tricks
         ]);
-        
+
     }
 
-   
+
 }
