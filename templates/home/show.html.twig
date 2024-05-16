@@ -65,10 +65,10 @@
                                 <a href="/tricks/{{ trick.slug }}/edit">
                                     <i class="text-black px-2 fas fa-pen"></i>
                                 </a>
-                                <a data-bs-toggle="modal" data-bs-target="#deleteConfirmationModal" href="{# /tricks/{{ trick.id }}/medias #}/{{ media.id }}/delete">
-                                    <i class="text-black px-2 fas fa-trash-alt"></i> 
+                                <a data-bs-toggle="modal" data-bs-target="#deleteMediaConfirmationModal" href="/tricks/{{ trick.id }}/medias/{{ media.id }}/delete">
+                                    <i class="text-black px-2 fas fa-trash-alt"></i>
                                 </a>
-                                {% include "modals/delete-trick.html.twig" %}
+                                {% include "modals/delete-trick-media.html.twig" %}
                             </div>
                             {% else %}
                         {% endif %}
@@ -100,7 +100,7 @@
         {# Commentaires #}
         <h5 class="ms-5 mb-5">Commentaires :
             {{ trick.comments|length }}</h5>
-        {% for comment in trick.comments(currentPage, commentPerPage) %}
+        {% for comment in trick.comments(currentPage, commentPerPage) | reverse %}
             <div class="comment">
                 <div class="row">
                     <div class="col">

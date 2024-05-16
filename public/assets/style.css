@@ -61,8 +61,8 @@ nav {
 /* CARTES IMAGES */
 .card-body .card-img{
     height: 13rem;
-    /* object-fit: cover; */
-    object-fit: fill;
+    object-fit: cover;
+    /* object-fit: fill; */
 }
 
 /* BOUTONS BOUTONS-ICONES */

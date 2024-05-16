@@ -82,6 +82,7 @@ class TrickController extends AbstractController
 
                 $medias = $form->get('medias')->getData();
                 if ($medias) {
+                    //dd($medias);
                     // Inclus le nom du fichier dans l'url en modifiant le nom de l'image récupérée
                     $fileName = md5(uniqid()) . '.' . $medias->guessExtension();
                     // Déplace l'image récupérée, dans le dossier public/assets/uploads
@@ -99,6 +100,8 @@ class TrickController extends AbstractController
                     }
                     $entityManager->persist($media);
                     $trick->addMedia($media);
+                    $entityManager->flush();                    
+                    //dd($media);
                 }
 
                 // flash message
@@ -165,7 +168,7 @@ class TrickController extends AbstractController
             return $this->redirectToRoute('app_show', ['slug' => $trick->getSlug()]);
         }
         $commentCount = $trick->getCommentCount();
-        $commentPerPage = 3;
+        $commentPerPage = 10;
         $commentPageCount = ceil($commentCount / $commentPerPage);
         return $this->render('home/show.html.twig', [
             'trick' => $trick,
