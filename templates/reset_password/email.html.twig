@@ -1,9 +1,11 @@
-<h1>Bonjour,</h1>
+<div class="container col-lg-8 col-md-6 border border-black p-4 text-center my-5">
+    <h1>Bonjour,</h1>
 
-<p>Pour réinitialiser votre mot de passe, merci de suivre le lien suivant</p>
+    <p>Pour réinitialiser votre mot de passe, merci de cliquer sur le lien suivant</p>
 
-<a href="{{ url('app_reset_password', {token: resetToken.token}) }}">{{ url('app_reset_password', {token: resetToken.token}) }}</a>
+    <a href="{{ url('app_reset_password', {token: resetToken.token}) }}">{{ url('app_reset_password', {token: resetToken.token}) }}</a>
 
-<p>Ce lien expirera dans {{ resetToken.expirationMessageKey|trans(resetToken.expirationMessageData, 'ResetPasswordBundle') }}.</p>
+    <p>Ce lien expirera dans {{ resetToken.expirationMessageKey|trans(resetToken.expirationMessageData, 'ResetPasswordBundle') }}.</p>
 
-<p>Cordialement</p>
+    <p>Cordialement</p>
+</div>

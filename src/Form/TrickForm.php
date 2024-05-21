@@ -31,6 +31,10 @@ class TrickForm extends AbstractType
                 'label' => 'Catégorie des figures',
                 'required' => false
             ])
+            /* ->add('photo_une', FileType::class, [
+                'label' => 'Photo à la une',
+                'required' => true
+            ]) */
             ->add('medias', FileType::class, [
                 'mapped' => false,
                 'required' => false

@@ -48,6 +48,9 @@ class Tricks
     #[ORM\Column(type: Types::DATETIME_MUTABLE)]
     private ?\DateTimeInterface $updatedAt = null;
 
+    /* #[ORM\Column(length: 255)]
+    private ?string $coverPhoto = null; */
+
     public function __construct()
     {
         $this->comments = new ArrayCollection();
@@ -110,7 +113,7 @@ class Tricks
     /**
      * @return Collection<int, Comments>
      */
-    public function getComments($page = 1, $commentPerPage = 3): Collection
+    public function getComments($page = 1, $commentPerPage = null): Collection
     {
         $offset = ($page - 1) * $commentPerPage;
         return new ArrayCollection($this->comments->slice($offset, $commentPerPage));
@@ -206,4 +209,16 @@ class Tricks
 
         return $this;
     }
+
+    /* public function getCoverPhoto(): ?string
+    {
+        return $this->coverPhoto;
+    }
+
+    public function setCoverPhoto(string $coverPhoto): static
+    {
+        $this->coverPhoto = $coverPhoto;
+
+        return $this;
+    } */
 }

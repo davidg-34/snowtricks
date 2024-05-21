@@ -49,7 +49,7 @@ class AppFixtures extends Fixture
         }
 
         $categories = [];
-        foreach (['grab', 'butter', 'spins'] as $values) {
+        foreach (['grab', 'butter', 'spins', 'rails'] as $values) {
             $category = new Category();
             $category->setName($values);
             $manager->persist($category);
