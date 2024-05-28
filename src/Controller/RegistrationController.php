@@ -30,6 +30,10 @@ class RegistrationController extends AbstractController
     #[Route('/inscription', name: 'app_register')]
     public function register(Request $request, UserPasswordHasherInterface $userPasswordHasher, UserAuthenticatorInterface $userAuthenticator, UsersAuthenticator $authenticator, EntityManagerInterface $entityManager): Response
     {
+    // Check if user is already logged in
+    if ($this->getUser()) {
+        return $this->redirectToRoute('home');
+    }
         $user = new Users();
         $form = $this->createForm(RegistrationFormType::class, $user);
         $form->handleRequest($request);
@@ -56,11 +60,13 @@ class RegistrationController extends AbstractController
             );
             // do anything else you need here, like send an email
 
-            return $userAuthenticator->authenticateUser(
-                $user,
-                $authenticator,
-                $request
-            );
+            // automatic user login after his registration.
+            //return $userAuthenticator->authenticateUser(
+            //    $user,
+            //    $authenticator,
+            //    $request
+            //);
+            return $this->redirectToRoute('app_login');
         }
 
         return $this->render('registration/register.html.twig', [

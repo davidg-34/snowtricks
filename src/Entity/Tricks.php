@@ -48,6 +48,9 @@ class Tricks
     #[ORM\Column(type: Types::DATETIME_MUTABLE)]
     private ?\DateTimeInterface $updatedAt = null;
 
+    //#[ORM\Column(type: 'boolean')]
+    //private $isVerified = false;
+
     /* #[ORM\Column(length: 255)]
     private ?string $coverPhoto = null; */
 
@@ -215,10 +218,22 @@ class Tricks
         return $this->coverPhoto;
     }
 
-    public function setCoverPhoto(string $coverPhoto): static
+    public function setCoverPhoto(string $coverPhoto): self
     {
         $this->coverPhoto = $coverPhoto;
 
         return $this;
     } */
+
+    public function isVerified(): bool
+    {
+        return $this->isVerified;
+    }
+
+    public function setIsVerified(bool $isVerified): self
+    {
+        $this->isVerified = $isVerified;
+
+        return $this;
+    }
 }
