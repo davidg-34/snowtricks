@@ -12,28 +12,23 @@ use Faker\Generator;
 use App\Entity\Tricks;
 use App\Entity\Users;
 use App\Entity\Medias;
-use App\Entity\TrickGroup;
-use App\Entity\TrickImage;
 use App\Entity\Comments;
 
 class AppFixtures extends Fixture
 {
     private Generator $faker;
     private UserPasswordHasherInterface $hasher;
-    private $slugger;
+    private SluggerInterface $slugger;
 
     public function __construct(UserPasswordHasherInterface $hasher, SluggerInterface $slugger)
     {
         $this->hasher = $hasher;
         $this->slugger = $slugger;
         $this->faker = Factory::create('fr_FR');
-        // $this->faker->addProvider('imageUrl');
-        // $this->faker->addProvider(new \Bluemmb\Faker\PicsumPhotosProvider($this->faker));
     }
 
     public function load(ObjectManager $manager): void
     {
-
         // Create Users
         $users = [];
         for ($i = 0; $i < 5; $i++) {
@@ -57,34 +52,38 @@ class AppFixtures extends Fixture
         }
 
         // Create tricks
-        for ($i=1; $i <= 10; $i++) {
+        $tricks = [];
+        for ($i = 1; $i <= 10; $i++) {
             $trick = new Tricks();
-            $name = $this->faker->Words(1, true);
-            $description = $this->faker->Text();
-            $media = $this->faker->imageUrl();
+            $name = implode(' ', $this->faker->words(2));
+            $coverPhoto = $this->faker->imageUrl();
+            $description = $this->faker->text();
             $trick->setName($name);
             $trick->setDescription($description);
-            $trick->setSlug($this->slugger->slug($name));
+            $trick->setSlug($this->slugger->slug($name)->toString());
+            $trick->setCoverPhoto($coverPhoto);
             $trick->setCategory($categories[array_rand($categories)]);
             $trick->setUsers($users[array_rand($users)]);
+            
             // Create random medias for this trick
             $trick_medias = [];
+            
             // First, we add an image to the trick
             $media = new Medias();
-            $media->setMedia('snow' . rand(1,6) . '.png');
+            $media->setMedia('snow' . rand(1, 6) . '.png');
             $media->setType('picture');
             $manager->persist($media);
             $trick_medias[] = $media;
             $trick->addMedia($trick_medias[0]);
+            
             // then we add two more medias : image or video
-            for ($m = 1; $m < 3 ; $m++) {
+            for ($m = 1; $m < 3; $m++) {
                 $media = new Medias();
-                // Générer un nombre aléatoire pour déterminer le type de média
                 if (rand(0, 1) == 0) {
-                    $media->setMedia('snow' . rand(1,6) . '.png');
+                    $media->setMedia('snow' . rand(1, 6) . '.png');
                     $media->setType('picture');
                 } else {
-                    $media->setMedia('snow' . rand(1,4) . '.mp4');
+                    $media->setMedia('snow' . rand(1, 4) . '.mp4');
                     $media->setType('video');
                 }
                 $manager->persist($media);
@@ -110,9 +109,7 @@ class AppFixtures extends Fixture
                 $comments[] = $comment;
             }
         }
-        /* dd(['users'=> $users, 'categories' => $categories, 'medias' => $trick_medias, 'tricks' => $tricks]);*/
+        
         $manager->flush();
-
     }
-
 }

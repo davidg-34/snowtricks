@@ -48,16 +48,21 @@ class Tricks
     #[ORM\Column(type: Types::DATETIME_MUTABLE)]
     private ?\DateTimeInterface $updatedAt = null;
 
-    //#[ORM\Column(type: 'boolean')]
-    //private $isVerified = false;
+    #[ORM\OneToMany(mappedBy: 'trick', targetEntity: Video::class)]
+    private Collection $videos;
 
-    /* #[ORM\Column(length: 255)]
-    private ?string $coverPhoto = null; */
+    #[ORM\OneToMany(mappedBy: 'trick', targetEntity: Picture::class)]
+    private Collection $pictures;
+
+    #[ORM\Column(length: 255)]
+    private ?string $coverPhoto = null;
 
     public function __construct()
     {
         $this->comments = new ArrayCollection();
         $this->medias = new ArrayCollection();
+        $this->videos = new ArrayCollection();
+        $this->pictures = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -213,7 +218,7 @@ class Tricks
         return $this;
     }
 
-    /* public function getCoverPhoto(): ?string
+    public function getCoverPhoto(): ?string
     {
         return $this->coverPhoto;
     }
@@ -223,16 +228,64 @@ class Tricks
         $this->coverPhoto = $coverPhoto;
 
         return $this;
-    } */
-
-    public function isVerified(): bool
-    {
-        return $this->isVerified;
     }
 
-    public function setIsVerified(bool $isVerified): self
+    /**
+     * @return Collection<int, Video>
+     */
+    public function getVideos(): Collection
     {
-        $this->isVerified = $isVerified;
+        return $this->videos;
+    }
+
+    public function addVideo(Video $video): self
+    {
+        if (!$this->videos->contains($video)) {
+            $this->videos->add($video);
+            $video->setTrick($this);
+        }
+
+        return $this;
+    }
+
+    public function removeVideo(Video $video): self
+    {
+        if ($this->videos->removeElement($video)) {
+            // set the owning side to null (unless already changed)
+            if ($video->getTrick() === $this) {
+                $video->setTrick(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Picture>
+     */
+    public function getPictures(): Collection
+    {
+        return $this->pictures;
+    }
+
+    public function addPicture(Picture $picture): self
+    {
+        if (!$this->pictures->contains($picture)) {
+            $this->pictures->add($picture);
+            $picture->setTrick($this);
+        }
+
+        return $this;
+    }
+
+    public function removePicture(Picture $picture): self
+    {
+        if ($this->pictures->removeElement($picture)) {
+            // set the owning side to null (unless already changed)
+            if ($picture->getTrick() === $this) {
+                $picture->setTrick(null);
+            }
+        }
 
         return $this;
     }

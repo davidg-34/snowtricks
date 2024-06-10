@@ -2,11 +2,11 @@
 
 namespace App\Entity;
 
-use App\Repository\PictureRepository;
+use App\Repository\VideoRepository;
 use Doctrine\ORM\Mapping as ORM;
 
-#[ORM\Entity(repositoryClass: PictureRepository::class)]
-class Picture
+#[ORM\Entity(repositoryClass: VideoRepository::class)]
+class Video
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
@@ -14,9 +14,9 @@ class Picture
     private ?int $id = null;
 
     #[ORM\Column(length: 255, nullable: true)]
-    private ?string $name = null;
+    private ?string $Name = null;
 
-    #[ORM\ManyToOne(inversedBy: 'pictures')]
+    #[ORM\ManyToOne(inversedBy: 'videos')]
     private ?Tricks $trick = null;
 
     public function getId(): ?int
@@ -26,12 +26,12 @@ class Picture
 
     public function getName(): ?string
     {
-        return $this->name;
+        return $this->Name;
     }
 
-    public function setName(?string $name): self
+    public function setName(?string $Name): self
     {
-        $this->name = $name;
+        $this->Name = $Name;
 
         return $this;
     }

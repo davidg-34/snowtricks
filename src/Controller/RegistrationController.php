@@ -46,6 +46,8 @@ class RegistrationController extends AbstractController
                     $form->get('plainPassword')->getData()
                 )
             );
+            // Définir la propriété isVerified sur false
+            $user->setIsVerified(false);
 
             $entityManager->persist($user);
             $entityManager->flush();
