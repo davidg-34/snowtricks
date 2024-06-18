@@ -242,6 +242,7 @@ class Tricks
     {
         if (!$this->videos->contains($video)) {
             $this->videos->add($video);
+            //$this->videos[] = $video;
             $video->setTrick($this);
         }
 
@@ -272,6 +273,7 @@ class Tricks
     {
         if (!$this->pictures->contains($picture)) {
             $this->pictures->add($picture);
+            //$this->pictures[] = $picture;
             $picture->setTrick($this);
         }
 

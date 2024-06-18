@@ -5,9 +5,7 @@
         <div class="card my-2">
             {# Affiche les cartes photos et vidéos page accueil #}
             <div class="card-body">
-                {% for media in trick.mainMedia() %}
-                    <img class="card-img" src="/assets/uploads/{{ media.media }}" alt="img_trick">
-                {%  endfor %}
+                    <img class="card-img" src="{{ trick.coverPhoto }}" alt="{{ trick.slug }} cover photo">
             </div>
             <div class="row">
                 <div class="col-6">
