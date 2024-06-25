@@ -14,13 +14,16 @@
                     </a>
                 </div>
                 {# Icônes modification/suppression si l'utilisateur est connecté #}
-                {% if app.user and app.user.id == trick.getUsers().getId() %}
+                {% if app.user %}
                     <div class="col-6">
                         <div class="row">
                             <div class="col-6">
                                 <a href="/tricks/{{ trick.slug }}/edit">
                                     <i class="fas fa-pen"></i>
                                 </a>
+                                {# <a data-bs-toggle="modal" data-bs-target="#deleteConfirmationModal" href="/tricks/{{ trick.slug }}/edit"> 
+                                    <i class="fas fa-pen"></i> 
+                                </a>#}
                             </div>
                             <div class="col-6">
                                 <a data-bs-toggle="modal" data-bs-target="#deleteConfirmationModal" href="/tricks/{{ trick.id }}/delete">

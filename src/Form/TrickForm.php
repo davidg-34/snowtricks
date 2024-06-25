@@ -32,16 +32,20 @@ class TrickForm extends AbstractType
                 'required' => false
             ])
             ->add('coverPhoto', FileType::class, [
+                'data_class' => null,
+                'empty_data' => '',
                 'label' => 'Photo à la une',
                 'mapped' => true,
                 'required' => false
             ])
             ->add('picture', FileType::class, [
+                'data_class' => null,
                 'label' => 'Ajouter une image',
                 'mapped' => false,
                 'required' => false
             ])
             ->add('video', FileType::class, [
+                'data_class' => null,
                 'label' => 'Ajouter une video',
                 'mapped' => false,
                 'required' => false

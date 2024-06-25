@@ -63,6 +63,7 @@ class TrickController extends AbstractController
                 if (!$trick->getId()) {
                     // creation
                     $trick->setCreatedAt(new \DateTime());
+                    $trick->setUpdatedAt(new \DateTime());
                     $user = $this->getUser();
                     $trick->setUsers($user);
                 } else {
