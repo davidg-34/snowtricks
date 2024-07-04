@@ -2,23 +2,26 @@
 
 namespace App\Controller;
 
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Routing\Annotation\Route;
-use Symfony\Component\String\Slugger\AsciiSlugger;
-use Symfony\Component\HttpFoundation\JsonResponse;
-use Doctrine\ORM\EntityManagerInterface;
 use App\Entity\User;
-use App\Entity\Tricks;
+use App\Entity\Video;
 use App\Entity\Medias;
+use App\Entity\Tricks;
+use App\Entity\Picture;
 use App\Form\TrickForm;
-use Symfony\Component\Filesystem\Filesystem;
 use App\Entity\Comments;
 use App\Form\CommentType;
 use App\Repository\TricksRepository;
+use Doctrine\ORM\EntityManagerInterface;
+use Symfony\Component\Filesystem\Filesystem;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Routing\Annotation\Route;
 use Doctrine\Common\Collections\ArrayCollection;
+use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\String\Slugger\AsciiSlugger;
 use Symfony\Component\HttpFoundation\RedirectResponse;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 //use Doctrine\ORM\EntityManager;
 //use Doctrine\ORM\Mapping\Entity;
@@ -45,78 +48,90 @@ class TrickController extends AbstractController
 
     // Ajout d'une figure / Mise à jour d'une figure
     #[Route('/tricks/new', name: 'trick_add')]
-    #[Route('/tricks/{slug}/edit', name: 'trick_edit'/* , requirements: ['id' => '\d+'] */)]
+    #[Route('/tricks/{slug}/edit', name: 'trick_edit')]
     public function form(Request $request, EntityManagerInterface $entityManager, ?string $slug = null): Response
     {
+        // Récupération du Trick existant ou création d'un nouveau Trick
+        if (!$this->getUser()) {
+            return $this->redirectToRoute('home');
+        }
+        
         if ($slug) {
             $trick = $entityManager->getRepository(Tricks::class)->findOneBy(['slug' => $slug]);
         } else {
             $trick = new Tricks();
+            $trick->setUsers($this->getUser());
         }
-        // CREATION DU FORMULAIRE****************
+
+        // Création du formulaire
         $form = $this->createForm(TrickForm::class, $trick);
-        // On traite/soumet la requête du formulaire
         $form->handleRequest($request);
-        //On vérifie si le formulaire est soumis ET valide
-        if ($form->isSubmitted()) {
-            if ($form->isValid()) {
-                if (!$trick->getId()) {
-                    // creation
-                    $trick->setCreatedAt(new \DateTime());
-                    $trick->setUpdatedAt(new \DateTime());
-                    $user = $this->getUser();
-                    $trick->setUsers($user);
-                } else {
-                    // edition
-                    $trick->setUpdatedAt(new \DateTime());
-                }
-                // print_r($trick);
-                // UPLOAD DE FICHIER*************
-                // Récupère toutes les données 'médias' à partir du formulaire
 
-                // GENERATION DE SLUG***************
-                $slugger = new AsciiSlugger();
-                $trick->setSlug($slugger->slug($trick->getName()));
-                $entityManager->persist($trick);
-                $entityManager->flush();
+        if ($form->isSubmitted() && $form->isValid()) {
 
+            // Gestion de l'upload de la photo à la une (coverPhoto)
+            $Photo = $form->get('coverPhoto')->getData();
+            if ($Photo instanceof UploadedFile) {
+                $PhotoFileName = md5(uniqid()) . '.' . $Photo->guessExtension();
+                $Photo->move(
+                    $this->getParameter('medias_directory'),
+                    $PhotoFileName
+                );
+                $trick->setCoverPhoto($PhotoFileName);
+        }
 
-                $medias = $form->get('medias')->getData();
-                if ($medias) {
-                    //dd($medias);
-                    // Inclus le nom du fichier dans l'url en modifiant le nom de l'image récupérée
-                    $fileName = md5(uniqid()) . '.' . $medias->guessExtension();
-                    // Déplace l'image récupérée, dans le dossier public/assets/uploads
-                    $medias->move(
+            // Gestion de l'upload des images
+            $images = $form->get('pictures')->getData();
+            foreach ($images as $value) {
+                    $fileName = md5(uniqid()). '.' .$value->guessExtension();
+                    $value->move(
                         $this->getParameter('medias_directory'),
                         $fileName
                     );
-                    // Insère l'image avec le nom de l'image
-                    $media = new Medias();
-                    $media->setMedia($fileName);
-                    if (strpos($fileName, 'mp4')) {
-                        $media->setType('video');
-                    } else {
-                        $media->setType('picture');
-                    }
-                    $entityManager->persist($media);
-                    $trick->addMedia($media);
-                    $entityManager->flush();                    
-                    //dd($media);
-                }
-
-                // flash message
-                $this->addFlash('success', 'Les données sont enregistrées!');
-                // redirection
-                return $this->redirectToRoute('home', ['slug' => $trick->getSlug()]);
-            } else {
-                $this->addFlash('warning', 'Erreur');
+                    $picture = new Picture();
+                    $picture->setName($fileName);
+                    //$picture->setTrick($trick);
+                    $trick->addPicture($picture);
             }
+
+            // Gestion de l'upload des vidéos
+            $videos = $form->get('videos')->getData();
+            foreach ($videos as $video) {
+                if ($video instanceof UploadedFile) {
+                    //$video = new Video();
+                    $fileName = md5(uniqid()) . '.' . $video->guessExtension();
+                    $video->move(
+                        $this->getParameter('medias_directory'),
+                        $fileName
+                    );
+                    // On crée la video dans la base de données
+                    $video = new Video();
+                    $video->setName($fileName);
+                    //$video->setTrick($trick);
+                    $trick->addVideo($video);
+                }
+            }
+
+            // Mise à jour du slug et autres propriétés du Trick
+            $slugger = new AsciiSlugger();
+            $trick->setSlug($slugger->slug($trick->getName()));
+
+            // Persist et flush des données
+            $entityManager->persist($trick);
+            $entityManager->flush();
+
+            // Flash message de succès
+            $this->addFlash('success', 'Le trick a été enregistré avec succès !');
+
+            // Redirection vers la page d'accueil ou autre page souhaitée
+            return $this->redirectToRoute('home', ['slug' => $trick->getSlug()]);
         }
+
+        // Affichage du formulaire
         return $this->render('trick/edit.html.twig', [
-            'formTrick' => $form,
+            'formTrick' => $form->createView(),
             'trick' => $trick,
-            'editMode' => $trick->getId() !== null
+            'editMode' => $trick->getId() !== null,
         ]);
     }
 
@@ -194,4 +209,5 @@ class TrickController extends AbstractController
     }
 
 
+ 
 }

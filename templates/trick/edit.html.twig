@@ -1,6 +1,12 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Administration{% endblock %}
+{% block title %}
+    {% if editMode %}
+        Modification de la figure
+    {% else %}
+        Création d'une figure
+    {% endif %}
+{% endblock %}
 
 {% block body %}
 
@@ -12,9 +18,9 @@
         {% endif %}
     </div>
     {# Formulaire pour créer/modifier une figure #}
-    {% if app.user %}
+    {# {% if app.user %} #}
         <div class="container my-5">
-            <div class="container col-lg-6 col-md-8 modife rounded-3 p-3">
+            <div class="container col-lg-6 col-md-8 border border-secondary {# modife #} {# rounded-1 #} p-3">
                 {{ form_start(formTrick) }}
                 {{ form_errors(formTrick) }}
 
@@ -22,8 +28,8 @@
                 {{ form_row(formTrick.description) }}
                 {{ form_row(formTrick.category) }}
                 {{ form_row(formTrick.coverPhoto) }}
-                {{ form_row(formTrick.picture) }}
-                {{ form_row(formTrick.video) }}
+                {{ form_row(formTrick.pictures) }}
+                {{ form_row(formTrick.videos) }}
 
                 {# Modification/suppression de l'image ou la vidéo téléchargée du formulaire #}
                 {% if editMode %}
@@ -66,5 +72,5 @@
                 {{ form_end(formTrick) }}
             </div>
         </div>
-    {% endif %}
+    {# {% endif %} #}
 {% endblock %}

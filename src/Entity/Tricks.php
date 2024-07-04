@@ -47,11 +47,11 @@ class Tricks
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE)]
     private ?\DateTimeInterface $updatedAt = null;
-
-    #[ORM\OneToMany(mappedBy: 'trick', targetEntity: Video::class)]
+    
+    #[ORM\OneToMany(mappedBy: 'trick', targetEntity: Video::class, cascade: ['persist'])]
     private Collection $videos;
 
-    #[ORM\OneToMany(mappedBy: 'trick', targetEntity: Picture::class)]
+    #[ORM\OneToMany(mappedBy: 'trick', targetEntity: Picture::class, cascade: ['persist'])]
     private Collection $pictures;
 
     #[ORM\Column(length: 255)]
@@ -223,7 +223,7 @@ class Tricks
         return $this->coverPhoto;
     }
 
-    public function setCoverPhoto(string $coverPhoto): self
+    public function setCoverPhoto(?string $coverPhoto): self
     {
         $this->coverPhoto = $coverPhoto;
 
@@ -241,8 +241,8 @@ class Tricks
     public function addVideo(Video $video): self
     {
         if (!$this->videos->contains($video)) {
-            $this->videos->add($video);
-            //$this->videos[] = $video;
+            //$this->videos->add($video);
+            $this->videos[] = $video;
             $video->setTrick($this);
         }
 
@@ -272,8 +272,8 @@ class Tricks
     public function addPicture(Picture $picture): self
     {
         if (!$this->pictures->contains($picture)) {
-            $this->pictures->add($picture);
-            //$this->pictures[] = $picture;
+            //$this->pictures->add($picture);
+            $this->pictures[] = $picture;
             $picture->setTrick($this);
         }
 

@@ -44,7 +44,7 @@
                     <div class="card-img m-2 rounded border border-primary" style="width: 320px;">
                         <img class="img-fluid w-100" src="/assets/uploads/{{ picture.name }}" alt="{{ trick.slug }}">
                         {# 2 icônes modifier/supprimer #}
-                        {% if app.user and app.user.id == trick.getUsers().getId( )%}
+                        {# {% if app.user and app.user.id == trick.getUsers().getId( )%} #}
                             <div class="card-body">
                                 <a href="/tricks/{{ trick.slug }}/edit">
                                     <i class="text-black px-2 fas fa-pen"></i>
@@ -54,8 +54,8 @@
                                 </a>
                                 {% include "modals/delete-trick-media.html.twig" %}
                             </div>
-                            {% else %}
-                        {% endif %}
+                            {# {% else %} #}
+                        {# {% endif %} #}
                     </div>
                 {% endfor %}
             </div>
