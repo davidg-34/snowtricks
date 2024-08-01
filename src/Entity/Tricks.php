@@ -48,10 +48,10 @@ class Tricks
     #[ORM\Column(type: Types::DATETIME_MUTABLE)]
     private ?\DateTimeInterface $updatedAt = null;
     
-    #[ORM\OneToMany(mappedBy: 'trick', targetEntity: Video::class, cascade: ['persist'])]
+    #[ORM\OneToMany(mappedBy: 'trick', targetEntity: Video::class, orphanRemoval: true, fetch: 'EAGER', cascade: ['persist'])]
     private Collection $videos;
 
-    #[ORM\OneToMany(mappedBy: 'trick', targetEntity: Picture::class, cascade: ['persist'])]
+    #[ORM\OneToMany(mappedBy: 'trick', targetEntity: Picture::class, orphanRemoval: true, fetch: 'EAGER', cascade: ['persist'])]
     private Collection $pictures;
 
     #[ORM\Column(length: 255)]
@@ -63,6 +63,7 @@ class Tricks
         $this->medias = new ArrayCollection();
         $this->videos = new ArrayCollection();
         $this->pictures = new ArrayCollection();
+        $this->createdAt = new \DateTime(); 
     }
 
     public function getId(): ?int

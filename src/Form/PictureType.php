@@ -20,13 +20,13 @@ class PictureType extends AbstractType
                 'mapped' => false,
                 'required' => true,
             ]); */
-            /* ->add('picture', FileType::class, [
+            ->add('name', FileType::class, [
                 'label' => 'Ajouter une image',
                 'mapped' => false,
                 'required' => true,
-            ]); */
-            ->add('picture', CollectionType::class, [
-                'entry_type' => PictureType::class,
+            ]);
+            /* ->add('picture', CollectionType::class, [
+                'entry_type' => ImageFileType::class,
                 'entry_options' => ['label' => 'Ajouter une image'],
                 'allow_add' => true,
                 'allow_delete' => true,
@@ -34,7 +34,7 @@ class PictureType extends AbstractType
                 'mapped' => false,
                 'required' => false,
                 'by_reference' => false
-            ]); 
+            ]); */ 
     }
 
     public function configureOptions(OptionsResolver $resolver): void

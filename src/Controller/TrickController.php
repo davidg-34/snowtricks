@@ -78,11 +78,13 @@ class TrickController extends AbstractController
                     $PhotoFileName
                 );
                 $trick->setCoverPhoto($PhotoFileName);
-        }
-
+            }
+            
             // Gestion de l'upload des images
             $images = $form->get('pictures')->getData();
+            dd($images);
             foreach ($images as $value) {
+                if ($value instanceof UploadedFile) {
                     $fileName = md5(uniqid()). '.' .$value->guessExtension();
                     $value->move(
                         $this->getParameter('medias_directory'),
@@ -92,24 +94,16 @@ class TrickController extends AbstractController
                     $picture->setName($fileName);
                     //$picture->setTrick($trick);
                     $trick->addPicture($picture);
-            }
-
-            // Gestion de l'upload des vidéos
-            $videos = $form->get('videos')->getData();
-            foreach ($videos as $video) {
-                if ($video instanceof UploadedFile) {
-                    //$video = new Video();
-                    $fileName = md5(uniqid()) . '.' . $video->guessExtension();
-                    $video->move(
-                        $this->getParameter('medias_directory'),
-                        $fileName
-                    );
-                    // On crée la video dans la base de données
-                    $video = new Video();
-                    $video->setName($fileName);
-                    //$video->setTrick($trick);
-                    $trick->addVideo($video);
                 }
+            }
+            die();
+
+            // Gestion de l'url des vidéos
+            $videos = $form->get('videos')->getData();
+            foreach ($videos as $videoData) {
+                $video = new Video();
+                $video->setName($videoData->getName());
+                $trick->addVideo($video);
             }
 
             // Mise à jour du slug et autres propriétés du Trick
@@ -147,18 +141,20 @@ class TrickController extends AbstractController
         return $this->redirectToRoute('app_tricks', ['id' => $trick->getId()]);
     }
     // Suppression d'un media de figure
-    #[Route('/tricks/{id}/medias/{mediaId}/delete', name: 'trick_media_delete')]
-    public function deleteMedia(EntityManagerInterface $entityManager, $id, $mediaId): RedirectResponse
+    #[Route('/tricks/{id}/picture/{pictureId}/delete', name: 'trick_media_delete')]
+    public function deleteMedia(EntityManagerInterface $entityManager, $id, $pictureId): RedirectResponse
     {
         $trick = $entityManager->getRepository(Tricks::class)->find($id);
         // $form = $this->createForm(TrickForm::class, $trick);
-        $media = $entityManager->getRepository(Medias::class)->find($mediaId);
+        $media = $entityManager->getRepository(Medias::class)->find($pictureId);
 
-        // Suppression de l'image sur le HD
-        unlink($this->getParameter('medias_directory') . '/' . $media->getMedia());
-        // Suppression de l'image en BDD
-        $entityManager->remove($media);
-        $entityManager->flush();
+        if ($media) {
+            // Suppression de l'image sur le HD 
+            unlink($this->getParameter('medias_directory') . '/' . $media->getMedia());
+            // Suppression de l'image en BDD
+            $entityManager->remove($media);
+            $entityManager->flush();
+        }
 
         return $this->redirectToRoute('trick_edit', ['slug' => $trick->getSlug()]);
     }

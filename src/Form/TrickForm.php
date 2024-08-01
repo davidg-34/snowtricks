@@ -2,7 +2,6 @@
 
 namespace App\Form;
 
-use App\Entity\Medias;
 use App\Entity\Tricks;
 use App\Entity\Category;
 use App\Form\PictureType;
@@ -40,48 +39,59 @@ class TrickForm extends AbstractType
                 'mapped' => false,
                 'required' => false
             ])
-            /* ->add('pictures', CollectionType::class, [
+            ->add('pictures', CollectionType::class, [
                 'entry_type' => PictureType::class,
                 'entry_options' => ['label' => 'Ajouter une image'],
                 'allow_add' => true,
                 'allow_delete' => true,
+                'by_reference' => false,
+                'prototype' => true,
                 'label' => false,
                 'mapped' => false,
                 'required' => false,
-                'by_reference' => false
-            ]) */
-            /* ->add('pictures', CollectionType::class, [
-                'entry_type' => PictureType::class,
-                'entry_options' => ['label' => 'Image'],
-                'allow_add' => true,
-                'allow_delete' => true,
-                'by_reference' => false,
-                'prototype' => true,
-                'label' => 'Ajouter des images',
-                'mapped' => false,
-                'required' => false,
-            ]) */
-            ->add('pictures', FileType::class, [
-                'data_class' => null,
-                'label' => 'Ajouter une image',
-                'mapped' => false,
-                'required' => false,
-                'multiple' => true,
-            ])
-            ->add('videos', FileType::class, [
+                'attr' => [
+                    'data-controller' => 'form-collection'
+                ]
+                ])
+                /* ->add('pictures', FileType::class, [
+                    'label' => 'Ajouter une image',
+                    'mapped' => false,
+                    'required' => true,
+                ]) */
+                /* ->add('pictures', FileType::class, [
+                    'data_class' => null,
+                    'label' => 'Ajouter une image',
+                    'mapped' => false,
+                    'required' => false,
+                    'multiple' => true,
+                ]) */
+
+                ->add('videos', CollectionType::class, [
+                    'entry_type' => VideoType::class,
+                    'entry_options' => ['label' => 'Ajouter une Vidéo'],
+                    'allow_add' => true,
+                    'allow_delete' => true,
+                    'prototype' => true,
+                    'label' => false,
+                    'mapped' => false,
+                    'required' => false,
+                    'by_reference' => false
+                ])
+               
+            /* ->add('videos', FileType::class, [
                 'data_class' => null,
                 'label' => 'Ajouter une video',
                 'mapped' => false,
                 'required' => false,
                 'multiple' => true
-            ])
+            ]) */
             ->getForm();
     }
 
-    /* public function configureOptions(OptionsResolver $resolver): void
+    public function configureOptions(OptionsResolver $resolver): void
     {
         $resolver->setDefaults([
             'data_class' => Tricks::class,
         ]);
-    } */
+    }
 }

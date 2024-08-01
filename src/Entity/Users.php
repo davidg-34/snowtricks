@@ -41,7 +41,7 @@ class Users implements UserInterface, PasswordAuthenticatedUserInterface
     // private Collection $comments;
 
     #[ORM\Column(length: 120)]
-    private ?string $avatar = null;
+    private ?string $avatar = 'default_avatar.png';
 
     #[ORM\Column(length:120, unique: true)]
     private ?string $email = null;

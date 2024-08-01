@@ -6,7 +6,7 @@ use App\Entity\Video;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
-use Symfony\Component\Form\Extension\Core\Type\FileType;
+use Symfony\Component\Form\Extension\Core\Type\UrlType;
 use Symfony\Component\Form\Extension\Core\Type\CollectionType;
 
 class VideoType extends AbstractType
@@ -20,13 +20,13 @@ class VideoType extends AbstractType
                 'mapped' => false,
                 'required' => true,
             ]); */
-            /* ->add('picture', FileType::class, [
-                'label' => 'Ajouter une image',
+            ->add('name', UrlType::class, [
+                'label' => 'Ajouter une video',
                 'mapped' => false,
                 'required' => true,
-            ]); */
-            ->add('video', CollectionType::class, [
-                'entry_type' => VideoType::class,
+            ]);
+            /* ->add('video', CollectionType::class, [
+                'entry_type' => VideoFileType::class,
                 'entry_options' => ['label' => 'Ajouter une Vidéo'],
                 'allow_add' => true,
                 'allow_delete' => true,
@@ -34,7 +34,7 @@ class VideoType extends AbstractType
                 'mapped' => false,
                 'required' => false,
                 'by_reference' => false
-            ]); 
+            ]); */ 
     }
 
     public function configureOptions(OptionsResolver $resolver): void
