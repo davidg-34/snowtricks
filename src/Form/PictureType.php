@@ -26,7 +26,7 @@ class PictureType extends AbstractType
                 'required' => true,
             ]);
             /* ->add('picture', CollectionType::class, [
-                'entry_type' => ImageFileType::class,
+                'entry_type' => PictureType::class,
                 'entry_options' => ['label' => 'Ajouter une image'],
                 'allow_add' => true,
                 'allow_delete' => true,

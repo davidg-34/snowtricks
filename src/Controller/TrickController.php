@@ -82,7 +82,9 @@ class TrickController extends AbstractController
             
             // Gestion de l'upload des images
             $images = $form->get('pictures')->getData();
-            dd($images);
+            //dump($form);
+            //dump($images);
+            //die();
             foreach ($images as $value) {
                 if ($value instanceof UploadedFile) {
                     $fileName = md5(uniqid()). '.' .$value->guessExtension();
@@ -96,8 +98,8 @@ class TrickController extends AbstractController
                     $trick->addPicture($picture);
                 }
             }
-            die();
-
+            //die();
+            //dd($trick);
             // Gestion de l'url des vidéos
             $videos = $form->get('videos')->getData();
             foreach ($videos as $videoData) {
@@ -105,11 +107,11 @@ class TrickController extends AbstractController
                 $video->setName($videoData->getName());
                 $trick->addVideo($video);
             }
-
+            
             // Mise à jour du slug et autres propriétés du Trick
             $slugger = new AsciiSlugger();
             $trick->setSlug($slugger->slug($trick->getName()));
-
+            
             // Persist et flush des données
             $entityManager->persist($trick);
             $entityManager->flush();
