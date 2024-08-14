@@ -35,7 +35,7 @@ class EmailVerifier
             $verifyEmailRouteName,
             $user->getId(),
             $user->getEmail(),
-            //['id' => $user->getId()] //passe un tableau comme argument final pour inclure l'identifiant de l'utilisateur
+            ['id' => $user->getId()] //passe un tableau comme argument final pour inclure l'identifiant de l'utilisateur
         );
     //dd($user); 
     //déjà inscrit sans avoir reçu le lien de confirmation avec verified = 0 (c'est bien app\entity\Users)
