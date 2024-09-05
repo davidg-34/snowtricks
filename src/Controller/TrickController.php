@@ -98,6 +98,7 @@ class TrickController extends AbstractController
                     $trick->addPicture($picture);
                 }
             }
+            dd($form);
             //die();
             //dd($trick);
             // Gestion de l'url des vidéos
