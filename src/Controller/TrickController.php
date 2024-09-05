@@ -10,6 +10,7 @@ use App\Entity\Picture;
 use App\Form\TrickForm;
 use App\Entity\Comments;
 use App\Form\CommentType;
+use App\Service\FileUploader;
 use App\Repository\TricksRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Filesystem\Filesystem;
@@ -49,7 +50,7 @@ class TrickController extends AbstractController
     // Ajout d'une figure / Mise à jour d'une figure
     #[Route('/tricks/new', name: 'trick_add')]
     #[Route('/tricks/{slug}/edit', name: 'trick_edit')]
-    public function form(Request $request, EntityManagerInterface $entityManager, ?string $slug = null): Response
+    public function form(Request $request, EntityManagerInterface $entityManager, ?string $slug = null, FileUploader $fileUploader): Response
     {
         // Récupération du Trick existant ou création d'un nouveau Trick
         if (!$this->getUser()) {
@@ -85,18 +86,23 @@ class TrickController extends AbstractController
             //dump($form);
             //dump($images);
             //die();
+
+            
+            
             foreach ($images as $value) {
-                if ($value instanceof UploadedFile) {
-                    $fileName = md5(uniqid()). '.' .$value->guessExtension();
-                    $value->move(
-                        $this->getParameter('medias_directory'),
-                        $fileName
-                    );
+                $file = $request->files->get('tricks');
+                if (!$file){
+                    $images->removeElement($value);
+            }
+            $imgName = $fileUploader->upload($file);
+            $value->setName($imgName);
+
+                
                     $picture = new Picture();
-                    $picture->setName($fileName);
+                    $picture->setName($file);
                     //$picture->setTrick($trick);
                     $trick->addPicture($picture);
-                }
+                //}
             }
             dd($form);
             //die();
