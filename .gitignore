@@ -1,5 +1,5 @@
 
-public/assets/uploads/*
+# public/assets/uploads/*
 
 ###> symfony/framework-bundle ###
 /.env

@@ -15,7 +15,7 @@ class Video
     private ?int $id = null;
 
     #[ORM\Column(type: Types::TEXT)]
-    private ?string $Name = null;
+    private ?string $name = null;
 
     #[ORM\ManyToOne(inversedBy: 'videos')]
     #[ORM\JoinColumn(nullable: false, onDelete: 'CASCADE')]
@@ -28,12 +28,12 @@ class Video
 
     public function getName(): ?string
     {
-        return $this->Name;
+        return $this->name;
     }
 
-    public function setName(?string $Name): self
+    public function setName(?string $name): self
     {
-        $this->Name = $Name;
+        $this->name = $name;
 
         return $this;
     }
