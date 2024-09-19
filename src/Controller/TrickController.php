@@ -82,29 +82,36 @@ class TrickController extends AbstractController
             }
             
             // Gestion de l'upload des images
-            $images = $form->get('pictures')->getData();
+        //    $images = $form->get('pictures')->getData();
             //dump($form);
             //dump($images);
             //die();
 
-            
-            
-            foreach ($images as $value) {
-                $file = $request->files->get('tricks');
-                if (!$file){
-                    $images->removeElement($value);
-            }
-            $imgName = $fileUploader->upload($file);
-            $value->setName($imgName);
+        //    if ($form->isSubmitted() && $form->isValid()) {
+                /** @var UploadedFile $brochureFile */
+        //        $brochureFile = $form->get('brochure')->getData();
+        //        if ($brochureFile) {
+        //            $brochureFileName = $fileUploader->upload($brochureFile);
+        //            $product->setBrochureFilename($brochureFileName);
+        //        }
+        
+                // ...
+        //    }
 
-                
+            $images = $form->get('pictures')->getData();
+
+            foreach ($images as $image) {
+                if ($image instanceof UploadedFile) {
+                    $imgName = $fileUploader->upload($image); // passez directement $image ici
                     $picture = new Picture();
-                    $picture->setName($file);
-                    //$picture->setTrick($trick);
+                    $picture->setName($imgName);
                     $trick->addPicture($picture);
-                //}
+                }
             }
-            dd($form);
+
+
+
+            //dd($form);
             //die();
             //dd($trick);
             // Gestion de l'url des vidéos

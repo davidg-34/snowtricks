@@ -2,8 +2,9 @@
 
 namespace App\Entity;
 
-use App\Repository\VideoRepository;
+use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use App\Repository\VideoRepository;
 
 #[ORM\Entity(repositoryClass: VideoRepository::class)]
 class Video
@@ -13,7 +14,7 @@ class Video
     #[ORM\Column]
     private ?int $id = null;
 
-    #[ORM\Column(length: 255, nullable: true)]
+    #[ORM\Column(type: Types::TEXT)]
     private ?string $Name = null;
 
     #[ORM\ManyToOne(inversedBy: 'videos')]

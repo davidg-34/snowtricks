@@ -76,6 +76,7 @@
                                 <a data-bs-toggle="modal" data-bs-target="#deleteMediaConfirmationModal" href="/tricks/{{ trick.id }}/video/{{ video.id }}/delete">
                                     <i class="text-black px-2 fas fa-trash-alt"></i>
                                 </a>
+                                <iframe width="560" height="315" src="https://www.youtube.com/embed/{{ video.id }}" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
                                 {% include "modals/delete-trick-media.html.twig" %}
                             </div>
                             {% else %}
