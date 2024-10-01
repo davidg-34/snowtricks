@@ -40,7 +40,7 @@ class TrickForm extends AbstractType
                 'required' => false
             ])
             ->add('pictures', CollectionType::class, [
-                'entry_type' => PictureType::class,
+                'entry_type' => fileType::class,
                 'entry_options' => ['label' => 'Ajouter une image'],
                 'allow_add' => true,
                 'allow_delete' => true,
@@ -53,38 +53,17 @@ class TrickForm extends AbstractType
                     'data-controller' => 'form-collection'
                 ]
                 ])
-                /* ->add('pictures', FileType::class, [
-                    'label' => 'Ajouter une image',
-                    'mapped' => false,
-                    'required' => true,
-                ]) */
-                /* ->add('pictures', FileType::class, [
-                    'data_class' => null,
-                    'label' => 'Ajouter une image',
-                    'mapped' => false,
-                    'required' => false,
-                    'multiple' => true,
-                ]) */
-
                 ->add('videos', CollectionType::class, [
                     'entry_type' => VideoType::class,
                     'entry_options' => ['label' => 'Ajouter une Vidéo'],
                     'allow_add' => true,
                     'allow_delete' => true,
+                    'by_reference' => false,
                     'prototype' => true,
                     'label' => false,
                     'mapped' => false,
                     'required' => false,
-                    'by_reference' => false
                 ])
-               
-            /* ->add('videos', FileType::class, [
-                'data_class' => null,
-                'label' => 'Ajouter une video',
-                'mapped' => false,
-                'required' => false,
-                'multiple' => true
-            ]) */
             ->getForm();
     }
 

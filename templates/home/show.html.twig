@@ -64,11 +64,12 @@
         {# liste des vidéos #} 
         <section class="container">
             <div class="d-flex flex-row flex-wrap justify-content-center">
+            {% if trick.videos %}
                 {% for video in trick.videos %}
                     <div class="card yt m-2 border border-primary">
                         {{ video.name|raw }}
                         {# 2 icônes modifier/supprimer #}
-                        {% if app.user and app.user.id == trick.getUsers().getId( )%}
+                        {# {% if app.user and app.user.id == trick.getUsers().getId( )%} #}
                             <div class="card-body">
                                 <a href="/tricks/{{ trick.slug }}/edit">
                                     <i class="text-black px-2 fas fa-pen"></i>
@@ -76,13 +77,13 @@
                                 <a data-bs-toggle="modal" data-bs-target="#deleteMediaConfirmationModal" href="/tricks/{{ trick.id }}/video/{{ video.id }}/delete">
                                     <i class="text-black px-2 fas fa-trash-alt"></i>
                                 </a>
-                                <iframe width="560" height="315" src="https://www.youtube.com/embed/{{ video.id }}" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
                                 {% include "modals/delete-trick-media.html.twig" %}
                             </div>
-                            {% else %}
-                        {% endif %}
+                            {# {% else %}
+                        {% endif %} #}
                     </div>
                 {% endfor %}
+            {% endif %}
             </div>
         </section>
 

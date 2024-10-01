@@ -27,18 +27,34 @@
                 {{ form_row(formTrick.name) }}
                 {{ form_row(formTrick.description) }}
                 {{ form_row(formTrick.category) }}
+                {# Si 'cover photo' a déjà une image, on l'affiche ici #}
+                {% if trick.coverPhoto %}
+                    <img src="/assets/uploads/{{ trick.coverPhoto }} " alt="Cover Photo" style="max-width: 100px; max-height: 50px;">
+                {% endif %}
                 {{ form_row(formTrick.coverPhoto) }}
                 
+                {# Si 'picture' a déjà une image, on l'affiche ici #}
+                {% if trick.pictures %}
+                    {% for picture in trick.pictures %}                                
+                        <img src="/assets/uploads/{{ picture.name }} " alt="Photo additionnelle" style="max-width: 100px; max-height: 50px;">
+                    {% endfor %}
+                        
+                {% endif %}
                 <div id="pictures" data-prototype="{{ form_row(formTrick.pictures.vars.prototype)|e('html_attr') }}">
                     {{ form_row(formTrick.pictures) }}
                 <span class="spanImage"></span>
-                </div> 
+                </div>
 
+                {% if trick.videos %}
+                    {% for video in trick.videos %}
+                        {{ video.name|raw }}
+                    {% endfor %}
+                {% endif %}
                 <div id="videos" data-prototype="{{ form_row(formTrick.videos.vars.prototype)|e('html_attr') }}">
                     {{ form_row(formTrick.videos) }}
                 <span class="spanVideo"></span>
                 </div>
-                
+
                 {# Modification/suppression de l'image ou la vidéo téléchargée du formulaire #}
                 {% if editMode %}
                     <div class=" d-flex gap-3 w-100">
