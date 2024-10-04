@@ -18,7 +18,7 @@
                     <a href="/tricks/{{ trick.slug }}/edit">
                         <i class="text-light px-2 fas fa-pen"></i>
                     </a>
-                    <a data-bs-toggle="modal" data-bs-target="#deleteConfirmationModal" href="/tricks/{{ trick.id }}{# /medias/{{ media.id }} #}/delete">
+                    <a data-bs-toggle="modal" data-bs-target="#deleteConfirmationModal{{ trick.id }}" href="#">
                         <i class="text-light fas fa-trash"></i> 
                     </a>
                     {% include "modals/delete-trick.html.twig" %}

@@ -1,5 +1,31 @@
+
 <!-- Modal -->
-<div class="modal fade" id="deleteConfirmationModal" data-bs-backdrop="static" tabindex="-1" aria-labelledby="confirmation de la suppression" aria-hidden="true">
+{% if trick.id %}
+    <!-- Modal for deleting the trick -->
+    <div class="modal fade" id="deleteConfirmationModal{{ trick.id }}" data-bs-backdrop="static" tabindex="-1" aria-labelledby="deleteConfirmationModalLabel{{ trick.id }}" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="deleteConfirmationModalLabel{{ trick.id }}">Supprimer la figure</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fermer"></button>
+                </div>
+                <div class="modal-body">
+                    Voulez-vous vraiment supprimer cette figure ?
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fermer</button>
+                    <a href="{{ path('trick_delete', {'id': trick.id}) }}" class="btn btn-danger">Supprimer</a>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endif %}
+
+
+
+
+<!-- Modal -->
+{# <div class="modal fade" id="deleteConfirmationModal" data-bs-backdrop="static" tabindex="-1" aria-labelledby="confirmation de la suppression" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
@@ -17,6 +43,6 @@
             </div>
         </div>
     </div>
-</div>
+</div> #}
 
 

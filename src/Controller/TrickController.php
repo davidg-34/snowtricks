@@ -154,23 +154,32 @@ class TrickController extends AbstractController
         $entityManager->flush();
 
         $this->addFlash('success', 'Figure supprimée !');
-        return $this->redirectToRoute('app_tricks', ['id' => $trick->getId()]);
+        return $this->redirectToRoute('app_tricks');
     }
     // Suppression d'un media de figure
     #[Route('/tricks/{id}/picture/{pictureId}/delete', name: 'trick_media_delete')]
-    public function deleteMedia(EntityManagerInterface $entityManager, $id, $pictureId): RedirectResponse
+    public function deleteMedia(EntityManagerInterface $entityManager, $id, $pictureId, $videoId): RedirectResponse
     {
         $trick = $entityManager->getRepository(Tricks::class)->find($id);
         // $form = $this->createForm(TrickForm::class, $trick);
-        $media = $entityManager->getRepository(Medias::class)->find($pictureId);
+        $picture = $entityManager->getRepository(Picture::class)->find($pictureId);
+        $video = $entityManager->getRepository(Video::class)->find($videoId);
 
-        if ($media) {
+        if ($picture) {
             // Suppression de l'image sur le HD 
-            unlink($this->getParameter('medias_directory') . '/' . $media->getMedia());
+            unlink($this->getParameter('medias_directory') . '/' . $picture->getMedia());
             // Suppression de l'image en BDD
-            $entityManager->remove($media);
+            $entityManager->remove($picture);
             $entityManager->flush();
         }
+        if ($video) {
+            // Suppression de l'image sur le HD 
+            unlink($this->getParameter('medias_directory') . '/' . $video->getMedia());
+            // Suppression de l'image en BDD
+            $entityManager->remove($video);
+            $entityManager->flush();
+        }
+
 
         return $this->redirectToRoute('trick_edit', ['slug' => $trick->getSlug()]);
     }

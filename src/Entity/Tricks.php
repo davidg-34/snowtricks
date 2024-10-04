@@ -33,7 +33,7 @@ class Tricks
     #[ORM\ManyToOne(inversedBy: 'tricks')]
     private ?Users $users = null;
 
-    #[ORM\OneToMany(mappedBy: 'tricks', targetEntity: Comments::class)]
+    #[ORM\OneToMany(mappedBy: 'tricks', targetEntity: Comments::class, orphanRemoval: true,cascade: ['persist'])]
     private Collection $comments;
 
     #[ORM\OneToMany(mappedBy: 'tricks', targetEntity: Medias::class, cascade: ['persist'])]
