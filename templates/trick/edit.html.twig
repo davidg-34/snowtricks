@@ -20,7 +20,7 @@
     {# Formulaire pour créer/modifier une figure #}
     {# {% if app.user %} #}
         <div class="container my-5">
-            <div class="container col-lg-6 col-md-8 border border-secondary {# modife #} {# rounded-1 #} p-3">
+            <div class="container col-lg-6 col-md-8 border border-secondary p-3">
                 {{ form_start(formTrick) }}
                 {{ form_errors(formTrick) }}
 
@@ -38,16 +38,16 @@
                         {% for picture in trick.pictures %}
                             <div class="edit-media">
                                     <img src="/assets/uploads/{{ picture.name }}">
-                                {% include "modals/delete-trick-media.html.twig" %}
+                                {% include "modals/delete-picture.html.twig" %}
                                 <div class="delete-overlay">
-                                    <a data-bs-toggle="modal" data-bs-target="#deleteConfirmationModal{{ trick.id }}" href="#">
+                                    <a data-bs-toggle="modal" data-bs-target="#deletePictureConfirmationModal" href="/tricks/{{ trick.id }}/picture/{{ picture.id }}/delete">
                                         <span class="text-white">X</span>
                                     </a>
                                 </div>
                             </div>
                         {%  endfor %}
                     </div>
-                {% endif %}                
+                {% endif %}
                 <div id="pictures" data-prototype="{{ form_row(formTrick.pictures.vars.prototype)|e('html_attr') }}">
                     {{ form_row(formTrick.pictures) }}
                 <span class="spanImage"></span>
@@ -57,17 +57,18 @@
                     <div class=" d-flex gap-3 w-100">
                         {% for video in trick.videos %}
                             <div class="edit-media">
-                                    {{ video.name|raw }}
-                                {% include "modals/delete-trick-media.html.twig" %}
+                                    <img src="/assets/videoicon.png">
+                                {% include "modals/delete-video.html.twig" %}
                                 <div class="delete-overlay">
-                                    <a data-bs-toggle="modal" data-bs-target="#deleteMediaConfirmationModal" href="/tricks/{{ trick.id }}{# /medias/{{ media.id }} #}/delete">
-                                        <span class="text-white">X</span>
-                                    </a>
+                                <a data-bs-toggle="modal" data-bs-target="#deleteVideoConfirmationModal" href="/tricks/{{ trick.id }}/video/{{ video.id }}/delete">
+                                    <span class="text-white">X</span>
+                                </a>
                                 </div>
                             </div>
                         {%  endfor %}
                     </div>
                 {% endif %}
+
                 <div id="videos" data-prototype="{{ form_row(formTrick.videos.vars.prototype)|e('html_attr') }}">
                     {{ form_row(formTrick.videos) }}
                 <span class="spanVideo"></span>
@@ -83,7 +84,7 @@
                         {% endif %}
                     </button>
                     {% if editMode %}
-                        <a class="delete-btn m-3 rounded" data-bs-toggle="modal" data-bs-target="#deleteConfirmationModal" href="/tricks/{{ trick.id }}/delete">
+                        <a class="delete-btn m-3 rounded" data-bs-toggle="modal" data-bs-target="#deleteConfirmationModal{{ trick.id }}" href="#">
                             Supprimer
                         </a>
                         {% include "modals/delete-trick.html.twig" %}
@@ -97,7 +98,7 @@
 
     <script>
         window.onload = () => {
-            // Code pour gérer les images
+            // Gestion des images
             let collectionPictures = document.querySelector("#pictures");
             let spanImage = collectionPictures.querySelector("span.spanImage");
 
@@ -114,7 +115,7 @@
                 addButton(collectionPictures, spanImage, "picture");
             });
 
-            // Code pour gérer les vidéos
+            // Gestion des vidéos
             let collectionVideos = document.querySelector("#videos");
             let spanVideo = collectionVideos.querySelector("span.spanVideo");
 
@@ -158,7 +159,6 @@
             span.insertBefore(newForm, boutonAjout);
 
             boutonSuppr.addEventListener("click", function(){
-                //this.parentElement.remove();
                  this.previousElementSibling.parentElement.remove();
             })
         }

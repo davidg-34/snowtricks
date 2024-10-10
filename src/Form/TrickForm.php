@@ -4,8 +4,6 @@ namespace App\Form;
 
 use App\Entity\Tricks;
 use App\Entity\Category;
-use App\Form\PictureType;
-use Doctrine\ORM\Mapping\Entity;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
@@ -17,7 +15,7 @@ use Symfony\Component\Form\Extension\Core\Type\CollectionType;
 class TrickForm extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options): void
-    {
+    {        
         $builder
             ->add('name', TextType::class, [
                 'label' => 'Nom',
@@ -36,8 +34,10 @@ class TrickForm extends AbstractType
                 'data_class' => null,
                 'empty_data' => '',
                 'label' => 'Photo à la une',
+                'required' => $options['is_new'], // Photo Obligatoire
+                
+                // unmapped means that this field is not associated to any entity property
                 'mapped' => false,
-                'required' => false
             ])
             ->add('pictures', CollectionType::class, [
                 'entry_type' => fileType::class,
@@ -71,6 +71,7 @@ class TrickForm extends AbstractType
     {
         $resolver->setDefaults([
             'data_class' => Tricks::class,
+            'is_new' => false, // Par défaut, formulaire de modification
         ]);
     }
 }

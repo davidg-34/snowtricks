@@ -1,0 +1,19 @@
+<!-- Modal -->
+<div class="modal fade" id="deletePictureConfirmationModal" data-bs-backdrop="static" tabindex="-1" aria-labelledby="confirmation de la suppression" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title fs-5" id="exampleModalLabel">Confirmer la suppression de l'image</h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                Voulez-vous vraiment supprimer cette image ?
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fermer</button>
+                  <a href="{{ path('trick_picture_delete', { 'id': trick.id, 'pictureId': picture.id }) }}" class="btn btn-danger">Supprimer
+                </a>
+            </div>
+        </div>
+    </div>
+</div>

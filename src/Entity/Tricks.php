@@ -36,20 +36,17 @@ class Tricks
     #[ORM\OneToMany(mappedBy: 'tricks', targetEntity: Comments::class, orphanRemoval: true,cascade: ['persist'])]
     private Collection $comments;
 
-    #[ORM\OneToMany(mappedBy: 'tricks', targetEntity: Medias::class, cascade: ['persist'])]
-    private Collection $medias;
-
     #[ORM\ManyToOne(inversedBy: 'tricks')]
     private ?Category $category = null;
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE, options: ["default" => "CURRENT_TIMESTAMP"])]
     private ?\DateTimeInterface $createdAt;
 
-    /* #[ORM\Column(type: Types::DATETIME_MUTABLE)]
-    private ?\DateTimeInterface $updatedAt = null; */
+    #[ORM\Column(type: Types::DATETIME_MUTABLE)]
+    private ?\DateTimeInterface $updatedAt = null;
 
-    #[ORM\Column(type: Types::DATETIME_MUTABLE, options: ["default" => "CURRENT_TIMESTAMP"])]
-    private ?\DateTimeInterface $updatedAt;
+    /* #[ORM\Column(type: Types::DATETIME_MUTABLE, options: ["default" => "CURRENT_TIMESTAMP"])]
+    private ?\DateTimeInterface $updatedAt; */
     
     #[ORM\OneToMany(mappedBy: 'trick', targetEntity: Video::class, orphanRemoval: true,cascade: ['persist'])]
     private Collection $videos;
@@ -63,7 +60,6 @@ class Tricks
     public function __construct()
     {
         $this->comments = new ArrayCollection();
-        $this->medias = new ArrayCollection();
         $this->videos = new ArrayCollection();
         $this->pictures = new ArrayCollection();
         $this->createdAt = new \DateTime();
@@ -149,33 +145,6 @@ class Tricks
             if ($comment->getTricks() === $this) {
                 $comment->setTricks(null);
             }
-        }
-
-        return $this;
-    }
-
-    public function getMainMedia(): Collection
-    {
-        return new ArrayCollection($this->medias->slice(0, 1));
-    }
-
-    public function getMedias(): Collection
-    {
-        return $this->medias;
-    }
-
-    public function setMedias(?Medias $medias): self
-    {
-        $this->medias->add($medias);
-
-        return $this;
-    }
-
-    public function addMedia(Medias $media): self
-    {
-        if (!$this->medias->contains($media)) {
-            $this->medias->add($media);
-            $media->setTricks($this);
         }
 
         return $this;

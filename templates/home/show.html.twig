@@ -49,10 +49,10 @@
                                 <a href="/tricks/{{ trick.slug }}/edit">
                                     <i class="text-black px-2 fas fa-pen"></i>
                                 </a>
-                                <a data-bs-toggle="modal" data-bs-target="#deleteMediaConfirmationModal" href="/tricks/{{ trick.id }}/picture/{{ picture.id }}/delete">
+                                <a data-bs-toggle="modal" data-bs-target="#deletePictureConfirmationModal" href="/tricks/{{ trick.id }}/picture/{{ picture.id }}/delete">
                                     <i class="text-black px-2 fas fa-trash-alt"></i>
                                 </a>
-                                {% include "modals/delete-trick-media.html.twig" %}
+                                {% include "modals/delete-picture.html.twig" %}
                             </div>
                             {# {% else %} #}
                         {# {% endif %} #}
@@ -74,10 +74,10 @@
                                 <a href="/tricks/{{ trick.slug }}/edit">
                                     <i class="text-black px-2 fas fa-pen"></i>
                                 </a>
-                                <a data-bs-toggle="modal" data-bs-target="#deleteMediaConfirmationModal" href="/tricks/{{ trick.id }}/video/{{ video.id }}/delete">
+                                <a data-bs-toggle="modal" data-bs-target="#deleteVideoConfirmationModal" href="/tricks/{{ trick.id }}/video/{{ video.id }}/delete">
                                     <i class="text-black px-2 fas fa-trash-alt"></i>
                                 </a>
-                                {% include "modals/delete-trick-media.html.twig" %}
+                                {% include "modals/delete-video.html.twig" %}
                             </div>
                             {# {% else %}
                         {% endif %} #}
