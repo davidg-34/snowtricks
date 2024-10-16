@@ -1,18 +1,34 @@
-# Snow Tricks
+# Projet N° 6 Développez de A à Z le site communautaire SnowTricks
+
+Ce projet est un site communautaire dédié au partage de figures de snowboard.
+
+## Prérequis
+
+Projet créé avec le framework Symfony 6.2
+PHP 8.1.10
 
 ## Installation
 
-1. git clone `git clone https://www.github.com/.......`
-2. cd snowtricks
-3. composer install
-4. cp .env.example .env
-5. Edit database information in .env
-6. Edit mailer information in .env
-7. Create the database `php bin/console doctrine:database:create`
-8. Init the db schema `php bin/console doctrine:migrations:migrate`
-	Note that the migrations were created with `php bin/console make:migration`
-9. Init the db data `php bin/console doctrine:fixtures:load`
+1 - Clonez ou telechargez le repository :
+ <https://github.com/davidg-34/snowtricks.git>
 
-## Project evolutions
+2 - A la racine du répertoire, installer toutes les dépendances avec 'composer install'
 
-- User avatars ? 
+3-1 - Modifiez le fichier .env avec vos parametres pour créer votre  base de données DATABASE_URL= "mysql://app:!ChangeMe!@127.0.0.1:3306/app?serverVersion=8&charset=utf8mb4"
+
+3-2 - Créez la base de données et exécutez les migrations :
+
+php bin/console doctrine:database:create
+php bin/console doctrine:migrations:migrate
+
+3-3 - Modifier le fichier .env pour configurer votre propre messagerie
+
+## Utilisation
+
+4 - Utilisation de bootstrap 5.
+
+5 - Vous pouvez utiliser l'application soit en vous connectant sur le compte créé pour les fixtures : TestUser ou en créant votre propre compte.
+
+6 - Lancer le serveur local : symfony serve ou symfony server:start
+
+7 - Dans le navigateur entrez l'adresse localhost:8000(ou autre port libre) pour accéder à l'application.

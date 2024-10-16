@@ -7,27 +7,20 @@
         <div class="collapse navbar-collapse navbar-nav-scroll" id="navbarNav">
             <ul class="navbar-nav ms-md-auto">
                 <li class="nav-item">
-                    {# <a class="nav-link active" href=" / ">ACCUEIL
-                       <span class="sr-only">(current)</span>
-                    </a> #}
                     <a class="nav-link {{ app.current_route == 'home' ? 'active' : '' }}" href="{{ path('home') }}">ACCUEIL</a>
                 </li>
                 <li class="nav-item">
-                    {# <a class="nav-link" href="/#tricks">TRICKS</a> #}
                     <a class="nav-link {{ app.current_route starts with 'app_tricks' ? 'active' : '' }}" href="{{ path('home', { '_fragment': 'tricks'}) }}" >TRICKS</a>
                 </li>
                 {% if app.user %}
                 <li class="nav-item">
-                    {# <a class="nav-link" href="{{ path('app_logout') }}">DECONNEXION</a> #}
                     <a class="nav-link {{ app.current_route starts with 'app_logout' ? 'active' : '' }}" href="{{ path('app_logout') }}">DECONNEXION</a>
                 </li>
                 {% else %}
                 <li class="nav-item">
-                    {# <a class="nav-link" href="{{ path('app_login') }}">CONNEXION</a> #}
                     <a class="nav-link {{ app.current_route starts with 'app_login' ? 'active' : '' }}" href="{{ path('app_login') }}">CONNEXION</a>
                 </li>
                 <li class="nav-item">
-                    {# <a class="nav-link" href="{{ path('app_register') }}">INSCRIPTION</a> #}
                     <a class="nav-link {{ app.current_route starts with 'app_register' ? 'active' : '' }}" href="{{ path('app_register') }}">INSCRIPTION</a>
                 </li>
                 {% endif %}
