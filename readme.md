@@ -19,6 +19,7 @@ PHP 8.1.10
 3-2 - Créez la base de données et exécutez les migrations :
 
 php bin/console doctrine:database:create
+php bin/console make:migration
 php bin/console doctrine:migrations:migrate
 
 3-3 - Modifier le fichier .env pour configurer votre propre messagerie
@@ -27,8 +28,14 @@ php bin/console doctrine:migrations:migrate
 
 4 - Utilisation de bootstrap 5.
 
-5 - Vous pouvez utiliser l'application soit en vous connectant sur le compte créé pour les fixtures : TestUser ou en créant votre propre compte.
+5 - Vous pouvez voir les premières tricks en lançant les fixtures :
 
-6 - Lancer le serveur local : symfony serve ou symfony server:start
+php bin/console doctrine:fixtures:load
+
+6 - Vous pouvez utiliser l'application soit en vous connectant sur le compte créé pour les fixtures : Identifiant : TestUser Mot de passe : pass_1234
+
+ soit en créant votre propre compte.
+
+6 - Lancer le serveur local : symfony serve ou symfony server:start -d
 
 7 - Dans le navigateur entrez l'adresse localhost:8000(ou autre port libre) pour accéder à l'application.
