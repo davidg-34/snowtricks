@@ -130,26 +130,18 @@
         {% if (trick.comments|length > 0) %}
             <nav aria-label="Page navigation example w-100">
                 <ul class="pagination justify-content-center">
-                    <li class="page-item">
-                        {% if (currentPage > 1) %}
-                            <a class="page-link" href="{{ path ('app_show', {slug: trick.slug, page: currentPage - 1}) }}">Précédent</a>
-                        {% else %}
-                            <span class="page-link disabled">Précédent</span>
-                        {% endif %}
+                    <li class="page-item {% if currentPage == 1 %}disabled{% endif %}">
+                        <a class="page-link" href="{{ path('app_show', {slug: trick.slug, page: currentPage - 1}) }}">Précédent</a>
                     </li>
-                    {% for page in range(currentPage - 5, currentPage + 5) %}
-                        {% if (page > 0 and page < commentPageCount) %}
-                            <li class="page-item {{ (page == currentPage) ? 'active' : '' }}">
-                                <a href="{{ path('app_show', {slug: trick.slug, page: page}) }}" class="page-link">{{ page }}</a>
+                    {% for page in range(currentPage - 2, currentPage + 2) %}
+                        {% if page > 0 and page <= commentPageCount %}
+                            <li class="page-item {{ page == currentPage ? 'active' : '' }}">
+                                <a class="page-link" href="{{ path('app_show', {slug: trick.slug, page: page}) }}">{{ page }}</a>
                             </li>
-                        {%  endif %}
-                    {% endfor %}
-                    <li>
-                        {% if (currentPage < commentPageCount) %}
-                            <a class="page-link" href="{{ path ('app_show', {slug: trick.slug, page: currentPage + 1}) }}">Suivant</a>
-                        {% else %}
-                            <span class="page-link disabled">Suivant</span>
                         {% endif %}
+                    {% endfor %}
+                    <li class="page-item {% if currentPage == commentPageCount %}disabled{% endif %}">
+                        <a class="page-link" href="{{ path('app_show', {slug: trick.slug, page: currentPage + 1}) }}">Suivant</a>
                     </li>
                 </ul>
             </nav>
