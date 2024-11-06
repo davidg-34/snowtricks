@@ -2,9 +2,7 @@
 
 namespace App\Controller;
 
-
 use App\Entity\Video;
-
 use App\Entity\Tricks;
 use App\Entity\Picture;
 use App\Form\TrickForm;
@@ -18,6 +16,7 @@ use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\String\Slugger\AsciiSlugger;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
+use Symfony\Component\Security\Http\Attribute\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 class TrickController extends AbstractController
@@ -26,14 +25,14 @@ class TrickController extends AbstractController
     public function tricks(EntityManagerInterface $entityManager): Response
     {
         $tricks = $entityManager->getRepository(Tricks::class)->findAll();
-        return $this->render('home/tricks.html.twig', [
-            //'tricks' => $tricks
+        return $this->render('trick/tricks.html.twig', [
+            'tricks' => $tricks
         ]);
     }
 
     // Ajout d'une figure / Mise à jour d'une figure
-    #[Route('/tricks/new', name: 'trick_add')]
-    #[Route('/tricks/{slug}/edit', name: 'trick_edit')]
+    #[Route('/tricks/new', name: 'trick_add', methods: ['GET', 'POST'])]
+    #[Route('/tricks/{slug}/edit', name: 'trick_edit', methods: ['GET', 'POST'])]
     public function form(Request $request, EntityManagerInterface $entityManager, ?string $slug = null, FileUploader $fileUploader): Response
     {
         // Vérifier si on est en mode création ou modification
@@ -87,6 +86,9 @@ class TrickController extends AbstractController
             // Mise à jour du slug et autres propriétés du Trick
             $slugger = new AsciiSlugger();
             $trick->setSlug($slugger->slug($trick->getName()));
+
+            // Mise à jour de la date de modification
+            $trick->setUpdatedAt(new \DateTime());
             
             // Persist et flush des données
             $entityManager->persist($trick);
@@ -109,18 +111,23 @@ class TrickController extends AbstractController
 
     // Suppression d'une figure
     #[Route('/tricks/{id}/delete', name: 'trick_delete')]
-    public function delete(EntityManagerInterface $entityManager, $id): RedirectResponse
+    #[IsGranted('ROLE_USER')]
+    public function delete(EntityManagerInterface $entityManager, int $id): RedirectResponse
     {
         $trick = $entityManager->getRepository(Tricks::class)->find($id);
-        $entityManager->remove($trick);
-        $entityManager->flush();
+        if ($trick !== null) {
+            $entityManager->remove($trick);
+            $entityManager->flush();
+        } else {
+            throw $this->createNotFoundException('Tricks not found.');
+        }
 
         $this->addFlash('success', 'Figure supprimée !');
-        return $this->redirectToRoute('app_tricks');
+        return $this->redirectToRoute('home');
     }
     // Suppression d'un media de figure - Picture
     #[Route('/tricks/{id}/picture/{pictureId}/delete', name: 'trick_picture_delete')]
-    public function deletePicture(EntityManagerInterface $entityManager, $id, $pictureId): RedirectResponse
+    public function deletePicture(EntityManagerInterface $entityManager, int $id, int $pictureId): RedirectResponse
     {
         $trick = $entityManager->getRepository(Tricks::class)->find($id);
         $picture = $entityManager->getRepository(Picture::class)->find($pictureId);
@@ -139,7 +146,7 @@ class TrickController extends AbstractController
 
     // Suppression d'un media de figure - Video
     #[Route('/tricks/{id}/video/{videoId}/delete', name: 'trick_video_delete')]
-    public function deleteVideo(EntityManagerInterface $entityManager, $id, $videoId): RedirectResponse
+    public function deleteVideo(EntityManagerInterface $entityManager, int $id, int $videoId): RedirectResponse
     {
         $trick = $entityManager->getRepository(Tricks::class)->find($id);
         $video = $entityManager->getRepository(Video::class)->find($videoId);
@@ -155,7 +162,7 @@ class TrickController extends AbstractController
 
     // Commentaire sur les figures
     #[Route('/tricks/{slug}', name: 'app_show')]
-    public function show(EntityManagerInterface $entityManager, $slug, Request $request): Response
+    public function show(EntityManagerInterface $entityManager, string $slug, Request $request): Response
     {
         // pagination des commentaires
         $currentPage = $request->query->get('page') ?: 1;
@@ -188,7 +195,7 @@ class TrickController extends AbstractController
 
     // loadMore
     #[Route('/ajax/tricks/{page}', name: 'tricks_load_more')]
-    public function loadMore(EntityManagerInterface $entityManager, $page):response
+    public function loadMore(EntityManagerInterface $entityManager, int $page):response
     {
         $currentPage = intval($page);
         $tricks = $entityManager->getRepository(Tricks::class)->findAll($currentPage);

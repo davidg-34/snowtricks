@@ -26,19 +26,17 @@ class Users implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column]
     private array $roles = [];
 
-    // private $comments;
-
     /**
      * @var string The hashed password
      */
     #[ORM\Column]
     private ?string $password = null;
 
-    // #[ORM\OneToMany(mappedBy: 'users', targetEntity: Tricks::class)]
-    // private Collection $tricks;
+    #[ORM\OneToMany(mappedBy: 'users', targetEntity: Tricks::class)]
+    private Collection $tricks;
 
-    // #[ORM\OneToMany(mappedBy: 'users', targetEntity: Comments::class)]
-    // private Collection $comments;
+    #[ORM\OneToMany(mappedBy: 'users', targetEntity: Comments::class)]
+    private Collection $comments;
 
     #[ORM\Column(length: 120)]
     private ?string $avatar = 'default_avatar.png';
@@ -51,7 +49,7 @@ class Users implements UserInterface, PasswordAuthenticatedUserInterface
 
     public function __construct()
     {
-        // $this->comments = new ArrayCollection();
+        $this->comments = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -127,7 +125,7 @@ class Users implements UserInterface, PasswordAuthenticatedUserInterface
     /**
      * @return Collection<int, Tricks>
      */
-    /* public function getTricks(): Collection
+    public function getTricks(): Collection
     {
         return $this->tricks;
     }
@@ -153,12 +151,12 @@ class Users implements UserInterface, PasswordAuthenticatedUserInterface
 
         return $this;
     }
-    */
+   
 
     /**
      * @return Collection<int, Comments>
      */
-    /* public function getComments(): Collection
+    public function getComments(): Collection
     {
         return $this->comments;
     }
@@ -183,7 +181,7 @@ class Users implements UserInterface, PasswordAuthenticatedUserInterface
         }
 
         return $this;
-    } */
+    }
 
     public function getAvatar(): ?string
     {
