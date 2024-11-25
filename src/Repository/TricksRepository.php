@@ -20,13 +20,16 @@ class TricksRepository extends ServiceEntityRepository
     public function __construct(ManagerRegistry $registry)
     {
         parent::__construct($registry, Tricks::class);
-    }    
+    }
 
-    public function findAll($currentPage = 1, $tricksPerPage = 10) : array
-    {        
-        $offset = ($currentPage-1)*$tricksPerPage;
-        $allTricks = new ArrayCollection($this->findBy(array()));
-        return $allTricks->slice($offset, $tricksPerPage);
+    public function findWithPagination(int $page = 1, int $limit = 10): array
+    {
+    $offset = ($page - 1) * $limit;  // Calcul de l'offset 
+    return $this->createQueryBuilder('t')  // Crée un QueryBuilder avec l'alias t pour l'entité
+        ->setFirstResult($offset)  // Définit l'offset pour la pagination.
+        ->setMaxResults($limit)  // Limite le nombre maximum de résultats à retourner.
+        ->getQuery()  // Convertit le QueryBuilder en une requête.
+        ->getResult();  // Exécute la requête et retourne les résultats.
     }
 
 //    /**

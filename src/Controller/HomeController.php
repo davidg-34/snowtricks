@@ -15,7 +15,7 @@ class HomeController extends AbstractController
     #[Route('/', name: 'home')]
     public function index(EntityManagerInterface $entityManager): Response
     {
-        $tricks = $entityManager->getRepository(Tricks::class)->findAll();
+        $tricks = $entityManager->getRepository(Tricks::class)->findWithPagination();
 
         return $this->render('home/index.html.twig', [
             'controller_name' => 'HomeController',

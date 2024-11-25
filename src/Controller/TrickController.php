@@ -21,18 +21,10 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 class TrickController extends AbstractController
 {
-    #[Route('/tricks', name: 'app_tricks')]
-    public function tricks(EntityManagerInterface $entityManager): Response
-    {
-        $tricks = $entityManager->getRepository(Tricks::class)->findAll();
-        return $this->render('trick/tricks.html.twig', [
-            'tricks' => $tricks
-        ]);
-    }
-
     // Ajout d'une figure / Mise à jour d'une figure
     #[Route('/tricks/new', name: 'trick_add', methods: ['GET', 'POST'])]
     #[Route('/tricks/{slug}/edit', name: 'trick_edit', methods: ['GET', 'POST'])]
+    #[IsGranted('ROLE_USER')]
     public function form(Request $request, EntityManagerInterface $entityManager, ?string $slug = null, FileUploader $fileUploader): Response
     {
         // Vérifier si on est en mode création ou modification
@@ -82,13 +74,6 @@ class TrickController extends AbstractController
                 $video->setName($videoData->getName());
                 $trick->addVideo($video);
             }
-            
-            // Mise à jour du slug et autres propriétés du Trick
-            $slugger = new AsciiSlugger();
-            $trick->setSlug($slugger->slug($trick->getName()));
-
-            // Mise à jour de la date de modification
-            $trick->setUpdatedAt(new \DateTime());
             
             // Persist et flush des données
             $entityManager->persist($trick);
@@ -193,15 +178,14 @@ class TrickController extends AbstractController
         ]);
     }
 
-    // loadMore
+    // loadMore    
     #[Route('/ajax/tricks/{page}', name: 'tricks_load_more')]
-    public function loadMore(EntityManagerInterface $entityManager, int $page):response
+    public function loadMore(EntityManagerInterface $entityManager, int $page): Response
     {
-        $currentPage = intval($page);
-        $tricks = $entityManager->getRepository(Tricks::class)->findAll($currentPage);
+        $limit = 10; // Limite de tricks par page
+        $tricks = $entityManager->getRepository(Tricks::class)->findWithPagination($page, $limit);
         return $this->render('trick/tricks.html.twig', [
             'tricks' => $tricks
         ]);
-
     }
 }
