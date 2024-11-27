@@ -25,7 +25,6 @@ nav {
     background-position: center;
     min-height: 100vh;    
 }
-
 .citation{
     position: absolute;
     top: 50%;
@@ -72,7 +71,6 @@ button, .delete-btn, .icon-btn {
     display: inline-block;
     border: darkgray 1px solid;
 }
-
 .delete-btn{
     background-color: red;
     color: aliceblue;
@@ -131,4 +129,28 @@ button, .delete-btn, .icon-btn {
 /* FOOTER */
 footer{
     border-top: rgb(14, 4, 44) 1.5px solid;
+}
+
+/* MEDIA QUERIES BOUTON ACCORDEON */
+@media (max-width: 325px) {
+    #tricks_container {
+        display: none;
+    }
+    #load-more {
+        display: none;
+    }
+    #accordionExampleTiny {
+        display: block;
+    }
+}
+@media (min-width: 326px) {
+    #accordionExampleTiny {
+        display: none;
+    }
+    #tricks_container {
+        display: flex;
+    }
+    #load-more {
+        display: block;
+    }
 }

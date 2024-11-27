@@ -19,15 +19,33 @@ class Tricks
     #[ORM\Column]
     private ?int $id = null;
 
-    #[ORM\Column(length: 25)]
+    #[ORM\Column(length: 255)]
+    #[Assert\Length(
+        max: 255,
+        maxMessage: 'Le slug ne peut pas dépasser {{ limit }} caractères'
+    )]
+    #[Assert\Regex(
+        pattern: '/^[a-z0-9]+(?:-[a-z0-9]+)*$/',
+        message: 'Le slug doit contenir uniquement des caractères alphanumériques et des tirets'
+    )]
     private ?string $slug = null;
 
     #[ORM\Column(length: 255)]
     #[Assert\NotBlank]
+    #[Assert\Length(
+        min: 3,
+        max: 255,
+        minMessage: 'Le nom doit comporter au moins {{ limit }} caractères',
+        maxMessage: 'Le nom ne peut pas dépasser {{ limit }} caractères'
+        )]
     private ?string $name = null;
 
     #[ORM\Column(type: Types::TEXT)]
     #[Assert\NotBlank]
+    #[Assert\Length(
+        min: 10,
+        maxMessage: 'la description doit contenir au minimum {{ limit }} caractères.'
+        )]
     private ?string $description = null;
 
     #[ORM\ManyToOne(inversedBy: 'tricks')]
@@ -37,6 +55,7 @@ class Tricks
     private Collection $comments;
 
     #[ORM\ManyToOne(inversedBy: 'tricks')]
+    #[Assert\NotNull(message: 'Une catégorie doit être sélectionnée')]
     private ?Category $category = null;
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE, options: ["default" => "CURRENT_TIMESTAMP"])]
@@ -52,6 +71,11 @@ class Tricks
     private Collection $pictures;
 
     #[ORM\Column(length: 255)]
+    #[Assert\Url(message: 'L\'URL de la photo de couverture est invalide')]
+    #[Assert\Length(
+        max: 255,
+        maxMessage: 'L\'URL de la photo de couverture ne peut pas dépasser {{ limit }} caractères'
+        )]
     private ?string $coverPhoto = null;
 
     public function __construct()

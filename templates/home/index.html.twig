@@ -32,18 +32,44 @@
                     </button>
                 </div>
             {% endif %}
+        {# Bouton accordéon Médias Version avec accordéon pour écrans < 325px #}
+        <div class="accordion d-block d-sm-none" id="accordionExampleTiny">
+            <div class="accordion-item my-4">
+                <h2 class="accordion-header" id="headingTiny">
+                    <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseTiny" aria-expanded="true" aria-controls="collapseTiny">
+                        <h6 class="mx-auto couleur"><strong>Médias</strong></h6>
+                    </button>
+                </h2>
+                <div id="collapseTiny" class="accordion-collapse collapse show" aria-labelledby="headingTiny" data-bs-parent="#accordionExampleTiny">
+                    <div class="accordion-body">
+                        <div class="row" id="tricks_container_tiny">
+                            {% include "trick/tricks.html.twig" %}
+                        </div>
+                        <div class="container">
+                            <a class="d-grid gap-2 col-2 mx-auto text-decoration-none" id="load-more-tiny">
+                                <button class="text-center bg-primary rounded" onclick="loadMoreTiny(); return false">
+                                    <span>Load More</span>
+                                </button>
+                                <input type="hidden" id="loadMoreTiny" name="loadMoreTiny" value="0">
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {# Bouton accordéon Médias Version classique pour écrans >= 325px #}
+        <div class="d-none d-sm-block">
             <div class="row" id="tricks_container">
                 {% include "trick/tricks.html.twig" %}
             </div>
-        </div>
-        {# Bouton 'load more' #}
-        <div class="container">
-            <a href="" class="d-grid gap-2 col-2 mx-auto text-decoration-none" id="load-more">
-                <button class="text-center bg-primary rounded" onclick="loadMore(); return false">
-                    <span>Load More</span>
-                </button>
-                <input type="hidden" id="loadMore" name="loadMore" value="0">
-            </a>
+            <div class="container">
+                <a href="" class="d-grid gap-2 col-2 mx-auto text-decoration-none" id="load-more">
+                    <button class="text-center bg-primary rounded" onclick="loadMore(); return false">
+                        <span>Load More</span>
+                    </button>
+                    <input type="hidden" id="loadMore" name="loadMore" value="0">
+                </a>
+            </div>
         </div>
         {# Flèche du haut #}
         <div class="arrow">
