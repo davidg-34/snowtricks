@@ -21,6 +21,21 @@ class CommentsRepository extends ServiceEntityRepository
         parent::__construct($registry, Comments::class);
     }
 
+    public function findCommentsByTrickSlug(string $trickSlug, int $page = 1, int $limit = 10): array
+    {
+        $offset = ($page - 1) * $limit;  // Calcul de l'offset
+        return $this->createQueryBuilder('c')
+            ->innerJoin('c.tricks', 't')
+            ->where('t.slug = :trickSlug')
+            ->setParameter('trickSlug', $trickSlug)
+            ->orderBy('c.createdAt', 'ASC')  // Trier par ordre croissant de la date de création
+            ->setFirstResult($offset)  // Définit l'offset pour la pagination.
+            ->setMaxResults($limit)  // Limite le nombre maximum de résultats à retourner.
+            ->getQuery()  // Convertit le QueryBuilder en une requête.
+            ->getResult();  // Exécute la requête et retourne les résultats.
+    }
+}
+
 //    /**
 //     * @return Comments[] Returns an array of Comments objects
 //     */
@@ -45,4 +60,3 @@ class CommentsRepository extends ServiceEntityRepository
 //            ->getOneOrNullResult()
 //        ;
 //    }
-}

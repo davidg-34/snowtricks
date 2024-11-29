@@ -71,7 +71,6 @@ class Tricks
     private Collection $pictures;
 
     #[ORM\Column(length: 255)]
-    #[Assert\Url(message: 'L\'URL de la photo de couverture est invalide')]
     #[Assert\Length(
         max: 255,
         maxMessage: 'L\'URL de la photo de couverture ne peut pas dépasser {{ limit }} caractères'

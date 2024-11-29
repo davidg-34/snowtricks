@@ -1,0 +1,92 @@
+{# description de la figure #}
+        <div class="container col-lg-12 my-5">
+            {{ trick.description }}
+        </div>
+
+        {# liste des images #}
+        <section class="container">
+            <div class="d-flex flex-row flex-wrap justify-content-center">
+                {% for picture in trick.pictures %}
+                    <div class="card-img m-2 rounded border border-primary" style="width: 320px;">
+                        <img class="img-fluid w-100" src="/assets/uploads/{{ picture.name }}" alt="{{ trick.slug }}">
+                        {# 2 icônes modifier/supprimer #}
+                        {# {% if app.user and app.user.id == trick.getUsers().getId( )%} #}
+                            <div class="card-body">
+                                <a href="/tricks/{{ trick.slug }}/edit">
+                                    <i class="text-black px-2 fas fa-pen"></i>
+                                </a>
+                                <a data-bs-toggle="modal" data-bs-target="#deletePictureConfirmationModal" href="/tricks/{{ trick.id }}/picture/{{ picture.id }}/delete">
+                                    <i class="text-black px-2 fas fa-trash-alt"></i>
+                                </a>
+                                {% include "modals/delete-picture.html.twig" %}
+                            </div>
+                            {# {% else %} #}
+                        {# {% endif %} #}
+                    </div>
+                {% endfor %}
+            </div>
+        </section>
+
+        {# liste des vidéos #} 
+        <section class="container">
+            <div class="d-flex flex-row flex-wrap justify-content-center">
+            {% if trick.videos %}
+                {% for video in trick.videos %}
+                    <div class="card yt m-2 border border-primary">
+                        {{ video.name|raw }}
+                        {# 2 icônes modifier/supprimer #}
+                        {# {% if app.user and app.user.id == trick.getUsers().getId( )%} #}
+                            <div class="card-body">
+                                <a href="/tricks/{{ trick.slug }}/edit">
+                                    <i class="text-black px-2 fas fa-pen"></i>
+                                </a>
+                                <a data-bs-toggle="modal" data-bs-target="#deleteVideoConfirmationModal" href="/tricks/{{ trick.id }}/video/{{ video.id }}/delete">
+                                    <i class="text-black px-2 fas fa-trash-alt"></i>
+                                </a>
+                                {% include "modals/delete-video.html.twig" %}
+                            </div>
+                            {# {% else %}
+                        {% endif %} #}
+                    </div>
+                {% endfor %}
+            {% endif %}
+            </div>
+        </section>
+
+        {# informations sur la figure #}
+        <div class="container container-fluid col-lg-12 my-5 text-center">
+            <button class="btn btn-primary disabled my-2">Créé le :
+                {{ trick.createdAt | date('d/m/y') }}
+            </button>
+            {%  if (trick.updatedAt) %}
+                <button class="btn btn-primary disabled my-2">Modifié le :
+                    {{ trick.updatedAt | date('d/m/y') }}
+                </button>
+            {%  endif %}
+            <button class="btn btn-primary disabled my-2">Groupe :
+                {{trick.category.name}}
+            </button>
+            <button class="btn btn-primary disabled my-2">Auteur :
+                {{trick.users.username|default('')}}
+            </button>
+        </div>
+
+        {# Liste des commentaires #}
+        <h5 class="ms-5 mb-5">Commentaires :
+            {{ trick.comments|length }}</h5>
+        {% for comment in trick.comments(currentPage, commentPerPage) | reverse %}
+            <div class="comment">
+                <div class="row">
+                    <div class="col">
+                        <img class="mb-4 mx-5" src="https://ui-avatars.com/api/?rounded=true&background=random&name={{ comment.user.username|default('undefined') }}" width="40px">
+                        <strong>{{ comment.user.username|default('') }}</strong>
+                        <span class="ps-2">Le
+                            {{comment.createdAt | date('d/m/y à H:i')}}</span>
+                    </div>
+                </div>
+                <div class="col mb-4 ms-5">
+                    {{ comment.content | raw }}
+                </div>
+            </div>
+        {% endfor %}
+        

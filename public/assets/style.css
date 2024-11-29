@@ -132,7 +132,7 @@ footer{
 }
 
 /* MEDIA QUERIES BOUTON ACCORDEON */
-@media (max-width: 325px) {
+/* @media (max-width: 325px) {
     #tricks_container {
         display: none;
     }
@@ -151,6 +151,45 @@ footer{
         display: flex;
     }
     #load-more {
+        display: block;
+    }
+} */
+ /* Affichage pour écrans < 325px */
+@media (max-width: 325px) {
+    #media-container {
+        display: none;
+    }
+    .accordion-tiny {
+        display: block;
+    }
+}
+
+/* Affichage pour écrans >= 325px */
+@media (min-width: 326px) {
+    #media-container {
+        display: flex;
+    }
+    .accordion-tiny {
+        display: none;
+    }
+}
+
+/* Formulaire pour les petits écrans (< 325px) */
+@media (max-width: 325px) {
+    .comment-form-tiny {
+        display: block;
+    }
+    .comment-form-large {
+        display: none;
+    }
+}
+
+/* Formulaire pour les écrans >= 325px */
+@media (min-width: 326px) {
+    .comment-form-tiny {
+        display: none;
+    }
+    .comment-form-large {
         display: block;
     }
 }

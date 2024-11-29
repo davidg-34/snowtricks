@@ -144,33 +144,44 @@ class TrickController extends AbstractController
         $this->addFlash('success', 'Vidéo supprimée !');
         return $this->redirectToRoute('trick_edit', ['slug' => $trick->getSlug()]);
     }
-
-    // Commentaire sur les figures
+    
+   // Commentaire sur les figures
     #[Route('/tricks/{slug}', name: 'app_show')]
     public function show(EntityManagerInterface $entityManager, string $slug, Request $request): Response
     {
-        // pagination des commentaires
+        // Pagination des commentaires
         $currentPage = $request->query->get('page') ?: 1;
         $trick = $entityManager->getRepository(Tricks::class)->findOneBy(['slug' => $slug]);
 
-        $comment = new Comments();
-        $form = $this->createForm(CommentType::class, $comment);
-        $form->handleRequest($request);
-        if ($form->isSubmitted() && $form->isValid()) {
-            $comment->setCreatedAt(new \DateTime());
-            $comment->setTricks($trick)
-                    ->setUser($this->getUser());
-            $entityManager->persist($comment);
-            $entityManager->flush();
+        // Créer deux instances du formulaire
+        $commentLarge = new Comments();
+        $commentTiny = new Comments();
 
+        $formLarge = $this->createForm(CommentType::class, $commentLarge);
+        $formTiny = $this->createForm(CommentType::class, $commentTiny);
+
+        // Traiter les soumissions des formulaires
+        $formLarge->handleRequest($request);
+        $formTiny->handleRequest($request);
+
+        if ($formLarge->isSubmitted() && $formLarge->isValid()) {
+            $this->processComment($commentLarge, $trick, $entityManager);
             return $this->redirectToRoute('app_show', ['slug' => $trick->getSlug()]);
         }
+
+        if ($formTiny->isSubmitted() && $formTiny->isValid()) {
+            $this->processComment($commentTiny, $trick, $entityManager);
+            return $this->redirectToRoute('app_show', ['slug' => $trick->getSlug()]);
+        }
+
         $commentCount = $trick->getCommentCount();
         $commentPerPage = 10;
         $commentPageCount = ceil($commentCount / $commentPerPage);
+
         return $this->render('home/show.html.twig', [
             'trick' => $trick,
-            'commentForm' => $form->createView(),
+            'commentFormLarge' => $formLarge->createView(),
+            'commentFormTiny' => $formTiny->createView(),
             'currentPage' => $currentPage,
             'commentPerPage' => $commentPerPage,
             'commentCount' => $commentCount,
@@ -178,7 +189,16 @@ class TrickController extends AbstractController
         ]);
     }
 
-    // loadMore    
+    private function processComment(Comments $comment, Tricks $trick, EntityManagerInterface $entityManager)
+    {
+        $comment->setCreatedAt(new \DateTime());
+        $comment->setTricks($trick)
+                ->setUser($this->getUser());
+        $entityManager->persist($comment);
+        $entityManager->flush();
+    }
+
+    // loadMore tricks
     #[Route('/ajax/tricks/{page}', name: 'tricks_load_more')]
     public function loadMore(EntityManagerInterface $entityManager, int $page): Response
     {
@@ -186,6 +206,27 @@ class TrickController extends AbstractController
         $tricks = $entityManager->getRepository(Tricks::class)->findWithPagination($page, $limit);
         return $this->render('trick/tricks.html.twig', [
             'tricks' => $tricks
+        ]);
+    }
+
+    // loadMore commentaire
+    #[Route('/ajax/comments/{trickSlug}/{page}', name: 'comments_load_more')]
+    public function loadMoreComments(EntityManagerInterface $entityManager, string $trickSlug, int $page): Response
+    {
+        // Ajouter un log pour vérifier si la méthode est appelée
+        error_log('Loading more comments for trick: ' . $trickSlug . ' on page: ' . $page);
+
+        $limit = 10; // Nombre de commentaires à charger par page
+        $comments = $entityManager->getRepository(Comments::class)->findCommentsByTrickSlug($trickSlug, $page, $limit);
+
+        // Créer le formulaire de commentaire
+        $comment = new Comments();
+        $commentForm = $this->createForm(CommentType::class, $comment);
+
+        // Renvoyer les commentaires et le formulaire en HTML
+        return $this->render('trick/comments.html.twig', [
+            'comments' => $comments,
+            'commentForm' => $commentForm->createView(),
         ]);
     }
 }
