@@ -1,0 +1,49 @@
+{# liste des images #}
+<section class="container">
+    <div class="d-flex flex-row flex-wrap justify-content-center">
+        {% for picture in trick.pictures %}
+            <div class="card-img m-2 rounded border border-primary" style="width: 320px;">
+                <img class="img-fluid w-100" src="/assets/uploads/{{ picture.name }}" alt="{{ trick.slug }}">
+                {# 2 icônes modifier/supprimer #}
+                {# {% if app.user and app.user.id == trick.getUsers().getId( )%} #}
+                    <div class="card-body">
+                        <a href="/tricks/{{ trick.slug }}/edit">
+                            <i class="text-black px-2 fas fa-pen"></i>
+                        </a>
+                        <a data-bs-toggle="modal" data-bs-target="#deletePictureConfirmationModal" href="/tricks/{{ trick.id }}/picture/{{ picture.id }}/delete">
+                            <i class="text-black px-2 fas fa-trash-alt"></i>
+                        </a>
+                        {% include "modals/delete-picture.html.twig" %}
+                    </div>
+                    {# {% else %} #}
+                {# {% endif %} #}
+            </div>
+        {% endfor %}
+    </div>
+</section>
+
+{# liste des vidéos #} 
+<section class="container">
+    <div class="d-flex flex-row flex-wrap justify-content-center">
+    {% if trick.videos %}
+        {% for video in trick.videos %}
+            <div class="card yt m-2 border border-primary">
+                {{ video.name|raw }}
+                {# 2 icônes modifier/supprimer #}
+                {# {% if app.user and app.user.id == trick.getUsers().getId( )%} #}
+                    <div class="card-body">
+                        <a href="/tricks/{{ trick.slug }}/edit">
+                            <i class="text-black px-2 fas fa-pen"></i>
+                        </a>
+                        <a data-bs-toggle="modal" data-bs-target="#deleteVideoConfirmationModal" href="/tricks/{{ trick.id }}/video/{{ video.id }}/delete">
+                            <i class="text-black px-2 fas fa-trash-alt"></i>
+                        </a>
+                        {% include "modals/delete-video.html.twig" %}
+                    </div>
+                    {# {% else %}
+                {% endif %} #}
+            </div>
+        {% endfor %}
+    {% endif %}
+    </div>
+</section>

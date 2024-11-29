@@ -4,36 +4,127 @@
 
 {% block body %}
 
-    <section class="container border border-secondary col col-lg-8 p-0" style="box-shadow: 0px 2px 5px 0px #000;">
-        {# Couverture photo de la figure page détail #}
-        <div class="container p-0 position-relative">
-            <div class="card-body">
-                <img class="w-100" src="/assets/uploads/{{ trick.coverPhoto }}" alt="{{ trick.slug }} cover photo">
+<section class="container border border-secondary col col-lg-8 p-0" style="box-shadow: 0px 2px 5px 0px #000;">
+    {# Couverture photo de la figure page détail #}
+    <div class="container p-0 position-relative">
+        <div class="card-body">
+            <img class="w-100" src="/assets/uploads/{{ trick.coverPhoto }}" alt="{{ trick.slug }} cover photo">
+        </div>
+        {# Les 2 icônes modifier/supprimer la figure #}
+        {# {% if app.user and app.user.id == trick.getUsers().getId() %} #}
+        {% if app.user %}
+            <p class="icon-btn border border-light position-absolute">
+                <a href="/tricks/{{ trick.slug }}/edit">
+                    <i class="text-light px-2 fas fa-pen"></i>
+                </a>
+                <a data-bs-toggle="modal" data-bs-target="#deleteConfirmationModal{{ trick.id }}" href="#">
+                    <i class="text-light fas fa-trash"></i> 
+                </a>
+                {% include "modals/delete-trick.html.twig" %}
+            </p>
+            {% else %}
+        {% endif %}
+    </div>
+
+    {# Titre/Nom de la figure #}
+    <div class="row my-5">
+        <div class="col">
+            <h1 class="text-center">{{ trick.name}}</h1>
+        </div>
+    </div>
+    {# description de la figure #}
+    <div class="container col-lg-12 my-5">
+        {{ trick.description }}
+    </div>
+
+    {# ECRAN DEKSTOP #}
+    {# Version classique pour écrans >= 325px #}
+    <div class="container d-none d-sm-none d-md-block">
+        <div class="">
+            <div class="row" id="tricks_container">
+                {% include "trick/mediaTrick.html.twig" %}
             </div>
-            {# Les 2 icônes modifier/supprimer la figure #}
-            {# {% if app.user and app.user.id == trick.getUsers().getId() %} #}
-            {% if app.user %}
-                <p class="icon-btn border border-light position-absolute">
-                    <a href="/tricks/{{ trick.slug }}/edit">
-                        <i class="text-light px-2 fas fa-pen"></i>
-                    </a>
-                    <a data-bs-toggle="modal" data-bs-target="#deleteConfirmationModal{{ trick.id }}" href="#">
-                        <i class="text-light fas fa-trash"></i> 
-                    </a>
-                    {% include "modals/delete-trick.html.twig" %}
-                </p>
-                {% else %}
+            {# informations sur la figure #}
+            <div class="container container-fluid col-lg-12 my-5 text-center">
+                <button class="btn btn-primary disabled my-2">Créé le :
+                    {{ trick.createdAt | date('d/m/y') }}
+                </button>
+                {%  if (trick.updatedAt) %}
+                    <button class="btn btn-primary disabled my-2">Modifié le :
+                        {{ trick.updatedAt | date('d/m/y') }}
+                    </button>
+                {%  endif %}
+                <button class="btn btn-primary disabled my-2">Groupe :
+                    {{trick.category.name}}
+                </button>
+                <button class="btn btn-primary disabled my-2">Auteur :
+                    {{trick.users.username|default('')}}
+                </button>
+            </div>
+            {# Liste des commentaires #}
+            <h5 class="ms-5 mb-5">Commentaires :
+                {{ trick.comments|length }}</h5>
+            {% for comment in trick.comments(currentPage, commentPerPage) | reverse %}
+                <div class="comment">
+                    <div class="row">
+                        <div class="col">
+                            <img class="mb-4 mx-5" src="https://ui-avatars.com/api/?rounded=true&background=random&name={{ comment.user.username|default('undefined') }}" width="40px">
+                            <strong>{{ comment.user.username|default('') }}</strong>
+                            <span class="ps-2">Le
+                                {{comment.createdAt | date('d/m/y à H:i')}}</span>
+                        </div>
+                    </div>
+                    <div class="col mb-4 ms-5">
+                        {{ comment.content | raw }}
+                    </div>
+                </div>
+            {% endfor %}
+            {# Pagination des commentaires #}
+            {% if (trick.comments|length > 0) %}
+                <nav aria-label="Page navigation example w-100">
+                    <ul class="pagination justify-content-center">
+                        <li class="page-item {% if currentPage == 1 %}disabled{% endif %}">
+                            <a class="page-link" href="{{ path('app_show', {slug: trick.slug, page: currentPage - 1}) }}">Précédent</a>
+                        </li>
+                        {% for page in range(currentPage - 2, currentPage + 2) %}
+                            {% if page > 0 and page <= commentPageCount %}
+                                <li class="page-item {{ page == currentPage ? 'active' : '' }}">
+                                    <a class="page-link" href="{{ path('app_show', {slug: trick.slug, page: page}) }}">{{ page }}</a>
+                                </li>
+                            {% endif %}
+                        {% endfor %}
+                        <li class="page-item {% if currentPage == commentPageCount %}disabled{% endif %}">
+                            <a class="page-link" href="{{ path('app_show', {slug: trick.slug, page: currentPage + 1}) }}">Suivant</a>
+                        </li>
+                    </ul>
+                </nav>
             {% endif %}
         </div>
-        {# Titre/Nom de la figure #}
-        <div class="row my-5">
-            <div class="col">
-                <h1 class="text-center">{{ trick.name}}</h1>
+        {# Formulaire des commentaires pour écrans larges >=325px #}
+        <div class="container comment-form-large d-none d-sm-block">
+            <div class="container mx-auto">
+                {% if app.user %}
+                    {{ form_start(commentFormLarge) }}
+                    <div class="row justify-content-center align-items-center mt-4">
+                        <div class="col-xl-4">
+                            {{ form_row(commentFormLarge.content, {'attr': {'placeholder': "Votre commentaire"}}) }}
+                        </div>
+                        <div class="col-xl-4">
+                            <button type="submit" class="btn btn-primary mb-3 p-3 w-100">Laissez un commentaire</button>
+                        </div>
+                    </div>
+                    {{ form_end(commentFormLarge) }}
+                {% else %}
+                    <p class="text-center fw-bolder fs-4">Vous ne pouvez-pas commenter si vous n'êtes pas connecté !</p>
+                {% endif %}
             </div>
         </div>
+    </div>
 
-        {# Bouton accordéon Médias Version mobile écrans <325px #}
-        <div class="accordion d-block d-sm-none" id="accordionExampleTiny">
+    {# MOBILE #}
+    {# Bouton accordéon Médias Version mobile écrans <325px #}
+    <div class="container d-sm-block d-md-none">
+        <div class="accordion " id="accordionExampleTiny">
             <div class="accordion-item my-4">
                 <h2 class="accordion-header" id="headingTiny">
                     <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseTiny" aria-expanded="false" aria-controls="collapseTiny">
@@ -43,88 +134,78 @@
                 <div id="collapseTiny" class="accordion-collapse collapse" aria-labelledby="headingTiny" data-bs-parent="#accordionExampleTiny">
                     <div class="accordion-body">
                         <div class="row" id="tricks_container_tiny">
-                            {% include 'trick/showTrick.html.twig' %}
-                            {# Load More commentaires <325px#}
-                            <div class="container">
-                                <div id="comments_container">
-                                </div>
-                                <a href="" class="d-grid gap-2 col-2 mx-auto text-decoration-none" id="load-more-comments">
-                                    <button class="text-center bg-primary rounded" onclick="loadMoreComments('{{ trick.slug }}'); return false">
-                                        <span>Load More Comments</span>
-                                    </button>
-                                    <input type="hidden" id="loadMoreComments" name="loadMoreComments" value="0">
-                                </a>
-                            </div>
-                            {# Formulaire du commentaire pour les écrans <325px#}
-                            <div class="container comment-form-tiny d-block d-sm-none">
-                                <div class="container comment-form-tiny d-block d-sm-none">
-                                {% if app.user %}
-                                    {{ form_start(commentFormTiny) }}
-                                    <div class="row justify-content-center align-items-center mt-4">
-                                        <div class="col-xl-4">
-                                            {{ form_row(commentFormTiny.content, {'attr': {'placeholder': "Votre commentaire"}}) }}
-                                        </div>
-                                        <div class="col-xl-4">
-                                            <button type="submit" class="btn btn-primary mb-3 p-3 w-100">Laissez un commentaire</button>
-                                        </div>
-                                    </div>
-                                    {{ form_end(commentFormTiny) }}
-                                {% else %}
-                                    <p class="text-center fw-bolder fs-4">Vous devez être connecté pour commenter.</p>
-                                {% endif %}
-                                </div>
-                            </div>
+                            {% include 'trick/mediaTrick.html.twig' %}
                         </div>
                     </div>
                 </div>
-            </div>
+            </div> 
         </div>
-
-        {# Version classique pour écrans >= 325px #}
-        <div class="d-none d-sm-block">
-            <div class="row" id="tricks_container">
-                {% include "trick/showTrick.html.twig" %}
-            </div>
-        
-        {# Pagination des commentaires #}
-        {% if (trick.comments|length > 0) %}
-            <nav aria-label="Page navigation example w-100">
-                <ul class="pagination justify-content-center">
-                    <li class="page-item {% if currentPage == 1 %}disabled{% endif %}">
-                        <a class="page-link" href="{{ path('app_show', {slug: trick.slug, page: currentPage - 1}) }}">Précédent</a>
-                    </li>
-                    {% for page in range(currentPage - 2, currentPage + 2) %}
-                        {% if page > 0 and page <= commentPageCount %}
-                            <li class="page-item {{ page == currentPage ? 'active' : '' }}">
-                                <a class="page-link" href="{{ path('app_show', {slug: trick.slug, page: page}) }}">{{ page }}</a>
-                            </li>
-                        {% endif %}
-                    {% endfor %}
-                    <li class="page-item {% if currentPage == commentPageCount %}disabled{% endif %}">
-                        <a class="page-link" href="{{ path('app_show', {slug: trick.slug, page: currentPage + 1}) }}">Suivant</a>
-                    </li>
-                </ul>
-            </nav>
-        {%  endif %}
-            <div class="container comment-form-large d-none d-sm-block">
-                <div class="container mx-auto">
-                    {% if app.user %}
-                        {{ form_start(commentFormLarge) }}
-                        <div class="row justify-content-center align-items-center mt-4">
-                            <div class="col-xl-4">
-                                {{ form_row(commentFormLarge.content, {'attr': {'placeholder': "Votre commentaire"}}) }}
-                            </div>
-                            <div class="col-xl-4">
-                                <button type="submit" class="btn btn-primary mb-3 p-3 w-100">Laissez un commentaire</button>
-                            </div>
-                        </div>
-                        {{ form_end(commentFormLarge) }}
-                    {% else %}
-                        <p class="text-center fw-bolder fs-4">Vous ne pouvez-pas commenter si vous n'êtes pas connecté !</p>
-                    {% endif %}
+        {# informations sur la figure #}
+        <div class="container container-fluid col-lg-12 my-5 text-center">
+            <button class="btn btn-primary disabled my-2">Créé le :
+                {{ trick.createdAt | date('d/m/y') }}
+            </button>
+            {%  if (trick.updatedAt) %}
+                <button class="btn btn-primary disabled my-2">Modifié le :
+                    {{ trick.updatedAt | date('d/m/y') }}
+                </button>
+            {%  endif %}
+            <button class="btn btn-primary disabled my-2">Groupe :
+                {{trick.category.name}}
+            </button>
+            <button class="btn btn-primary disabled my-2">Auteur :
+                {{trick.users.username|default('')}}
+            </button>
+        </div>
+        {# Liste des commentaires #}
+        <h5 class="ms-5 mb-5">Commentaires :
+            {{ trick.comments|length }}</h5>
+        {% for comment in trick.comments(currentPage, commentPerPage) | reverse %}
+            <div class="comment">
+                <div class="row">
+                    <div class="col">
+                        <img class="mb-4 mx-5" src="https://ui-avatars.com/api/?rounded=true&background=random&name={{ comment.user.username|default('undefined') }}" width="40px">
+                        <strong>{{ comment.user.username|default('') }}</strong>
+                        <span class="ps-2">Le
+                            {{comment.createdAt | date('d/m/y à H:i')}}</span>
+                    </div>
+                </div>
+                <div class="col mb-4 ms-5">
+                    {{ comment.content | raw }}
                 </div>
             </div>
+        {% endfor %}
+        {# Load More commentaires <325px#}
+        <div class="container">
+            <div id="comments_container">
             </div>
-        </div
-    
-    {% endblock %}
+            <a href="" class="d-grid gap-2 col-2 mx-auto text-decoration-none" id="load-more-comments">
+                <button class="text-center bg-primary rounded" onclick="loadMoreComments('{{ trick.slug }}'); return false">
+                    <span>Load More Comments</span>
+                </button>
+                <input type="hidden" id="loadMoreComments" name="loadMoreComments" value="0">
+            </a>
+        </div>
+        {# Formulaire du commentaire pour les écrans <325px#}
+        <div class="container comment-form-tiny d-block d-sm-none">
+            <div class="container comment-form-tiny d-block d-sm-none">
+                {% if app.user %}
+                    {{ form_start(commentFormTiny) }}
+                    <div class="row justify-content-center align-items-center mt-4">
+                        <div class="col-xl-4">
+                            {{ form_row(commentFormTiny.content, {'attr': {'placeholder': "Votre commentaire"}}) }}
+                        </div>
+                        <div class="col-xl-4">
+                            <button type="submit" class="btn btn-primary mb-3 p-3 w-100">Laissez un commentaire</button>
+                        </div>
+                    </div>
+                    {{ form_end(commentFormTiny) }}
+                {% else %}
+                    <p class="text-center fw-bolder fs-4">Vous devez être connecté pour commenter.</p>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</section>
+
+{% endblock %}

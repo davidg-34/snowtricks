@@ -132,28 +132,7 @@ footer{
 }
 
 /* MEDIA QUERIES BOUTON ACCORDEON */
-/* @media (max-width: 325px) {
-    #tricks_container {
-        display: none;
-    }
-    #load-more {
-        display: none;
-    }
-    #accordionExampleTiny {
-        display: block;
-    }
-}
-@media (min-width: 326px) {
-    #accordionExampleTiny {
-        display: none;
-    }
-    #tricks_container {
-        display: flex;
-    }
-    #load-more {
-        display: block;
-    }
-} */
+
  /* Affichage pour écrans < 325px */
 @media (max-width: 325px) {
     #media-container {
